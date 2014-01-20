@@ -287,7 +287,7 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		//m_pDialogResultatEtalon->setLine(m_pModel->sGetEtalonRefLbl(), m_pModel->sGetEtalonRefVal());
 		m_pDialogResultatEtalon->setLine(m_pModel->sGetCoefActuelLbl(m_numStream, 0), m_sAncienCoefActuel);
 		m_pDialogResultatEtalon->setLine2(m_pModel->sGetCoefCalculeLbl(m_numStream, 0), m_pModel->sGetCoefCalculeVal(m_numStream, 0));
-#if defined(SILICE) && !defined(MULTI_MEASURE)
+#if /*defined(SILICE) &&*/ !defined(MULTI_MEASURE)
 		float fMesureAvantEtalon = 
 				(m_pModel->sGetEtalonRefVal(m_numStream, 0).toFloat() * 
 				m_sAncienCoefActuel.toFloat()) / m_pModel->sGetCoefCalculeVal(m_numStream, 0).toFloat();
