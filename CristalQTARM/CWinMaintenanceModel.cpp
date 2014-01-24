@@ -308,12 +308,12 @@ void CWinMaintenanceModel::setCoefActuelVal(const QString& sValue, int arg_numSt
 	    CMesureModel::writeElemConfigIni((WCHAR *)section.utf16(), _T("m_CalibCoeff")
                , &m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibCoeff);
 
-	if(arg_numMeasure == 0 && m_pSupervision->getAnalyseur()->iGetNbrStream() == 4){
+	/*if(arg_numMeasure == 0 && m_pSupervision->getAnalyseur()->iGetNbrStream() == 4){
 		QString section = QString("CStream3_CMesure")+QString::number(arg_numMeasure) ;
 	    m_pSupervision->getAnalyseur()->pGetAt(3)->pGetAt(arg_numMeasure)->m_CalibCoeff.bSetVal(sValue.toFloat());
 	    CMesureModel::writeElemConfigIni((WCHAR *)section.utf16(), _T("m_CalibCoeff")
                , &m_pSupervision->getAnalyseur()->pGetAt(3)->pGetAt(arg_numMeasure)->m_CalibCoeff);
-	}
+	}*/
 #else
 	QString section = QString("CStream")+ QString::number(arg_numStream)+ QString("_CMesure")+QString::number(arg_numMeasure) ;
 	    m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibCoeff.bSetVal(sValue.toFloat());
