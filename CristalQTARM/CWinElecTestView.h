@@ -46,6 +46,16 @@ public:
 	//Pompe
 	void setEnabledBtOnPompe(bool bEnabled, int arg_numPompe){m_listBtOnPompe.at(arg_numPompe)->setEnabled(bEnabled);};
 	void setEnabledBtOffPompe(bool bEnabled, int arg_numPompe){m_listBtOffPompe.at(arg_numPompe)->setEnabled(bEnabled);};
+#ifdef R_D
+	void setCheckedBtSensRotation(int arg_numPompe){m_listBtSensRotation.at(arg_numPompe)->setFlat(!m_listBtSensRotation.at(arg_numPompe)->isFlat());};
+	void setCheckedBtModeRotation(int arg_numPompe){m_listBtModeRotation.at(arg_numPompe)->setFlat(!m_listBtModeRotation.at(arg_numPompe)->isFlat());};
+
+	bool getBtSensRotationIsChecked(int arg_numPompe){ return m_listBtSensRotation.at(arg_numPompe)->isFlat();};
+	bool getBtModeRotationIsChecked(int arg_numPompe){ return m_listBtModeRotation.at(arg_numPompe)->isFlat();};
+
+	void setTextBtConfVitessePompe(int arg_numPompe, QString arg_value){m_listBtConfigVitesse.at(arg_numPompe)->setText(arg_value);};
+	void setTextBtConfNbPasPompe(int arg_numPompe, QString arg_value){m_listBtConfigNbPas.at(arg_numPompe)->setText(arg_value);};
+#endif
 	//Carte mesure
 	void setEnabledBtOnLocal(bool bEnabled, int arg_numLocal){m_listBtOnLocal.at(arg_numLocal)->setEnabled(bEnabled);};
 	void setEnabledBtOffLocal(bool bEnabled, int arg_numLocal){m_listBtOffLocal.at(arg_numLocal)->setEnabled(bEnabled);};
@@ -96,6 +106,13 @@ private:
 	//Onglet Pompe
 	QList<CPushButton*> m_listBtOnPompe;
 	QList<CPushButton*> m_listBtOffPompe;
+
+#ifdef R_D
+	QList<CPushButton*> m_listBtSensRotation;
+	QList<CPushButton*> m_listBtConfigVitesse;
+	QList<CPushButton*> m_listBtConfigNbPas;
+	QList<CPushButton*> m_listBtModeRotation;
+#endif
 
 	//onglet 4-20 
 	QPushButton* m_btValAna;

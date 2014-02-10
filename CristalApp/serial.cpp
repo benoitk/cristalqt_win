@@ -407,4 +407,42 @@ BOOL CSerialPort::bAddExchangeJbus(LPTSTR pszRQ,LPTSTR pszRP,CListStream *pListS
 	}
 	return bReturn;
 }
+BOOL CSerialPort::bSetExchangeJbus(LPTSTR pszRQ,LPTSTR pszRP,CListStream *pListStream, int indexRQ)
+{
+	//CElemList *m_pListExchange membre
+	BOOL bReturn = FALSE;
+	TCHAR szText[MAX_PATH*2];
+	CElemExchangeJbus *pExchangeJbus = NULL;
+	int iCurrentPos;
+
+	if (pExchangeJbus = (CElemExchangeJbus *)m_pListExchange->pGetAt(indexRQ))
+	{
+		_stprintf(szText,_T("Requete perif : %d"), m_pListExchange->iGetCount()+1);
+		pExchangeJbus->SetLabel(szText);
+		pExchangeJbus->SetAutoDelete(TRUE);
+
+	
+		// requete
+		iCurrentPos = 0;
+		if (bReturn = pExchangeJbus->bSetConfig(TRUE,pszRQ,iCurrentPos,pListStream))
+		{
+			iCurrentPos = 0;
+			// reponse
+			if (bReturn = pExchangeJbus->bSetConfig(FALSE,pszRP,iCurrentPos,pListStream))
+			{
+				bReturn = TRUE;
+				pExchangeJbus = NULL;
+			}
+		
+		}
+		
+	}
+	if (pExchangeJbus) delete pExchangeJbus;
+	if (!bReturn) 
+	{
+		TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: bSetExchangeJbus"));
+	}
+	return bReturn;
+}
+
 

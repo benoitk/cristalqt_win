@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/CristalQTARM">
         <file>CristalQTARM.rc</file>
+        <file>qss/cristal.qss</file>
+        <file>qss/cristalX86.qss</file>
     </qresource>
 </RCC>

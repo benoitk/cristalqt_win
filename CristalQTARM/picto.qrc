@@ -106,5 +106,28 @@
         <file>pictohd/30x30 Ana-tor inactive.png</file>
         <file>picto/30x30 moins active.png</file>
         <file>picto/30x30 moins.png</file>
+        <file>picto/30x30 pas a pas mvt active.png</file>
+        <file>picto/30x30 pas a pas mvt.png</file>
+        <file>picto/30x30 rotation antihoraire active.png</file>
+        <file>picto/30x30 rotation antihoraire.png</file>
+        <file>picto/30x30 rotation horaire active.png</file>
+        <file>picto/30x30 rotation horaire.png</file>
+        <file>picto/30x30 rotation mvt active.png</file>
+        <file>picto/30x30 rotation mvt.png</file>
+        <file>pictohd/30x30 rotation antihoraire active.png</file>
+        <file>pictohd/30x30 rotation antihoraire.png</file>
+        <file>pictohd/30x30 rotation horaire active.png</file>
+        <file>pictohd/30x30 rotation horaire.png</file>
+        <file>pictohd/30x30 rotation mvt active.png</file>
+        <file>pictohd/30x30 rotation mvt.png</file>
+        <file>pictohd/30x30 pas a pas mvt active.png</file>
+        <file>pictohd/30x30 pas a pas mvt.png</file>
+        <file>picto/30x30 pas a pas mvt active.png</file>
+        <file>picto/30x30 rotation antihoraire active.png</file>
+        <file>picto/30x30 rotation horaire active.png</file>
+        <file>picto/30x30 rotation mvt active.png</file>
+        <file>picto/30x30 rotation antihoraire active.png</file>
+        <file>picto/30x30 rotation horaire active.png</file>
+        <file>pictohd/50x50 historique.png</file>
     </qresource>
 </RCC>

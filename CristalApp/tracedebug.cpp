@@ -555,7 +555,7 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 			break;
 		//PRG_MESURE_OPTIQUE
 		case 6:
-			//Defaut de mesure 
+			//Defaut de mesure eErrorPrgDefaultOpticalSetting
 			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrgOpticalMeasureDefaultMeasure, argNumCurrentStream);
 			
 			//Defaut de stabilité de la mesure

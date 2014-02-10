@@ -166,6 +166,41 @@ void CWinElecTestControler::btOffPompePressed(int arg_numPompe)
 	m_pView->setEnabledBtOffPompe(false, arg_numPompe);
 	m_pModelEVPompe->cmdPompe(arg_numPompe, false);
 }
+#ifdef R_D
+void CWinElecTestControler::btSensRotationPressed(int arg_numPompe){
+	m_pView->setCheckedBtSensRotation(arg_numPompe);
+	//true Sens trigo, false anti trigo
+	if(m_pView->getBtSensRotationIsChecked(arg_numPompe))
+		m_pModelEVPompe->setSensRotation(arg_numPompe, true);
+	else
+		m_pModelEVPompe->setSensRotation(arg_numPompe, false);
+
+}
+void CWinElecTestControler::btModeRotaionPressed(int arg_numPompe){
+	m_pView->setCheckedBtModeRotation(arg_numPompe);
+	//true mode tour, false mode pas à pas
+	if(m_pView->getBtModeRotationIsChecked(arg_numPompe))
+		m_pModelEVPompe->setModeRotation(arg_numPompe, true);
+	else
+		m_pModelEVPompe->setModeRotation(arg_numPompe, false);
+}
+void CWinElecTestControler::btConfVitessePressed(int arg_numPompe){
+	CDialogPaveNum::getInstance()->setValueName("Vitesse pompe tr/min");
+	CDialogPaveNum::getInstance()->setValue(m_pModelEVPompe->getVitessePompe(arg_numPompe));
+	if(CDialogPaveNum::getInstance()->exec()){
+		m_pModelEVPompe->setVitessePompe(arg_numPompe, CDialogPaveNum::getInstance()->getValue());
+		m_pView->setTextBtConfVitessePompe(arg_numPompe, CDialogPaveNum::getInstance()->getValue());
+	}
+}
+void CWinElecTestControler::btConfNbPasPressed(int arg_numPompe){
+	CDialogPaveNum::getInstance()->setValueName("Nombre pas/tours");
+	CDialogPaveNum::getInstance()->setValue(m_pModelEVPompe->getNbTourPompe(arg_numPompe));
+	if(CDialogPaveNum::getInstance()->exec()){
+		m_pModelEVPompe->setNbTourPompe(arg_numPompe, CDialogPaveNum::getInstance()->getValue());
+		m_pView->setTextBtConfNbPasPompe(arg_numPompe, CDialogPaveNum::getInstance()->getValue());
+	}
+}
+#endif
 //SLOT
 void CWinElecTestControler::btOnLocalPressed(int arg_numLocal)
 {

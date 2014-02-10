@@ -40,10 +40,14 @@ CWinEVPompeModel::CWinEVPompeModel(CSupervision* argpSupervision)//, CWinEVPompe
 	m_pSupervision->addKeyOnMapRQTComJBUSMesure(CONFIG_VITESSE_POMPE);
 	_stprintf(szRQ,_T("10|16|0x0220|10|20|300|300|300|300|300|300|300|300|300|300"));
 	_stprintf(szRP,_T("10|16|0x0220|10"));
+	for(int i=0; i<10; ++i)	m_listVitessePompe.append("30");
 	m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
 	m_pSupervision->addKeyOnMapRQTComJBUSMesure(CONFIG_POMPE);
 	_stprintf(szRQ,_T("10|16|0x0240|10|20|12|12|12|12|12|12|12|12|12|12"));
 	_stprintf(szRP,_T("10|16|0x0240|10"));
+	for(int i=0; i<10; ++i)	m_listConfPompe.append("12");
+	for(int i=0; i<10; ++i)	m_listNbTourPompe.append("1000");
+
 	m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
 	/*m_pSupervision->addKeyOnMapRQTComJBUSMesure(ALL_POMPES_OFF_1);
 	_stprintf(szRQ,_T("10|15|0x112|8|1|1"));
@@ -369,5 +373,115 @@ void CWinEVPompeModel::cmdPompesOff()
 {
 }
 
+void CWinEVPompeModel::setVitessePompe(int arg_numPompe, const QString arg_vit){
+	m_listVitessePompe[arg_numPompe] = arg_vit ;
+	QString sRq = "10|16|0x0220|10|20";
+	QString sValue;
+	foreach(sValue, m_listVitessePompe) sRq += "|" + sValue +"0";
+	//	_stprintf(szRQ,_T("10|16|0x0220|10|20|300|300|300|300|300|300|300|300|300|300"));
+	TCHAR szRQ[MAX_PATH];
+	TCHAR szRP[MAX_PATH];
 
+	lstrcpy(szRQ, (TCHAR*)sRq.utf16());
+	szRQ[sRq.size()] = _T('\0');
+	_stprintf(szRP,_T("10|16|0x0220|10"));
 
+	qDebug() << "setVitessePompe " << QString::fromUtf16((const ushort *)szRQ);
+	m_pSupervision->getCarteMesure()->bSetExchangeJbus(szRQ, szRP
+			, m_pSupervision->getAnalyseur()
+			, m_pSupervision->getNumRQTComJBUSMesure(CONFIG_VITESSE_POMPE));
+
+	m_threadPool->start(new CCmdJBusRunnable( this
+                                            , m_pSupervision->getNumRQTComJBUSMesure(CONFIG_VITESSE_POMPE)
+                                            , m_pSupervision->getCarteMesure()->getListExchange()
+                                            , m_pSupervision->getAnalyseur()->m_ExternalInterface));
+
+}
+void CWinEVPompeModel::setSensRotation(int arg_numPompe, bool arg_sensTrigo){
+	/*Char sens de rotation
+				XX00-> horaire en tour
+				XX01-> antihoraire en tour
+				XX10-> nombre de pas Horaire
+				XX11-> nombre de pas antihoraire 
+				X1XX-> Alimentation du moteur au repos
+				X0XX-> pas d’alimentation au repos
+				1XXX-> Retour position Homing 
+				0XXX-> Pas de gestion de la position Homing 
+	*/
+	int confPompe = m_listConfPompe[arg_numPompe].toInt();
+	qDebug() << "setSensRotation avant "<< confPompe;
+	if(arg_sensTrigo)
+		confPompe = confPompe | 0x01;
+	else
+		confPompe = confPompe & 0xFE;
+	qDebug() << "setSensRotation apres "<< confPompe << " " << arg_sensTrigo;
+
+	m_listConfPompe[arg_numPompe] = QString::number(confPompe);
+	initConfPompe();
+}
+void CWinEVPompeModel::setModeRotation(int arg_numPompe, bool arg_modeTour){
+	int confPompe = m_listConfPompe[arg_numPompe].toInt();
+	qDebug() << "setModeRotation avant "<< confPompe;
+	if(arg_modeTour)
+		//confPompe = confPompe & 0xF7;
+		confPompe = (confPompe & 0xF7) | 0x02;
+	else
+		confPompe = confPompe & 0xF5;
+	qDebug() << "setModeRotation apres "<< confPompe << " " << arg_modeTour;
+
+	m_listConfPompe[arg_numPompe] = QString::number(confPompe);
+	initConfPompe();
+}
+void CWinEVPompeModel::initConfPompe(){ 
+	//m_listConfPompe[arg_numPompe] = arg_conf;
+	QString sRq = "10|16|0x0240|10|20";
+	QString sValue;
+	foreach(sValue, m_listConfPompe) sRq += "|" + sValue;
+	//_stprintf(szRQ,_T("10|16|0x0240|10|20|12|12|12|12|12|12|12|12|12|12"));
+	TCHAR szRQ[MAX_PATH];
+	TCHAR szRP[MAX_PATH];
+
+	lstrcpy(szRQ, (TCHAR*)sRq.utf16());
+	szRQ[sRq.size()] = _T('\0');
+	_stprintf(szRP,_T("10|16|0x0240|10"));
+
+	qDebug() << "setConfPompe " << QString::fromUtf16((const ushort *)szRQ);
+	m_pSupervision->getCarteMesure()->bSetExchangeJbus(szRQ, szRP
+			, m_pSupervision->getAnalyseur()
+			, m_pSupervision->getNumRQTComJBUSMesure(CONFIG_POMPE));
+
+	m_threadPool->start(new CCmdJBusRunnable( this
+                                            , m_pSupervision->getNumRQTComJBUSMesure(CONFIG_POMPE)
+                                            , m_pSupervision->getCarteMesure()->getListExchange()
+                                            , m_pSupervision->getAnalyseur()->m_ExternalInterface));
+	
+}
+void CWinEVPompeModel::setNbTourPompe(int arg_numPompe, const QString arg_nbtour){ 
+	m_listNbTourPompe[arg_numPompe] = arg_nbtour;
+	QString sAddrPompe = "0x02"+ QString::number(arg_numPompe*2, 16).rightJustified(2,'0');
+	QString sRq = "10|16|"+ sAddrPompe+"|1|2|" + QString::number(arg_nbtour.toInt());
+	QString sRp = "10|16|"+ sAddrPompe+"|1";
+	
+	TCHAR szRQ[MAX_PATH];
+	TCHAR szRP[MAX_PATH];
+
+	lstrcpy(szRQ, (TCHAR*)sRq.utf16());
+	szRQ[sRq.size()] = _T('\0');
+	lstrcpy(szRP, (TCHAR*)sRp.utf16());
+	szRP[sRp.size()] = _T('\0');
+	
+
+	qDebug() << "setNbTourPompe ON" << QString::fromUtf16((const ushort *)szRQ);
+	m_pSupervision->getCarteMesure()->bSetExchangeJbus(szRQ, szRP
+			, m_pSupervision->getAnalyseur()
+			, m_pSupervision->getNumRQTComJBUSMesure(POMPE_ON + QString::number(arg_numPompe)));
+
+	//Arret -> 0 tour de pompe, même Rp que ON
+	/*sRq = "10|16|"+ sAddrPompe+"|1|2|0" ;
+	lstrcpy(szRQ, (TCHAR*)sRq.utf16());
+	szRQ[sRq.size()] = _T('\0');
+	qDebug() << "setNbTourPompe OFF" << QString::fromUtf16((const ushort *)szRQ);
+	m_pSupervision->getCarteMesure()->bSetExchangeJbus(szRQ, szRP
+			, m_pSupervision->getAnalyseur()
+			, m_pSupervision->getNumRQTComJBUSMesure(POMPE_OFF + QString::number(arg_numPompe)));*/
+}

@@ -189,7 +189,7 @@ QPushButton#btPlusDateTime:pressed {image: url(":/picto/30x30 Plus active.png");
 QPushButton#btMoinsDateTime {image: url(":/picto/30x30 moins.png"); border-width: 0px; height: 30px; width: 30px;}
 QPushButton#btMoinsDateTime:pressed {image: url(":/picto/30x30 moins active.png"); border-width: 0px; height: 30px; width: 30px; }
 
-PushButton#btSensRotation { image: url(":/pictohd/30x30 rotation horaire active.png"); border-width: 0px;height: 32px;width: 32px;}
+QPushButton#btSensRotation { image: url(":/pictohd/30x30 rotation horaire active.png"); border-width: 0px;height: 32px;width: 32px;}
 QPushButton#btSensRotation:flat { image: url(":/pictohd/30x30 rotation antihoraire active.png"); border-width: 0px;height: 32px;width: 32px;}
 
 QPushButton#btModeRotaion { image: url(":/pictohd/30x30 rotation mvt active.png"); border-width: 0px;height: 32px;width: 32px;}

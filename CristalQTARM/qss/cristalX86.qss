@@ -516,6 +516,7 @@ QPushButton#btInformation:pressed  {
 	width: 75px;
 	}	
 
+QPushButton#btHistorique { 	image: url(":/pictohd/50x50 historique.png"); border-width: 0px;height: 75px;width: 75px;}	
 
 	/*Fin onglet outils*/
 

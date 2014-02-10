@@ -157,9 +157,9 @@ int main(int argc, char *argv[])
 
 		//chargement stylesheet
 #ifdef RES_640_480
-		QFile file("cristalX86.qss");
+		QFile file(":/CristalQTARM/qss/cristalX86.qss");
 #else
-		QFile file("cristal.qss");
+		QFile file(":/CristalQTARM/qss/cristal.qss");
 #endif
 		file.open(QFile::ReadOnly);
 		a.setStyleSheet(QLatin1String(file.readAll()));

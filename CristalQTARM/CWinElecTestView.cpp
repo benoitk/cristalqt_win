@@ -39,17 +39,53 @@ void CWinElecTestView::init()
 	int numPompe = 0;
 	foreach(sPumpLabel, m_pModelEVPompe->getVectorPumpLabels())
 	{
+#ifdef R_D
+		CPushButton* btSensRotation = new CPushButton(numPompe);
+		btSensRotation->setObjectName("btSensRotation");
+		btSensRotation->setCheckable(true);
+		m_listBtSensRotation.append(btSensRotation);
+		connect(btSensRotation, SIGNAL(clicked(int)), m_pControler,SLOT(btSensRotationPressed(int)));
+		
+		CPushButton* btModeRotaion = new CPushButton(numPompe);
+		btModeRotaion->setObjectName("btModeRotaion");
+		btModeRotaion->setCheckable(true);
+		m_listBtModeRotation.append(btModeRotaion);
+		connect(btModeRotaion, SIGNAL(clicked(int)), m_pControler,SLOT(btModeRotaionPressed(int)));
+
+		CPushButton* btConfVitesse = new CPushButton(numPompe);
+		btConfVitesse->setObjectName("btLineEdit");
+		btConfVitesse->setText("30");
+		m_listBtConfigVitesse.append(btConfVitesse);
+		connect(btConfVitesse, SIGNAL(clicked(int)), m_pControler,SLOT(btConfVitessePressed(int)));
+
+		CPushButton* btConfNbPas = new CPushButton(numPompe);
+		btConfNbPas->setObjectName("btLineEdit");
+		m_listBtConfigNbPas.append(btConfNbPas);
+		btConfNbPas->setText("1000");
+		connect(btConfNbPas, SIGNAL(clicked(int)), m_pControler,SLOT(btConfNbPasPressed(int)));
+#endif
 		CPushButton* btOnTemp = new CPushButton(numPompe);
 		btOnTemp->setObjectName("btOn");
 		m_listBtOnPompe.append(btOnTemp);
+		connect(btOnTemp, SIGNAL(clicked(int)), m_pControler,SLOT(btOnPompePressed(int)));
 
 		CPushButton* btOffTemp = new CPushButton(numPompe++);
 		btOffTemp->setObjectName("btOff");
 		m_listBtOffPompe.append(btOffTemp);
+		connect(btOffTemp, SIGNAL(clicked(int)), m_pControler,SLOT(btOffPompePressed(int)));
 
 		QHBoxLayout* layoutBtPompe = new QHBoxLayout();
+#ifndef R_D
 		layoutBtPompe->addWidget(btOnTemp,50, Qt::AlignCenter);
 		layoutBtPompe->addWidget(btOffTemp,50, Qt::AlignLeft);
+#else
+		layoutBtPompe->addWidget(btOnTemp);
+		layoutBtPompe->addWidget(btOffTemp);
+		layoutBtPompe->addWidget(btSensRotation);
+		layoutBtPompe->addWidget(btModeRotaion);
+		layoutBtPompe->addWidget(btConfNbPas);
+		layoutBtPompe->addWidget(btConfVitesse);
+#endif
 
 		layoutCentral->addRow(sPumpLabel, layoutBtPompe);	
 	}
@@ -600,7 +636,7 @@ void CWinElecTestView::setConnexion()
 	int nNbPompe = m_listBtOnPompe.count();
 	qDebug() << "#### CWinEVPompeView::setConnexion | Nb pompe" << nNbPompe << endl;
 	
-	foreach(btTemp, m_listBtOnPompe)
+	/*foreach(btTemp, m_listBtOnPompe)
 	{
 		connect(btTemp, SIGNAL(clicked(int)), m_pControler,SLOT(btOnPompePressed(int)));
 		
@@ -609,7 +645,7 @@ void CWinElecTestView::setConnexion()
 	{
 		connect(btTemp, SIGNAL(clicked(int)), m_pControler,SLOT(btOffPompePressed(int)));
 
-	}
+	}*/
 	//Tab Mesure
 	foreach(btTemp, m_listBtOnLocal)
 	{
@@ -656,3 +692,4 @@ void CWinElecTestView::setConnexion()
 	//Event des onglets
 	connect(m_tabWidget, SIGNAL(currentChanged(int)), m_pControler, SLOT(tabChanged(int)));
 }
+

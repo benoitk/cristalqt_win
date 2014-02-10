@@ -30,7 +30,16 @@ public:
     QVector<QString> getVectorEVLabels()const{return m_vEVLabels;};
 
     void sendCmdJBus(const int& arg_numRQT, CElemList* arg_elemList, CEnumInterface& arg_interface);
+	
+	QString getVitessePompe(int arg_numPompe)const{return m_listVitessePompe.at(arg_numPompe);};
+	QString getConfPompe(int arg_numPompe)const{return m_listConfPompe.at(arg_numPompe);};
+	QString getNbTourPompe(int arg_numPompe)const{return m_listNbTourPompe.at(arg_numPompe);};
 
+	void setVitessePompe(int arg_numPompe, const QString arg_vit);
+	void initConfPompe();
+	void setSensRotation(int arg_numPompe, bool arg_sensTrigo);
+	void setModeRotation(int arg_numPompe, bool arg_modeTour);
+	void setNbTourPompe(int arg_numPompe, const QString arg_nbtour);
 
 private:
 	//Coté supervision connexion aux données
@@ -40,6 +49,10 @@ private:
     
     QVector<QString> m_vPumpLabels;
     QVector<QString> m_vEVLabels;
+
+	QList<QString> m_listVitessePompe;
+	QList<QString> m_listConfPompe;
+	QList<QString> m_listNbTourPompe;
 
     QThreadPool* m_threadPool;
     QMutex* m_mutex;

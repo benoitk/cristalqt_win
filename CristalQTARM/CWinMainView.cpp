@@ -460,7 +460,7 @@ void CWinMainView::init()
 	lblAnalyseur->setObjectName("lblOutils");*/
 	
 	m_btHistorique = new QPushButton();
-	m_btHistorique->setObjectName("btAnalyseur");
+	m_btHistorique->setObjectName("btHistorique");
 	QLabel* lblHistorique = new QLabel(tr("Historique"));
 	lblHistorique->setObjectName("lblOutils");
 
@@ -470,9 +470,12 @@ void CWinMainView::init()
 	gridLayoutBt->addWidget(lblMaintenance, 1, 0, Qt::AlignTop|Qt::AlignHCenter);
 	gridLayoutBt->addWidget(m_btSequenceur, 2, 0, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblSequenceur, 3, 0, Qt::AlignTop|Qt::AlignHCenter);
-#if defined(RES_640_480) //pas de copie de fichier pour le petit panel
+#if defined(RES_640_480) //pas de copie de fichier pour le petit panel/ni d'historique
 	gridLayoutBt->addWidget(m_btCopyLogFiles, 4, 0, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblCopyLogFiles, 5, 0, Qt::AlignTop|Qt::AlignHCenter);
+
+	gridLayoutBt->addWidget(m_btHistorique, 2, 3, Qt::AlignHCenter);
+	gridLayoutBt->addWidget(lblHistorique, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
 #endif
 	/*gridLayoutBt->addWidget(m_btHelp, 4, 0, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblHelp, 5, 0, Qt::AlignTop|Qt::AlignHCenter);*/
@@ -493,8 +496,7 @@ void CWinMainView::init()
 	/*gridLayoutBt->addWidget(m_btAnalyseur, 2, 3, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblAnalyseur, 3, 3, Qt::AlignTop|Qt::AlignHCenter);*/
 	
-	//gridLayoutBt->addWidget(m_btHistorique, 2, 3, Qt::AlignHCenter);
-	//gridLayoutBt->addWidget(lblHistorique, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
+	
 
 	QWidget* widgetMenuTools = new QWidget();
 	widgetMenuTools->setLayout(gridLayoutBt);

@@ -19,6 +19,7 @@ public:
 	virtual BOOL bRead(BYTE* lpData,long lSizeDataMax,long *plNbrLu,BOOL bByPass);
 	virtual BOOL bWriteAndRead(long lExtraHeader,BYTE* pBufferWrite,long iSizeToWrite,BYTE* pBufferRead, long iSizeToRead,long iSizeToReadMax, long *piSizeRead,BOOL bByPass);
 	virtual BOOL bAddExchangeJbus(LPTSTR pszRQ,LPTSTR pszRP,CListStream *pListStream);
+	virtual BOOL bSetExchangeJbus(LPTSTR pszRQ,LPTSTR pszRP,CListStream *pListStream, int indexRQ);
 	virtual void Stop();
 	virtual CElemList* getListExchange(){return m_pListExchange;};
 //////////////// FONCTIONS

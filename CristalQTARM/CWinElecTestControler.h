@@ -32,6 +32,13 @@ public slots:
 	void btOnPompePressed(int arg_numPompe);
 	void btOffPompePressed(int arg_numPompe);
 
+#ifdef R_D
+	void btSensRotationPressed(int arg_numPompe);
+	void btModeRotaionPressed(int arg_numPompe);
+	void btConfVitessePressed(int arg_numPompe);
+	void btConfNbPasPressed(int arg_numPompe);
+#endif
+
 	void btOnRelaisPressed(int numRelais);
 	void btOffRelaisPressed(int numRelais);
     void btOnStreamSelectorPressed(int numVoie);

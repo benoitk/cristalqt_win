@@ -106,7 +106,6 @@ BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTS
 	return bReturn;
 }
 
-
 BOOL CElemCycleStep::bReadConfig(LPTSTR pszRub, LPCTSTR pszFileName,CListStream *pListStream)
 {
 	BOOL bReturn = TRUE;

@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 33"
+#define NUM_VERSION_QT "4.0.7 build 34"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;
@@ -70,6 +70,10 @@ CDialogInfo::CDialogInfo()
 
 #if defined(SELECTEUR)    
     sTypeAnalyseur = sTypeAnalyseur +tr(" avec SELECTEUR");
+#endif
+
+#if defined(R_D)
+	sTypeAnalyseur = sTypeAnalyseur + "VERSION R&D";
 #endif
 
     //assemblage du menu et du layoutGauche

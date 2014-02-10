@@ -1,6 +1,7 @@
 #ifndef CPUSHBUTTON
 #define CPUSHBUTTON
 #include "header_qt.h"
+#include <QCheckBox>
 
 class CPushButton: public QPushButton
 {
