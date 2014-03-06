@@ -26,17 +26,7 @@ void CWinSchedulerView::init()
     {
 	    QWidget* widgetPeriodique = new QWidget();
 
-
-	    m_btNbCyleAvantZero = new QPushButton();
-	    m_btNbCyleAvantZero->setObjectName("btLineEdit");
-	    connect(m_btNbCyleAvantZero, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantZeroPressed()));
-		m_lblNbCyleAvantZero = new QLabel(tr("Nombre de cycle \navant cycle de blanc \n(Si 0, pas de cyle de blanc)"));
-#ifdef MULTI_MEASURE
-		m_lblNbCyleAvantZero->setText(tr("Nombre de cycle \navant cycle nettoyage \n(Si 0, pas de cyle de nettoyage)"));
-#endif
-	    m_lblNbCyleAvantZero->setObjectName("lblMeasure");
-
-	    m_btRemoteCtrl= new QPushButton();
+        m_btRemoteCtrl= new QPushButton();
 	    m_btRemoteCtrl->setObjectName("btLineEdit");
 	    connect(m_btRemoteCtrl, SIGNAL(clicked()), m_pControler, SLOT(btRemoteCtrlPressed()));
         m_lblRemoteCtrl = new QLabel(tr("Mode de contrôle\n0 : Local\n1 : Maintenance\n2 : JBus \n3 : Externe"));
@@ -72,9 +62,7 @@ void CWinSchedulerView::init()
         m_lblNumEscalveJBUS = new QLabel(tr("Esclave JBus N°"));
 	    m_lblNumEscalveJBUS->setObjectName("lblMeasure");
 	    QFormLayout* layoutGauche= new QFormLayout();
-#if defined(KMNO4) || defined (MULTI_MEASURE) 
-	    layoutGauche->addRow(m_lblNbCyleAvantZero, m_btNbCyleAvantZero);
-#endif
+
 	    layoutGauche->addRow(m_lblConsigneTemperature, m_btConsigneTemperature);
 	    layoutGauche->addRow(m_lblRegalgePression, m_btRegalgePression);
 	    layoutGauche->addRow(m_lblConsigneGain, m_btConsigneGain);
@@ -102,6 +90,63 @@ void CWinSchedulerView::init()
 	    //:Nom de l'onglet à garer en maj pour toutes les trad
 	    m_tabWidget->addTab(widgetPeriodique, tr("OPTIONS"));
     }
+
+	//Onglet configuration cycles auto
+	{
+		QWidget* widgetPeriodique = new QWidget();
+
+		
+		m_btNbCyleAvantCalib = new QPushButton();
+	    m_btNbCyleAvantCalib->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCalib, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCalibPressed()));
+		m_lblNbCyleAvantCalib = new QLabel(tr("Nombre de cycle \navant cycle de calibration"));
+
+		m_btNbCyleAvantCleanup = new QPushButton();
+	    m_btNbCyleAvantCleanup->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCleanup, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCleanupPressed()));
+		m_lblNbCyleAvantCleanup = new QLabel(tr("Nombre de cycle \navant cycle de controle de zero"));
+
+	    m_btNbCyleAvantZero = new QPushButton();
+	    m_btNbCyleAvantZero->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantZero, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantZeroPressed()));
+		m_lblNbCyleAvantZero = new QLabel(tr("Nombre de cycle \navant cycle de blanc \n(Si 0, pas de cyle de blanc)"));
+#ifdef MULTI_MEASURE
+		m_lblNbCyleAvantZero->setText(tr("Nombre de cycle \navant cycle nettoyage \n(Si 0, pas de cyle de nettoyage)"));
+#endif
+	    m_lblNbCyleAvantZero->setObjectName("lblMeasure");
+
+		m_btValeurEtalon= new QPushButton();
+	    m_btValeurEtalon->setObjectName("btLineEdit");
+	    connect(m_btValeurEtalon, SIGNAL(clicked()), m_pControler, SLOT(btValeurEtalonPressed()));
+        m_lblValeurEtalon = new QLabel(tr("Valeur étalon"));
+	    m_lblValeurEtalon->setObjectName("lblMeasure");
+      
+	    QFormLayout* layoutGauche= new QFormLayout();
+#if defined(KMNO4) || defined (MULTI_MEASURE) 
+	    layoutGauche->addRow(m_lblNbCyleAvantZero, m_btNbCyleAvantZero);
+#else
+	    layoutGauche->addRow(m_lblNbCyleAvantCalib, m_btNbCyleAvantCalib);
+	    layoutGauche->addRow(m_lblValeurEtalon, m_btValeurEtalon);
+	    layoutGauche->addRow(m_lblNbCyleAvantCleanup, m_btNbCyleAvantCleanup);
+#endif
+        //menu de gauche //toujours 4 items dans les menus en incluant les spacers
+	    m_btBack = new QPushButton();
+	    m_btBack->setObjectName("btBack");
+	    connect(m_btBack, SIGNAL(clicked()), m_pControler, SLOT(btBackPressed()));
+
+	    QVBoxLayout* layoutMenu = new QVBoxLayout();
+	    layoutMenu->addStretch();
+	    layoutMenu->addWidget(m_btBack);
+
+	    //assemblage du menu et du layoutGauche
+	    QHBoxLayout* layoutMain = new QHBoxLayout();
+	    layoutMain->addLayout(layoutGauche);
+	    layoutMain->addStretch();
+	    layoutMain->addLayout(layoutMenu);
+	    widgetPeriodique->setLayout(layoutMain);
+	    //:Nom de l'onglet à garer en maj pour toutes les trad
+	    m_tabWidget->addTab(widgetPeriodique, tr("CYCLES AUTO"));
+	}
 	//*** onglet Sequenceur
     {
         QWidget* widgetSequenceur = new QWidget();
@@ -359,10 +404,31 @@ void CWinSchedulerView::setNbCyleAvantZeroValue(const QString& arg_sValue)
 	m_pModel->setNbCycleAvantZero(arg_sValue);
 }
 
+void CWinSchedulerView::setNbCyleAvantCalibValue(const QString& arg_sValue)
+{
+	m_btNbCyleAvantCalib->setText(arg_sValue);
+	m_pModel->setNbCycleAvantCalib(arg_sValue);
+}
+
+void CWinSchedulerView::setNbCyleAvantCleanupValue(const QString& arg_sValue)
+{
+	m_btNbCyleAvantCleanup->setText(arg_sValue);
+	m_pModel->setNbCycleAvantCleanup(arg_sValue);
+}
+//void CWinSchedulerView::setNbCyleAvantCalibInLineValue(const QString& arg_sValue)
+//{
+//	m_btNbCyleAvantCalibInLine->setText(arg_sValue);
+//	m_pModel->setNbCycleAvantCalibInLine(arg_sValue);
+//}
 void CWinSchedulerView::setRemoteCtrlValue(const QString& arg_sValue)
 {
 	m_btRemoteCtrl->setText(arg_sValue);
 	m_pModel->setRemoteControl(arg_sValue);
+}
+void CWinSchedulerView::setValeurEtalonValue(const QString& arg_sValue)
+{
+	m_btRemoteCtrl->setText(arg_sValue);
+	m_pModel->setValeurEtalon(arg_sValue);
 }
 void CWinSchedulerView::setConsigneGainValue(const QString& arg_sValue)
 {
@@ -409,6 +475,9 @@ void CWinSchedulerView::loadPage()
     {
     case 0: //Options
 	    m_btNbCyleAvantZero->setText(m_pModel->getNbCycleAvantZero());
+	    m_btNbCyleAvantCalib->setText(m_pModel->getNbCycleAvantCalib());
+	    m_btNbCyleAvantCleanup->setText(m_pModel->getNbCycleAvantCleanup());
+		m_btValeurEtalon->setText(m_pModel->getValeurEtalon());
 	    m_btRemoteCtrl->setText(m_pModel->getRemoteControl());
 	    m_btConsigneGain->setText(m_pModel->getConsigneGain());
 	    m_btConsigneTemperature->setText(m_pModel->getConsigneTemperature());

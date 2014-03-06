@@ -127,6 +127,27 @@ void CAnalyseur::run()
 					m_CmdJumpStep.bSetVal(0);
 					m_iTimeElapse = 0;
 
+					//Commande par JBus prioritaire (test de tout les cycles)
+					if(pStream->m_ListCmdJbusMaintenance)
+					{
+						if(((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(0))->ucGetVal() == 1){
+							m_CmdCycleCalib.bSetVal(m_NumCurrentStream.ucGetVal());
+							((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(0))->bSetVal((BYTE)0);
+						}
+						if(((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(1))->ucGetVal() == 1){
+							m_CmdCycleCalibInLine.bSetVal(m_NumCurrentStream.ucGetVal());
+							((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(1))->bSetVal((BYTE)0);
+						}
+						if(((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(2))->ucGetVal() == 1){
+							m_CmdCycleCleanup.bSetVal(m_NumCurrentStream.ucGetVal());
+							((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(2))->bSetVal((BYTE)0);
+						}
+						if(((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(3))->ucGetVal() == 1){
+							m_CmdCycleZero.bSetVal(m_NumCurrentStream.ucGetVal());
+							((CElemInt8*)pStream->m_ListCmdJbusMaintenance->pGetAt(3))->bSetVal((BYTE)0);
+						}
+					}
+
 					//Pour ne pas faire de check sur les séquences inactive et si on est en maintenance manuel
 					if(pDuree->nGetVal()>0 && !m_CmdMaintenanceManuel.ucGetVal())
 					{
@@ -197,6 +218,7 @@ void CAnalyseur::run()
 									
 									pStream->m_StatusWaterFailure.bSetVal(0);
 									ExecuteZero();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 									m_CmdCycleZero.bSetVal(0xFF);
 								}
 								if (m_CmdCycleCleanup.ucGetVal() != 0xFF)
@@ -204,6 +226,7 @@ void CAnalyseur::run()
 								qDebug() <<"CHECK MAINTENANCE m_CmdCycleCleanup ON";
 									pStream->m_StatusWaterFailure.bSetVal(0);
 									ExecuteCleanup();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 									m_CmdCycleCleanup.bSetVal(0xFF);
 								}
 								if (m_CmdCycleCalib.ucGetVal() != 0xFF)
@@ -212,6 +235,7 @@ void CAnalyseur::run()
 									//TRACE_LOG_MSG(_T("CALIB ON  \n"));
 									pStream->m_StatusWaterFailure.bSetVal(0);
 									ExecuteCalib();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 									m_CmdCycleCalib.bSetVal(0xFF);
 									//TRACE_LOG_MSG(_T("CALIB OFF  \n"));
 								}
@@ -220,6 +244,7 @@ void CAnalyseur::run()
 								qDebug() <<"CHECK MAINTENANCE m_CmdCycleCalibInLine ON";
 									pStream->m_StatusWaterFailure.bSetVal(0);
 									ExecuteCalibInLine();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 									m_CmdCycleCalibInLine.bSetVal(0xFF);
 								}
 								
@@ -229,7 +254,6 @@ void CAnalyseur::run()
 						else
 						{
 							qDebug() <<"CHECK MAINTENANCE";
-
 							//TRACE_LOG_MSG(_T("CMD STOP AND CYCLE OFF  \n"));
 							//A factoriser
 							// action périodique
@@ -241,6 +265,8 @@ void CAnalyseur::run()
 								//TRACE_LOG_MSG(_T("Cmd de zero ...  \n"));
 								pStream->m_StatusWaterFailure.bSetVal(0);
 								ExecuteZero();
+								CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
+
 								m_CmdCycleZero.bSetVal(0xFF);
 							}
 							if (m_CmdCycleCalib.ucGetVal() != 0xFF)
@@ -250,6 +276,7 @@ void CAnalyseur::run()
 								//TRACE_LOG_MSG(_T("Cmd de calib ...  \n"));
 								pStream->m_StatusWaterFailure.bSetVal(0);
 								ExecuteCalib();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 								m_CmdCycleCalib.bSetVal(0xFF);
 							}
 							if (m_CmdCycleCalibInLine.ucGetVal() != 0xFF)
@@ -259,6 +286,7 @@ void CAnalyseur::run()
 								//TRACE_LOG_MSG(_T("Cmd de calib inline...  \n"));
 								pStream->m_StatusWaterFailure.bSetVal(0);
 								ExecuteCalibInLine();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 								m_CmdCycleCalibInLine.bSetVal(0xFF);
 							}
 							if (m_CmdCycleCleanup.ucGetVal() != 0xFF)
@@ -268,6 +296,7 @@ void CAnalyseur::run()
 								//TRACE_LOG_MSG(_T("Cmd de cleanup ...  \n"));
 								pStream->m_StatusWaterFailure.bSetVal(0);
 								ExecuteCleanup();
+									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 								m_CmdCycleCleanup.bSetVal(0xFF);
 							}
 						}
@@ -311,8 +340,7 @@ void CAnalyseur::run()
 							{				
 								//Trace des moyennes de mesures
 								TRACE_LOG_MESURE(pStream, &m_NumCurrentStream, m_Average.ucGetVal());	
-								//CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);
-																			
+								CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);												
 							}
 
 							//Si une demande d'ârret fin de cycle a été commandé, mettre le cmdRun à 0 à la fin du cycle

@@ -20,8 +20,12 @@ public:
 
 public slots:
 	void btBackPressed();
+	void btNbCyleAvantCalibPressed();
+	void btNbCyleAvantCleanupPressed();
+	//void btNbCyleAvantCalibInLinePressed();
 	void btNbCyleAvantZeroPressed();
 	void btRemoteCtrlPressed();
+	void btValeurEtalonPressed();
 	void btConsigneTemperaturePressed();
 	void btConsigneGainPressed();
 	void btReglagePressionPressed();

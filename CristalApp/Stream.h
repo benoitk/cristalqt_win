@@ -96,6 +96,8 @@ public:
 	CElemList m_ListPeriodicDayCycleCalib;
 	CElemList m_ListPeriodicDayCycleCalibInLine;
 
+	CElemFieldBit8* m_ListCmdJbusMaintenance;
+
 	CElemInt8 m_ConditioningCycleCleanup;
 	CElemInt8 m_ConditioningCycleZero;
 	CElemInt8 m_ConditioningCycleCalib;
@@ -227,6 +229,7 @@ public:
 	CElemList m_ListSequenceNum;
 	CElemList m_ListSequenceDuree;
 	static CElemList m_ListMessageError;
+
 protected:
 	long m_iNbrStream;
 	bool m_bNeedConditioning;

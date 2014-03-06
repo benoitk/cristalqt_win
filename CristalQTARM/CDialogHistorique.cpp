@@ -71,6 +71,7 @@ void CDialogHistorique::setEnabledBtPrev(const bool& arg_state)
     m_btPrev->setEnabled(arg_state);
 
 }
+
 void CDialogHistorique::addMesure(int arg_iStream, CStream* arg_pStream)
 {
 	//QString::fromWCharArray(arg_pszUnite);
@@ -95,17 +96,16 @@ void CDialogHistorique::addMesure(int arg_iStream, CStream* arg_pStream)
 			<< QString::number(stTime.wSecond).rightJustified(2, '0') << " " 
 			<< tr("VOIE : ") << arg_iStream+1 << " "
 			<< tr("MESURE : ") << lblMesure << " "
-			//<<  arg_pStream->pGetAt(k)->m_Val.fGetVal() << " "
-			<< rand() % 100 << " "
+			<<  arg_pStream->pGetAt(k)->m_Val.fGetVal() << " "
+			//<< rand() % 100 << " "
 			<<  lblUnite ;
 		listString.prepend(sRow);
 
-		//pas plus de 1000 ligne dans l'histo
-		if(listString.count() > 1000) listString.removeLast(); 
+		//pas plus de 10000 ligne dans l'histo
+		if(listString.count() > 10000) listString.removeLast(); 
 	
 	}
 	m_listModel->setStringList(listString);
     m_listView->slotChangePage();
 }
-
 

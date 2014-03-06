@@ -43,9 +43,22 @@ void CWinSchedulerModel::saveSequences()
     this->bWritePrivateProfileStringS("CListStream","m_ListSequenceDuree", sListSequenceDuree, "Config.ini");
     
 }
+
+QString CWinSchedulerModel::getValeurEtalon()const
+{
+	return QString::number(m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore.fGetVal());
+}
 QString CWinSchedulerModel::getNbCycleAvantZero()const
 {
 	return QString::number(m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleZero.ucGetVal());
+}
+QString CWinSchedulerModel::getNbCycleAvantCalib()const
+{
+	return QString::number(m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCalib.ucGetVal());
+}
+QString CWinSchedulerModel::getNbCycleAvantCleanup()const
+{
+	return QString::number(m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCleanup.ucGetVal());
 }
 QString CWinSchedulerModel::getRemoteControl()const
 {
@@ -291,6 +304,34 @@ void CWinSchedulerModel::setNbCycleAvantZero(QString arg_nbCycle)
 							, &m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleZero);
 
 }
+void CWinSchedulerModel::setNbCycleAvantCalib(QString arg_nbCycle)
+{
+	m_pSupervision->getAnalyseur()->pGetAt(0)->m_iNbCycleCalib = 1;
+	m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCalib.bSetVal((BYTE)arg_nbCycle.toShort(0, 10));
+	CMesureModel::writeElemConfigIni(_T("CStream0")
+							, _T("m_PeriodicCycleCalib")
+							, &m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCalib);
+
+}
+void CWinSchedulerModel::setNbCycleAvantCleanup(QString arg_nbCycle)
+{
+	m_pSupervision->getAnalyseur()->pGetAt(0)->m_iNbCycleCleanup = 1;
+	m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCleanup.bSetVal((BYTE)arg_nbCycle.toShort(0, 10));
+	CMesureModel::writeElemConfigIni(_T("CStream0")
+							, _T("m_PeriodicCycleCleanup")
+							, &m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCleanup);
+
+}
+//void CWinSchedulerModel::setNbCycleAvantCalibInLine(QString arg_nbCycle)
+//{
+//	m_pSupervision->getAnalyseur()->pGetAt(0)->m_iNbCycleCalibInLine = 1;
+//	m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCalibInLine.bSetVal((BYTE)arg_nbCycle.toShort(0, 10));
+//	CMesureModel::writeElemConfigIni(_T("CStream0")
+//							, _T("m_PeriodicCycleCalibInLine")
+//							, &m_pSupervision->getAnalyseur()->pGetAt(0)->m_PeriodicCycleCalibInLine);
+//
+//}
+
 void CWinSchedulerModel::setRemoteControl(QString arg_nbCycle)
 {
 
@@ -298,6 +339,16 @@ void CWinSchedulerModel::setRemoteControl(QString arg_nbCycle)
 	CMesureModel::writeElemConfigIni(_T("CListStream")
 							, _T("m_CmdRemoteControl")
 							, &m_pSupervision->getAnalyseur()->m_CmdRemoteControl);
+
+}
+
+void CWinSchedulerModel::setValeurEtalon(QString arg_nbCycle)
+{
+
+	m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore.bSetVal((BYTE)arg_nbCycle.toShort(0, 10));
+	CMesureModel::writeElemConfigIni(_T("CStream0_CMesure0")
+							, _T("m_StandardValueBefore")
+							, &m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore);
 
 }
 void CWinSchedulerModel::setConsigneGain(QString arg)

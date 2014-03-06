@@ -300,7 +300,6 @@ QString CWinMainModel::getCurrentStream()const
 }
 int CWinMainModel::nGetCurrentStream()const
 {
-	
     return m_pSupervision->getAnalyseur()->m_NumCurrentStream.ucGetVal();
 }
 int CWinMainModel::nGetPreviousStream()const{
@@ -360,6 +359,15 @@ QString CWinMainModel::getEtatAnalyseur()const
 	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
 			&& m_pSupervision->getAnalyseur()->m_CmdCycleZero.ucGetVal() != 0xFF)
 		sEtatAnalyseur = tr("ZERO EN COURS");
+	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
+			&& m_pSupervision->getAnalyseur()->m_CmdCycleCalibInLine.ucGetVal() != 0xFF)
+		sEtatAnalyseur = tr("CALIBRATION EN LIGNE EN COURS");
+	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
+			&& m_pSupervision->getAnalyseur()->m_CmdCycleCalib.ucGetVal() != 0xFF)
+		sEtatAnalyseur = tr("CALIBRATION EN COURS");
+	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
+			&& m_pSupervision->getAnalyseur()->m_CmdCycleCleanup.ucGetVal() != 0xFF)
+		sEtatAnalyseur = tr("CONTROLE ZERO EN COURS");
 	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0)
 		sEtatAnalyseur = tr("CYCLE EN COURS");
 	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()!=0)

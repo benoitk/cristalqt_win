@@ -31,12 +31,25 @@ public:
 	void setModel(CWinSchedulerModel* argpModel);
 	void loadPage();
 	QString getNbCyleAvantZeroValue()const{return m_btNbCyleAvantZero->text();};
+	QString getNbCyleAvantCalibValue()const{return m_btNbCyleAvantCalib->text();};
+	QString getNbCyleAvantCleanupValue()const{return m_btNbCyleAvantCleanup->text();};
+	//QString getNbCyleAvantCalibInLineValue()const{return m_btNbCyleAvantCalibInLine->text();};
 	QString getNbCyleAvantZeroLbl()const{return m_lblNbCyleAvantZero->text();};
+	QString getNbCyleAvantCalibLbl()const{return m_lblNbCyleAvantCalib->text();};
+	QString getNbCyleAvantCleanupLbl()const{return m_lblNbCyleAvantCleanup->text();};
+	//QString getNbCyleAvantCalibInLineLbl()const{return m_lblNbCyleAvantCalibInLine->text();};
 	void setNbCyleAvantZeroValue(const QString& arg_sValue);
+	void setNbCyleAvantCalibValue(const QString& arg_sValue);
+	void setNbCyleAvantCleanupValue(const QString& arg_sValue);
+	//void setNbCyleAvantCalibInLineValue(const QString& arg_sValue);
 
 	QString getRemoteCtrlValue()const{return m_btRemoteCtrl->text();};
 	QString getRemoteCtrlLbl()const{return m_lblRemoteCtrl->text();};
 	void setRemoteCtrlValue(const QString& arg_sValue);
+
+	QString getValeurEtalonValue()const{return m_btValeurEtalon->text();};
+	QString getValeurEtalonLbl()const{return m_lblValeurEtalon->text();};
+	void setValeurEtalonValue(const QString& arg_sValue);
 
     QString getConsigneTemperatureValue()const{return m_btConsigneTemperature->text();};
 	QString getConsigneTemperatureLbl()const{return m_lblConsigneTemperature->text();};
@@ -84,8 +97,17 @@ private:
     CWinSchedulerModel* m_pModel;
 	CWinSchedulerControler* m_pControler;
 
+	//QPushButton* m_btNbCyleAvantCalibInLine;
+	//QLabel* m_lblNbCyleAvantCalibInLine;
+	QPushButton* m_btNbCyleAvantCalib;
+	QLabel* m_lblNbCyleAvantCalib;
+	QPushButton* m_btNbCyleAvantCleanup;
+	QLabel* m_lblNbCyleAvantCleanup;
 	QPushButton* m_btNbCyleAvantZero;
 	QLabel* m_lblNbCyleAvantZero;
+
+	QPushButton* m_btValeurEtalon; ///Pour cycle de calib auto
+	QLabel* m_lblValeurEtalon;
 
 	QPushButton* m_btRemoteCtrl;
 	QLabel* m_lblRemoteCtrl;

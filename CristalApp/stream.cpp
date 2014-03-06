@@ -915,7 +915,8 @@ BOOL CStream::bCheckAndCmdPeriodic( int& argiCheckedDays, int& argiCheckedHours
 
 //	TCHAR szTrace[500];
 	//TRACE_LOG_MSG(_T("Check periodique ...  \n"));
-
+	
+	
 	//Periodique en nombre de cycle
 	/*_stprintf(szTrace,_T("Nb cycle a faire: %d , cpt : %d , voie : %d \n")
 			 ,argpPeriodicCycle->ucGetVal(), argiCptCycle, argNumCurrentStream->ucGetVal());

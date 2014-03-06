@@ -18,7 +18,10 @@ class CWinSchedulerModel: public QObject
 public:
 	CWinSchedulerModel(CSupervision* argpSupervision, CWinSchedulerView* argpView);
 	
+	QString getValeurEtalon()const;
 	QString getNbCycleAvantZero()const;
+	QString getNbCycleAvantCalib()const;
+	QString getNbCycleAvantCleanup()const;
 	QString getRemoteControl()const;
 	QString getConsigneTemperature()const;
 	QString getConsigneGain()const;
@@ -46,7 +49,12 @@ public:
 	void setMinute(const QString arg);
     void setDateTime(const QString arg_Year, const QString arg_Month, const QString arg_Day, const QString arg_Hour, const QString arg_Minute);
 	void setNbCycleAvantZero(QString arg_nbCycle);
+	void setNbCycleAvantCalib(QString arg_nbCycle);
+	void setNbCycleAvantCleanup(QString arg_nbCycle);
+	//void setNbCycleAvantCalibInLine(QString arg_nbCycle);
+	
 	void setRemoteControl(QString arg_nbCycle);
+	void setValeurEtalon(QString arg_nbCycle);
 	void setConsigneTemperature(QString arg_nbCycle);
 	void setConsigneGain(QString arg_nbCycle);
 	void setReglagePression(QString arg_nbCycle);

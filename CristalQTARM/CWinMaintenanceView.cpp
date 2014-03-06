@@ -226,7 +226,7 @@ void CWinMaintenanceView::init()
 	gridLayout->addWidget(m_btTemperatureCuve, row, 1);
 	gridLayout->addWidget(new QLabel(tr("°C")), row++,2);
 #endif
-	gridLayout->addWidget(new QLabel(tr("Préssion d'eau")), row,0);
+	gridLayout->addWidget(new QLabel(tr("Pression d'eau")), row,0);
 	gridLayout->addWidget(m_btPressionEau, row, 1);
 	gridLayout->addWidget(new QLabel(tr("V")), row++,2);
 	gridLayout->addWidget(new QLabel(tr("Mesure optique")), row,0);

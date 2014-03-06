@@ -45,6 +45,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 	CElemFieldBit8 *pElemFieldBit8 = NULL;
 	CElemBase *pElem = NULL;
 	CElemInt16 *pElemInt16 = NULL;
+	
 	TCHAR szText[2048];
 	TCHAR szSeps[]   = _T("|");
 	int iCurrentPos = 0;
@@ -53,7 +54,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 	{
 		iCurrentPos = 0;
 		// commande ECRITURE 
-		// CMD MARCHE VOIE
+		// CMD MARCHE VOIE 8600
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|%08x|%08x"),MAKE_ID(0,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(1,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),
 					MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),0,0);
 		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
@@ -62,7 +63,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 			iCurrentPos = 0;
 			bReturn = pElemFieldBit8->bSetConfig(szText,iCurrentPos,pListStream);
 		}
-		// CMD RUN
+		// CMD RUN 8601
 		_stprintf(szText, _T("0x%08x"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_RUN));
 		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
 		if (bReturn = (pElemFieldBit8 != NULL))
@@ -70,9 +71,23 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 			iCurrentPos = 0;
 			bReturn = pElemFieldBit8->bSetConfig(szText,iCurrentPos,pListStream);
 		}
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
-
-
+		//8602 VOIE 1 CMD CALIB 6020/ CALIB IN LINE 6021/ CLEANUP 6022 / ZERO 6023 
+		//8603 VOIE 2 CMD CALIB 6030/ CALIB IN LINE 6031/ CLEANUP 6032 / ZERO 6033 
+		//8604 VOIE 5 CMD CALIB 6040/ CALIB IN LINE 6041/ CLEANUP 6042 / ZERO 6043 
+		//8605 VOIE 1 CMD CALIB 6050/ CALIB IN LINE 6051/ CLEANUP 6052 / ZERO 6053 
+		//8606 VOIE 2 CMD CALIB 6060/ CALIB IN LINE 6061/ CLEANUP 6062 / ZERO 6063 
+		//8607 VOIE 5 CMD CALIB 6070/ CALIB IN LINE 6071/ CLEANUP 6072 / ZERO 6073 
+		for(int i=0; i<pListStream->iGetNbrStream(); ++i)
+		{
+			_stprintf(szText, _T("0|0|0|0|0|0|0|0"));
+			pListStream->pGetAt(i)->m_ListCmdJbusMaintenance = (CElemFieldBit8*)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
+			if (bReturn = (pListStream->pGetAt(i)->m_ListCmdJbusMaintenance != NULL))
+			{
+				iCurrentPos = 0;
+				bReturn = pListStream->pGetAt(i)->m_ListCmdJbusMaintenance->bSetConfig(szText, iCurrentPos,pListStream);
+			}
+		}
+		
 		iCurrentPos = 0;
 		// commande LECTURE 
 		// ETAT MARCHE VOIE : 0x8610
@@ -527,8 +542,11 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(5, 2,eTYPE_INT16,eID_MESURE_VAL_JBUS_SLAVE)));
 		// voie 6 mesure 4 : 0x86CE
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(5, 3,eTYPE_INT16,eID_MESURE_VAL_JBUS_SLAVE)));
-		// ADU : 0x86D0
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		// voie 1 mesure 1  : 0x86D0 (pour le control zéro modif nickel VOIE 1 MESURE 1)
+		CElemInt16* intDeltaJbus = new CElemInt16();
+		intDeltaJbus->bSetVal(((CElemFloat*)pListStream->pFindOrCreateElemFromID(MAKE_ID(0, 0,eTYPE_FLOAT,eID_MESURE_DELTA)))->fGetVal()
+							* ((CElemFloat*)pListStream->pFindOrCreateElemFromID(MAKE_ID(0, 0,eTYPE_FLOAT,eID_MESURE_COEFF_VAL_JBUS_SLAVE)))->fGetVal());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(intDeltaJbus);
 		// ADU : 0x86D2
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
 		// ADU : 0x86D4
