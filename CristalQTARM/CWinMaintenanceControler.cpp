@@ -62,7 +62,7 @@ void CWinMaintenanceControler::btExecuteCalibPressed()
 {
     qDebug()<< "CWinMaintenanceControler::btExecuteCalibPressed()" << m_numStream;
 #ifdef CALIBRATIONS_INDEPENDANTE
-	m_numStream = m_numTabIndex;
+	m_numStream = m_numTabIndex; 
 #endif
 	if(m_pView->getEnabledLblCalib(m_numStream))
 	{
@@ -101,7 +101,7 @@ void CWinMaintenanceControler::btExecuteCalibInLinePressed()
 	if(m_pView->getEnabledLblCalibInLine(m_numStream))
 	{
 		m_pDialogValEtalon = CDialogValEtalon::getInstance();
-#if !defined(COULEUR) && !defined(SONDE)
+#if !defined(COULEUR) && !defined(SONDE) && !defined(CALCIUM_MAGNESIUM)
 		connect(m_pDialogValEtalon, SIGNAL(accepted()), this, SLOT(executeCalibInLineAccepted()));
 		//connect(m_pDialogValEtalon, SIGNAL(rejected()), this, SLOT(executeCalibRejected()));
 		m_pDialogValEtalon->setTittle(tr("VALEUR ETALON"));
@@ -160,7 +160,7 @@ void CWinMaintenanceControler::btExecuteZeroPressed()
 		//m_pDialogValEtalon->setTittle(tr("VALEUR OFFSET"));
 		//m_pDialogValEtalon->setLine(m_pModel->sGetOffsetActuelLbl(), m_pModel->sGetOffsetActuelVal());
 //#ifdef COULEUR
-//        m_pDialogValEtalon->setTittle(tr("VALEUR ETALON"));
+//      m_pDialogValEtalon->setTittle(tr("VALEUR ETALON"));
 //		m_pDialogValEtalon->setLine(m_pModel->sGetEtalonEauRefLbl(), m_pModel->sGetEtalonEauRefVal());
 //		if(m_pDialogValEtalon->exec())	
 //#endif
@@ -285,14 +285,20 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		m_bCycleCalibEnCours=false;
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS ETALONNAGE"));
 		//m_pDialogResultatEtalon->setLine(m_pModel->sGetEtalonRefLbl(), m_pModel->sGetEtalonRefVal());
+#ifdef CALCIUM_MAGNESIUM
+		m_pDialogResultatEtalon->setLine(m_pModel->sGetCoefActuelLbl(m_numStream, 0), m_pModel->sGetCoefActuelVal(m_numStream, 0));
+		m_pDialogResultatEtalon->setLine2(m_pModel->sGetV2Lbl(), m_pModel->sGetV2Val());
+		m_pDialogResultatEtalon->setLine3(m_pModel->sGetEtalonRefLbl(m_numStream, 0), m_pModel->sGetEtalonRefVal(m_numStream, 0));
+#else
 		m_pDialogResultatEtalon->setLine(m_pModel->sGetCoefActuelLbl(m_numStream, 0), m_sAncienCoefActuel);
 		m_pDialogResultatEtalon->setLine2(m_pModel->sGetCoefCalculeLbl(m_numStream, 0), m_pModel->sGetCoefCalculeVal(m_numStream, 0));
 #if /*defined(SILICE) &&*/ !defined(MULTI_MEASURE)
 		float fMesureAvantEtalon = 
 				(m_pModel->sGetEtalonRefVal(m_numStream, 0).toFloat() * 
 				m_sAncienCoefActuel.toFloat()) / m_pModel->sGetCoefCalculeVal(m_numStream, 0).toFloat();
-		m_pDialogResultatEtalon->setLine3(tr("Mesure avant étalonnage"), QString::number(fMesureAvantEtalon, 'f', 2));
-		m_pDialogResultatEtalon->setLine4(tr("Mesure après étalonnage"), m_pModel->sGetEtalonRefVal(m_numStream,0));
+		m_pDialogResultatEtalon->setLine3(tr("Mes avant étalonnage"), QString::number(fMesureAvantEtalon, 'f', 2));
+		m_pDialogResultatEtalon->setLine4(tr("Mes après étalonnage"), m_pModel->sGetEtalonRefVal(m_numStream,0));
+#endif
 #endif
 #ifdef MULTI_MEASURE
         m_pDialogResultatEtalon->setLine3(m_pModel->sGetCoefActuelLbl(m_numStream, 1), m_sAncienCoefActuel2);
@@ -339,8 +345,10 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		if(m_pDialogResultatEtalon->exec())
 		{
 			//m_pModel->setEtalonRefVal(m_pDialogResultatEtalon->getReturnValue());
+#ifndef CALCIUM_MAGNESIUM //pas de report de coeff (les variable concerné sont utilisé pour tout autre chose ...)
 			m_pModel->setCoefActuelVal(m_pDialogResultatEtalon->getReturnValue2(),m_numStream, 0);
 			m_pModel->setCoefCalculeVal(m_pDialogResultatEtalon->getReturnValue2(),m_numStream, 0);
+
 #ifdef MULTI_MEASURE
             m_pModel->setCoefActuelVal(m_pDialogResultatEtalon->getReturnValue4(),m_numStream, 1);
 			m_pModel->setCoefCalculeVal(m_pDialogResultatEtalon->getReturnValue4(),m_numStream, 1);
@@ -351,6 +359,7 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 			m_pModel->setCoefActuelVal(m_sAncienCoefActuel,m_numStream,0);
 #ifdef MULTI_MEASURE
 			m_pModel->setCoefActuelVal(m_sAncienCoefActuel2,m_numStream,1);
+#endif
 #endif
 		}
 
@@ -374,8 +383,8 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 #elif defined(SONDE)
         m_pDialogResultatEtalon->setTittle(tr("RESULTATS ETALONNAGE SONDE"));
 		//m_pDialogResultatEtalon->setLine(m_pModel->sGetEtalonRefLbl(), m_pModel->sGetEtalonRefVal());
-		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetActuelLbl(m_numStream),m_sAncienOffsetActuel);
-		m_pDialogResultatEtalon->setLine2(m_pModel->sGetOffsetCalculeLbl(m_numStream),m_pModel->sGetOffsetCalculeVal(m_numStream));
+		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetActuelLbl(m_numStream,0),m_sAncienOffsetActuel);
+		m_pDialogResultatEtalon->setLine2(m_pModel->sGetOffsetCalculeLbl(m_numStream,0),m_pModel->sGetOffsetCalculeVal(m_numStream));
 		if( m_pModel->bGetCoefStatus(m_numStream,0) )
 		{
 			m_pDialogResultatEtalon->setLblMessageErreur(tr("Erreur étalonnage"));
@@ -392,6 +401,10 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		{
 			m_pModel->setOffsetActuelVal(m_sAncienOffsetActuel, m_numStream);
 		}
+#elif defined(CALCIUM_MAGNESIUM)
+		m_pDialogResultatEtalon->setTittle(tr("BRINE + 25µg TEST"));
+		m_pDialogResultatEtalon->setLine(m_pModel->sGetMesureManuelleLbl(m_numStream, 0), m_pModel->sGetMesureManuelleVal(m_numStream, 0));
+		m_pDialogResultatEtalon->exec();
 #else       
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS ETALONNAGE EN LIGNE"));
 		//m_pDialogResultatEtalon->setLine(m_pModel->sGetEtalonRefLbl(), m_pModel->sGetEtalonRefVal());
@@ -492,13 +505,21 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS MESURE PH"));
 		m_pDialogResultatEtalon->setLine(m_pModel->sGetMesurePHLbl(), m_pModel->sGetMesurePHVal());
 		m_pDialogResultatEtalon->exec();
+#elif defined(CALCIUM_MAGNESIUM)
 
-		
+		m_bCycleZeroEnCours=false;
+		m_pDialogResultatEtalon->setTittle(tr("BRINE + 75µg TEST"));
+		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetCalculeLbl(m_numStream,0), m_pModel->sGetOffsetCalculeVal(m_numStream));
+		m_pDialogResultatEtalon->exec();
 #else
 		m_bCycleZeroEnCours=false;
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS ETALONNAGE ZERO"));
-		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetActuelLbl(m_numStream), m_sAncienOffsetActuel);
-		m_pDialogResultatEtalon->setLine2(m_pModel->sGetOffsetCalculeLbl(m_numStream), m_pModel->sGetOffsetCalculeVal(m_numStream));
+		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetActuelLbl(m_numStream,0), m_sAncienOffsetActuel);
+		m_pDialogResultatEtalon->setLine2(m_pModel->sGetOffsetCalculeLbl(m_numStream,0), m_pModel->sGetOffsetCalculeVal(m_numStream));
+#ifdef MULTI_MEASURE
+		m_pDialogResultatEtalon->setLine3(m_pModel->sGetOffsetActuelLbl(m_numStream,1), m_sAncienOffsetActuel);
+		m_pDialogResultatEtalon->setLine4(m_pModel->sGetOffsetCalculeLbl(m_numStream,1), m_pModel->sGetOffsetCalculeVal(m_numStream));
+#endif
 		if( m_pModel->bGetOffsetStatus(m_numStream) )
 		{
 			m_pDialogResultatEtalon->setLblMessageErreur(tr("Erreur étalonnage"));
@@ -522,6 +543,7 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 	else if (m_bCycleCleanupEnCours) // m_pView->getPressedBtExecuteCleanup())
 	{
 		m_bCycleCleanupEnCours=false;
+#ifndef CALCIUM_MAGNESIUM
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS MESURE MANUELLE"));
 #if defined(MULTI_MEASURE)
         m_pDialogResultatEtalon->setLine(m_pModel->sGetMesureManuelleLbl(m_numStream, 0), m_pModel->sGetMesureManuelleVal(m_numStream, 0));
@@ -542,6 +564,7 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		{
 			m_pModel->setMesureManuelleVal(m_pDialogResultatEtalon->getReturnValue2(), m_numStream,0);
 		}
+#endif
 #endif
 	}
 	
@@ -584,7 +607,11 @@ void CWinMaintenanceControler::tabChanged(int index)
 		//autre
 		default:
 			//m_pModel->setStopTimerCycle();
+#ifdef CALIBRATIONS_INDEPENDANTE
+			m_pModel->setStartTimerDiag();
+#else
 			m_pModel->setStopTimerDiag();	
+#endif
 			break;
 	}
 }

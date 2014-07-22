@@ -63,7 +63,9 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
     #elif defined(SONDE)
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0601");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0602");
-	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0603");
+			#ifdef RES_640_480
+				listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0603");
+			#endif
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0606");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0607");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0608");
@@ -171,6 +173,14 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0621");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061f");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0622");
+
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061c");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061e");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0623");
+			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d9");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d6");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d7");
+
     	    
     #endif
             listMesure.append(listValuesKey);

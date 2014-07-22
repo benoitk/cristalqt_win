@@ -168,24 +168,24 @@ void CWinSchedulerControler::btNbCyleAvantCleanupPressed(){
 		}
 	}
 }
-////SLOT
-//void CWinSchedulerControler::btNbCyleAvantCalibInLinePressed(){
-//	if(CUserSession::getInstance()->loginUser())
-//	{
-//		CDialogPaveNum* pPaveNum = CDialogPaveNum::getInstance();
-//		pPaveNum->setValue(m_pView->getNbCyleAvantCalibInLineValue());
-//		pPaveNum->setValueName(m_pView->getNbCyleAvantCalibInLineLbl());
-//	
-//		if(pPaveNum->exec())
-//		{
-//			//Ce servir des bornes configurables plus tard ! 
-//			int iValue = pPaveNum->getValue().toInt();
-//			if(iValue > 255) iValue = 255;
-//			if(iValue < 0) iValue = 0;
-//			m_pView->setNbCyleAvantCalibInLineValue(QString::number(iValue));
-//		}
-//	}
-//}
+//SLOT
+void CWinSchedulerControler::btNbCyleAvantCalibInLinePressed(){
+	if(CUserSession::getInstance()->loginUser())
+	{
+		CDialogPaveNum* pPaveNum = CDialogPaveNum::getInstance();
+		pPaveNum->setValue(m_pView->getNbCyleAvantCalibInLineValue());
+		pPaveNum->setValueName(m_pView->getNbCyleAvantCalibInLineLbl());
+	
+		if(pPaveNum->exec())
+		{
+			//Ce servir des bornes configurables plus tard ! 
+			int iValue = pPaveNum->getValue().toInt();
+			if(iValue > 255) iValue = 255;
+			if(iValue < 0) iValue = 0;
+			m_pView->setNbCyleAvantCalibInLineValue(QString::number(iValue));
+		}
+	}
+}
 //SLOT
 void CWinSchedulerControler::btNbCyleAvantZeroPressed()
 {

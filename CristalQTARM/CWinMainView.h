@@ -103,6 +103,10 @@ private:
 	QPushButton* m_btQuit;
 	
 	QPushButton* m_btHistorique;
+
+	QPushButton* m_btSwitchConfig;
+	
+
 	//*** Onglet Diagnostic
 	QPushButton* m_btTemperatureCuve ;
 	QPushButton* m_btPressionEau;

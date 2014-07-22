@@ -33,15 +33,15 @@ public:
 	QString getNbCyleAvantZeroValue()const{return m_btNbCyleAvantZero->text();};
 	QString getNbCyleAvantCalibValue()const{return m_btNbCyleAvantCalib->text();};
 	QString getNbCyleAvantCleanupValue()const{return m_btNbCyleAvantCleanup->text();};
-	//QString getNbCyleAvantCalibInLineValue()const{return m_btNbCyleAvantCalibInLine->text();};
+	QString getNbCyleAvantCalibInLineValue()const{return m_btNbCyleAvantCalibInLine->text();};
 	QString getNbCyleAvantZeroLbl()const{return m_lblNbCyleAvantZero->text();};
 	QString getNbCyleAvantCalibLbl()const{return m_lblNbCyleAvantCalib->text();};
 	QString getNbCyleAvantCleanupLbl()const{return m_lblNbCyleAvantCleanup->text();};
-	//QString getNbCyleAvantCalibInLineLbl()const{return m_lblNbCyleAvantCalibInLine->text();};
+	QString getNbCyleAvantCalibInLineLbl()const{return m_lblNbCyleAvantCalibInLine->text();};
 	void setNbCyleAvantZeroValue(const QString& arg_sValue);
 	void setNbCyleAvantCalibValue(const QString& arg_sValue);
 	void setNbCyleAvantCleanupValue(const QString& arg_sValue);
-	//void setNbCyleAvantCalibInLineValue(const QString& arg_sValue);
+	void setNbCyleAvantCalibInLineValue(const QString& arg_sValue);
 
 	QString getRemoteCtrlValue()const{return m_btRemoteCtrl->text();};
 	QString getRemoteCtrlLbl()const{return m_lblRemoteCtrl->text();};
@@ -97,8 +97,8 @@ private:
     CWinSchedulerModel* m_pModel;
 	CWinSchedulerControler* m_pControler;
 
-	//QPushButton* m_btNbCyleAvantCalibInLine;
-	//QLabel* m_lblNbCyleAvantCalibInLine;
+	QPushButton* m_btNbCyleAvantCalibInLine;
+	QLabel* m_lblNbCyleAvantCalibInLine;
 	QPushButton* m_btNbCyleAvantCalib;
 	QLabel* m_lblNbCyleAvantCalib;
 	QPushButton* m_btNbCyleAvantCleanup;

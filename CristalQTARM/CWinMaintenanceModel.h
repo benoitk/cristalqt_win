@@ -48,8 +48,8 @@ public:
 	bool bGetOffsetStatus(int arg_numStream)const;
 	
 	QString sGetMesureManuelleLbl(int arg_numStream, int arg_numMeasure)const;
-	QString sGetOffsetActuelLbl(int arg_numStream)const;
-	QString sGetOffsetCalculeLbl(int arg_numStream)const;
+	QString sGetOffsetActuelLbl(int arg_numStream, int arg_numMeasure)const;
+	QString sGetOffsetCalculeLbl(int arg_numStream, int arg_numMeasure)const;
 	QString sGetEtalonRefLbl(int arg_numStream, int arg_numMeasure)const;
 	QString sGetCoefActuelLbl(int arg_numStream, int arg_numMeasure)const;
 	QString sGetCoefCalculeLbl(int arg_numStream, int arg_numMeasure)const;
@@ -95,6 +95,9 @@ public:
 	QString getOpticalMeasurementUnit()const;
 	float getOpticalMeasurementValue()const;
 	int getNbStream()const;
+	QString getAbsorbanceValueLbl()const;
+    QString getAbsorbanceValueUnit()const;
+    QString getAbsorbanceValueValue()const;
 
 	void setStopTimerCycle(){if(m_timerCycle->isActive())m_timerCycle->stop();};
 	void setStartTimerCycle(){if(!m_timerCycle->isActive())m_timerCycle->start();};

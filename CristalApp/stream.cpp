@@ -140,6 +140,9 @@ CStream::CStream(BYTE ucNumVoie):CElemBase(),m_ListPeriodicHourCycleCleanup(24),
 	m_StateConditioning.SetLabel(_T("m_StateConditioning"));
 	m_StateConditioning.SetType(MAKE_ID(ucNumVoie,0xFF,eTYPE_INT8,eID_STREAM_STATE_CONDITIONING));
 
+	m_StatusSaumureFailure.SetLabel(_T("m_StatusSaumureFailure"));
+	m_StatusSaumureFailure.SetType(MAKE_ID(ucNumVoie,0xFF,eTYPE_INT8,eID_STREAM_STATUS_SAUMURE_FAILURE));
+
 	m_iNbCycleCleanup=0;
 	m_iNbCycleZero=0;
 	m_iNbCycleCalib=0;
@@ -289,6 +292,7 @@ BOOL CStream::bSerialize(CContext &Context)
 	if (bReturn) bReturn = m_ConditioningCalibInLine.bSerialize(Context);
 	if (bReturn) bReturn = m_ConditioningMeasurement.bSerialize(Context);
 	if (bReturn) bReturn = m_StateConditioning.bSerialize(Context);
+	if (bReturn) bReturn = m_StatusSaumureFailure.bSerialize(Context);
 
 	if (!bReturn) 
 	{
@@ -362,6 +366,7 @@ int CStream::iGetStreamSize(CContext &Context)
 	iSize += m_ConditioningCalibInLine.iGetStreamSize(Context);
 	iSize += m_ConditioningMeasurement.iGetStreamSize(Context);
 	iSize += m_StateConditioning.iGetStreamSize(Context);
+	iSize += m_StatusSaumureFailure.iGetStreamSize(Context);
 
 	return iSize;
 }
@@ -622,6 +627,10 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 	_stprintf(szText2,_T("0x%08x|m_StateConditioning|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_STATE_CONDITIONING),m_StateConditioning.m_szFormat.szGetLabel());
 	dwGetPrivateProfileString(szRub,_T("m_StateConditioning"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_StateConditioning.bSetConfig(szText);
+
+	_stprintf(szText2,_T("0x%08x|m_StatusSaumureFailure|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_STATUS_SAUMURE_FAILURE),m_StatusSaumureFailure.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusSaumureFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
+	m_StatusSaumureFailure.bSetConfig(szText);
 	
 	if (!bReturn) 
 	{
@@ -793,6 +802,7 @@ BOOL CStream::bWriteConfig(int iNumStream,LPCTSTR pszFileName)
 	if (bReturn) bReturn = bWritePrivateProfileString(szRub,_T("m_ConditioningMeasurement"),m_ConditioningMeasurement.szGetConfig(szText,MAX_PATH),pszFileName);
 	
 	if (bReturn) bReturn = bWritePrivateProfileString(szRub,_T("m_StateConditioning"),m_StateConditioning.szGetConfig(szText,MAX_PATH),pszFileName);
+	if (bReturn) bReturn = bWritePrivateProfileString(szRub,_T("m_StatusSaumureFailure"),m_StatusSaumureFailure.szGetConfig(szText,MAX_PATH),pszFileName);
 	
 	/* 
 	m_ElemCycleFilename.SetLabel(_T("CycleSave.ini"));
@@ -923,7 +933,6 @@ BOOL CStream::bCheckAndCmdPeriodic( int& argiCheckedDays, int& argiCheckedHours
 	TRACE_LOG_MSG(szTrace);*/
 	if( (argpPeriodicCycle->ucGetVal() > 0) && (argiCptCycle++ >= argpPeriodicCycle->ucGetVal()))
 	{
-		
 		argpCmdCycle->bSetVal(argNumCurrentStream->ucGetVal());
 		argiCptCycle = 1;
 	}
@@ -1434,6 +1443,7 @@ CElemBase *CListStream::pFindElemFromID(long lID)
 			else if (pStream->m_ConditioningCalibInLine.iGetType() == lID) pElem = &pStream->m_ConditioningCalibInLine;
 			else if (pStream->m_ConditioningMeasurement.iGetType() == lID) pElem = &pStream->m_ConditioningMeasurement;
 			else if (pStream->m_StateConditioning.iGetType() == lID) pElem = &pStream->m_StateConditioning;
+			else if (pStream->m_StatusSaumureFailure.iGetType() == lID) pElem = &pStream->m_StatusSaumureFailure;
 		
 		}
 	}
@@ -1979,7 +1989,7 @@ void CListStream::SetRemoteControl()
 
 void CListStream::GestionConfig()
 {
-	TCHAR szText[MAX_PATH];
+	/*TCHAR szText[MAX_PATH];
 	TCHAR szText2[MAX_PATH];
 	TCHAR szText3[MAX_PATH];
 
@@ -2012,74 +2022,74 @@ void CListStream::GestionConfig()
 		}
 		m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
 		m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-	}
+	}*/
 }
 
 void CListStream::GestionConfigFlash()
 {
-	TCHAR szText[MAX_PATH];
-	TCHAR szText2[MAX_PATH];
+	//TCHAR szText[MAX_PATH];
+	//TCHAR szText2[MAX_PATH];
 
-	if (m_CmdLoadNumConfig.ucGetVal() != m_NumCurrentConfig.ucGetVal())
-	{
-		m_bStatusSupervision.bSetVal(1);
-		_stprintf(szText,_T("config_%d.ini"),m_CmdLoadNumConfig.ucGetVal());
-		if (bCopyFile(szGetFullPathName(szText,szText2),SZ_FIC_TEMP,FALSE))
-		{
-			if (bReadConfig(SZ_FIC_TEMP))
-			{
-				bCopyFile(SZ_FIC_TEMP,szGetFullPathName(_T("config.ini"),szText2),FALSE);
-			}
-			else
-			{
-				bCopyFile(szGetFullPathName(_T("config.ini"),szText2),SZ_FIC_TEMP,FALSE);
-				bReadConfig(SZ_FIC_TEMP);
-			}
-		}
-		m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-		m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-		m_CmdRun.bSetVal(0);
-		m_CmdStopEndCycle.bSetVal(0);
-		m_CmdMaintenanceManuel.bSetVal(0);
-		m_bStateCalib.bSetVal(0);
-		m_bStateCalibInLine.bSetVal(0);
-		m_bStateZero.bSetVal(0);
-		m_bStateCleanup.bSetVal(0);
-		m_bStatusFailure.bSetVal(0);
-		m_bStatusRealTime.bSetVal(0);
-		m_CmdCycleCalib.bSetVal(0xFF);
-		m_CmdCycleCalibInLine.bSetVal(0xFF);
-		m_CmdCycleZero.bSetVal(0xFF);
-		m_CmdCycleCleanup.bSetVal(0xFF);
-		m_bStatusSupervision.bSetVal(0);
+	//if (m_CmdLoadNumConfig.ucGetVal() != m_NumCurrentConfig.ucGetVal())
+	//{
+	//	m_bStatusSupervision.bSetVal(1);
+	//	_stprintf(szText,_T("config_%d.ini"),m_CmdLoadNumConfig.ucGetVal());
+	//	if (bCopyFile(szGetFullPathName(szText,szText2),SZ_FIC_TEMP,FALSE))
+	//	{
+	//		if (bReadConfig(SZ_FIC_TEMP))
+	//		{
+	//			bCopyFile(SZ_FIC_TEMP,szGetFullPathName(_T("config.ini"),szText2),FALSE);
+	//		}
+	//		else
+	//		{
+	//			bCopyFile(szGetFullPathName(_T("config.ini"),szText2),SZ_FIC_TEMP,FALSE);
+	//			bReadConfig(SZ_FIC_TEMP);
+	//		}
+	//	}
+	//	m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+	//	m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+	//	m_CmdRun.bSetVal(0);
+	//	m_CmdStopEndCycle.bSetVal(0);
+	//	m_CmdMaintenanceManuel.bSetVal(0);
+	//	m_bStateCalib.bSetVal(0);
+	//	m_bStateCalibInLine.bSetVal(0);
+	//	m_bStateZero.bSetVal(0);
+	//	m_bStateCleanup.bSetVal(0);
+	//	m_bStatusFailure.bSetVal(0);
+	//	m_bStatusRealTime.bSetVal(0);
+	//	m_CmdCycleCalib.bSetVal(0xFF);
+	//	m_CmdCycleCalibInLine.bSetVal(0xFF);
+	//	m_CmdCycleZero.bSetVal(0xFF);
+	//	m_CmdCycleCleanup.bSetVal(0xFF);
+	//	m_bStatusSupervision.bSetVal(0);
 
-	}
-	if (m_CmdSaveNumConfig.ucGetVal() != m_NumCurrentConfig.ucGetVal())
-	{
-		m_bStatusSupervision.bSetVal(1);
-		// test si carte existe
-		if (bCopyFile(szGetFullPathName(_T("config.ini"),szText2),SZ_FIC_TEMP,FALSE))
-		{
-			DeleteFile(SZ_FIC_TEMP);
-			_stprintf(szText,_T("config_%d.ini"),m_CmdSaveNumConfig.ucGetVal());
-			m_CmdLoadNumConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
+	//}
+	//if (m_CmdSaveNumConfig.ucGetVal() != m_NumCurrentConfig.ucGetVal())
+	//{
+	//	m_bStatusSupervision.bSetVal(1);
+	//	// test si carte existe
+	//	if (bCopyFile(szGetFullPathName(_T("config.ini"),szText2),SZ_FIC_TEMP,FALSE))
+	//	{
+	//		DeleteFile(SZ_FIC_TEMP);
+	//		_stprintf(szText,_T("config_%d.ini"),m_CmdSaveNumConfig.ucGetVal());
+	//		m_CmdLoadNumConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
 
-			if (bWriteConfig(SZ_FIC_TEMP))
-			{
-				m_NumCurrentConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
-				//bWritePrivateProfileString(_T("CListStream"),_T("m_NumCurrentConfig"),m_CmdSaveNumConfig.szGetConfig(szText2,MAX_PATH),SZ_FIC_TEMP);
-				bWritePrivateProfileString(_T("CListStream"),_T("m_NumCurrentConfig"),m_NumCurrentConfig.szGetConfig(szText2,MAX_PATH),SZ_FIC_TEMP);
-				if (bCopyFile(SZ_FIC_TEMP,szGetFullPathName(szText,szText2),FALSE) && 
-					bCopyFile(SZ_FIC_TEMP,szGetFullPathName(_T("config.ini"),szText2),FALSE))
-				{
-					m_NumCurrentConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
-				}
-			}
-		}
-		m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-		m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-		m_bStatusSupervision.bSetVal(0);
-	}
+	//		if (bWriteConfig(SZ_FIC_TEMP))
+	//		{
+	//			m_NumCurrentConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
+	//			//bWritePrivateProfileString(_T("CListStream"),_T("m_NumCurrentConfig"),m_CmdSaveNumConfig.szGetConfig(szText2,MAX_PATH),SZ_FIC_TEMP);
+	//			bWritePrivateProfileString(_T("CListStream"),_T("m_NumCurrentConfig"),m_NumCurrentConfig.szGetConfig(szText2,MAX_PATH),SZ_FIC_TEMP);
+	//			if (bCopyFile(SZ_FIC_TEMP,szGetFullPathName(szText,szText2),FALSE) && 
+	//				bCopyFile(SZ_FIC_TEMP,szGetFullPathName(_T("config.ini"),szText2),FALSE))
+	//			{
+	//				m_NumCurrentConfig.bSetVal(m_CmdSaveNumConfig.ucGetVal());
+	//			}
+	//		}
+	//	}
+	//	m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+	//	m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+	//	m_bStatusSupervision.bSetVal(0);
+	//}
 
 	
 }

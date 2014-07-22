@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <winioctl.h > 
 
+
 //#include "CThreadIHM.h"
 //typedef BOOL (__stdcall *GetSystemMemoryDivisionProc)(LPDWORD,LPDWORD,LPDWORD);
 //typedef DWORD (__stdcall *SetSystemMemoryDivisionProc)(DWORD);
@@ -78,7 +79,9 @@ int main(int argc, char *argv[])
 	if (bReturn) ReadConfigMsgError(SZ_FIC_TEMP);
 	if (bReturn) bReturn = bCopyFile(szGetFullPathName(_T("config.ini"),szText),SZ_FIC_TEMP,FALSE);
  	if (bReturn) bReturn = pAnalyseur->bReadConfig(SZ_FIC_TEMP);
+	TRACE_LOG_MSG(_T("lecture config.ini DONE !"));	
 	if (bReturn) bReturn = pAnalyseur->bReadCycle(SZ_FIC_TEMP);
+	TRACE_LOG_MSG(_T("lecture fichiers cycles DONE !"));	
 	//if (bReturn) bReturn = bCopyFile(szGetFullPathName(_T("InterfaceIHM.ini"),szText),SZ_FIC_TEMP,FALSE);
 	//if (bReturn) bReturn = pSocketIHM->bReadConfig(SZ_FIC_TEMP,pAnalyseur);
 
@@ -89,7 +92,11 @@ int main(int argc, char *argv[])
 	if (bReturn) bReturn = bCopyFile(szGetFullPathName(_T("InterfaceJbusSlave.ini"),szText),SZ_FIC_TEMP,FALSE);
 	if (bReturn) bReturn = pCarteJbusSlave->bReadConfig(SZ_FIC_TEMP,pAnalyseur);*/
 	if (bReturn) bReturn = pCarteIO->bReadConfig(szGetFullPathName(_T("InterfaceIO.ini"),szText),pAnalyseur);
+	TRACE_LOG_MSG(_T("lecture InterfaceIO.ini DONE !"));	
 	if (bReturn) bReturn = pCarteMesure->bReadConfig(szGetFullPathName(_T("InterfaceMesure.ini"),szText),pAnalyseur);
+	TRACE_LOG_MSG(_T("lecture InterfaceMesure.ini DONE !"));	
+	TRACE_LOG_MSG(_T("! DONE !"));
+	while(1){Sleep(1000);}
 	if (bReturn) bReturn = pCarteJbusSlave->bReadConfig(szGetFullPathName(_T("InterfaceJbusSlave.ini"),szText),pAnalyseur);
 
 	_tprintf(_T("****************************************\n"));

@@ -86,6 +86,7 @@ private:
 	QPushButton* m_btOpticalGain ;
 	QPushButton* m_btOpticalMeasurement;
 	QPushButton* m_btZeroOpticalMeasurement;
-
+	QPushButton* m_btAbsorbanceValue;
+	
 };
 #endif

@@ -479,6 +479,18 @@ QPushButton#btExplorer:pressed {
 	height: 75px;
 	width: 75px;
 	}
+QPushButton#btSwitchConfig { 
+	image: url(":/pictohd/50x50 menu parametre.png"); 
+	border-width: 0px;
+	height: 75px;
+	width: 75px;
+	}
+QPushButton#btSwitchConfig:pressed { 
+	image: url(":/pictohd/50x50 menu parametre active.png"); 
+	border-width: 0px;
+	height: 75px;
+	width: 75px;
+	}
 QPushButton#btEvPump  { 
 	image: url(":/pictohd/50x50 menu pompe.png"); 
 	border-width: 0px;

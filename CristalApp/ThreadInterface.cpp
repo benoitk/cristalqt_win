@@ -101,9 +101,13 @@ void CThreadInterface::SetAccess(BOOL bCanRead,BOOL bCanWrite)
 BOOL CThreadInterface::bReadConfig(LPCTSTR pszFileName)
 {
 	m_bNumInterface = iGetPrivateProfileInt(_T("Config"), _T("m_bNumInterface"),m_bNumInterface, pszFileName); 
+	TRACE_LOG_MSG(_T("! m_bNumInterface !"));
 	m_bCanRead = iGetPrivateProfileInt(_T("Config"), _T("m_bCanRead"),m_bCanRead, pszFileName); 
+	TRACE_LOG_MSG(_T("! Cm_bCanReadonfig !"));
 	m_bCanWrite = iGetPrivateProfileInt(_T("Config"), _T("m_bCanWrite"),m_bCanWrite, pszFileName); 
+	TRACE_LOG_MSG(_T("! m_bCanWrite !"));
 	m_bModeInteger = iGetPrivateProfileInt(_T("Config"), _T("m_bModeInteger"),m_bModeInteger, pszFileName); 
+	TRACE_LOG_MSG(_T("! m_bModeInteger !"));
 
 	return TRUE;
 }

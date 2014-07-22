@@ -129,5 +129,7 @@
         <file>picto/30x30 rotation antihoraire active.png</file>
         <file>picto/30x30 rotation horaire active.png</file>
         <file>pictohd/50x50 historique.png</file>
+        <file>pictohd/50x50 menu parametre active.png</file>
+        <file>pictohd/50x50 menu parametre.png</file>
     </qresource>
 </RCC>

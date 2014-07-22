@@ -21,6 +21,17 @@
 #include "CDialogValEtalon.h"
 
 #include "header_qt.h"
+
+#ifdef x86
+	#define DIR_APP  "\\HardDisk\\CristalQT"
+	//#define DIR_APP  "\\HardDisk\\CRISTAL"
+	
+#else
+	
+	#define DIR_APP  "\\ResidentFlash\\CristalQTARM"
+	//#define DIR_APP  "\\Program Files\\CristalQTARM"
+#endif
+
 CWinMainControler::CWinMainControler(CListStream* argAnalyseur,CCarteIO* argCarteIO,CCarteMesure* argCarteMesure, CSocketIHM* argInterfaceIHM)
     :m_CurrentGraphPage(0)
 {
@@ -111,6 +122,42 @@ void CWinMainControler::takeScreenshot()
 
     if (!fileName.isEmpty())
         pixmap.save(fileName, format.toAscii(), 100);
+}
+
+//SLOT
+void CWinMainControler::btSwitchConfigPressed()
+{
+	int numConfig = m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.ucGetVal();
+	qDebug() << "num conf " << numConfig ;
+	QString lblMessage = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.szGetLabel());
+	lblMessage = lblMessage + tr("\nconfiguration will be charged !");
+	CDialogMessage::getInstance()->setLblMsg(lblMessage, true);
+	
+	if(CDialogMessage::getInstance()->exec()){
+		
+						
+		QDir majDir(QString(DIR_APP) + "/config_" + QString::number(numConfig));
+		QDir appDir(DIR_APP);
+		QString sFilePath; 
+		qDebug() << majDir.entryList();
+		qDebug() << DIR_APP;
+		foreach(sFilePath, majDir.entryList ())
+		{
+			QFile fileUpdate(majDir.absolutePath()+ "/" + sFilePath);
+			QFile fileSource(appDir.absolutePath()+ "/" + sFilePath);
+			qDebug() << "majDir " << majDir.absolutePath() ;
+			qDebug() << "appDir " << appDir.absolutePath() ;
+			qDebug() << "sFilePath " << sFilePath ;
+
+			if(fileSource.exists()) 
+			{
+				fileSource.remove();
+			}
+			fileUpdate.copy(fileSource.fileName());
+		}
+		CDialogMessage::getInstance()->setLblMsg(tr("Restauration réussi. \nVeuillez redémarrer électriquement\nl'appareil"), false);
+		CDialogMessage::getInstance()->exec();
+	}
 }
 //SLOT
 void CWinMainControler::btPlayPausePressed()
@@ -265,6 +312,15 @@ void CWinMainControler::btMaintenancePressed()
     //Accept = 1   reject =0
     if(CUserSession::getInstance()->loginUser() )
     {
+#ifdef CALCIUM_MAGNESIUM
+		if(m_pSupervision->getAnalyseur()->pGetAt(0)->m_StatusSaumureFailure.ucGetVal() != 0)
+		{
+			CDialogMessage* dialogMsg = CDialogMessage::getInstance();
+			dialogMsg->setLblMsg(tr("Can't execute maintenance cycles\n because of brine failure"));
+			dialogMsg->exec();
+			return;
+		}
+#endif
         if(m_pModel->getStop() || CDialogStopCycle::getInstance()->exec()) 
         {
             if(!m_pModel->getStop())

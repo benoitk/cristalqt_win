@@ -21,6 +21,7 @@ public:
 	QString getValeurEtalon()const;
 	QString getNbCycleAvantZero()const;
 	QString getNbCycleAvantCalib()const;
+	QString getNbCycleAvantCalibInLine()const;
 	QString getNbCycleAvantCleanup()const;
 	QString getRemoteControl()const;
 	QString getConsigneTemperature()const;
@@ -51,7 +52,7 @@ public:
 	void setNbCycleAvantZero(QString arg_nbCycle);
 	void setNbCycleAvantCalib(QString arg_nbCycle);
 	void setNbCycleAvantCleanup(QString arg_nbCycle);
-	//void setNbCycleAvantCalibInLine(QString arg_nbCycle);
+	void setNbCycleAvantCalibInLine(QString arg_nbCycle);
 	
 	void setRemoteControl(QString arg_nbCycle);
 	void setValeurEtalon(QString arg_nbCycle);

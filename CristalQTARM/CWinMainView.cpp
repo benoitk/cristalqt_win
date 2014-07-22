@@ -367,10 +367,6 @@ void CWinMainView::init()
 	gridLayout->addWidget(new QLabel(tr("Capteur de pression d'eau")), row,0);
 	gridLayout->addWidget(m_btPressionEau, row, 1);
 	gridLayout->addWidget(new QLabel(tr("V")), row++,2);
-
-	
-	
-	
 	
 	m_lblCurrentStreamDiag = new QLabel;
 	m_lblCurrentStreamDiag->setObjectName("lblCurrentStream");
@@ -458,7 +454,11 @@ void CWinMainView::init()
 	m_btAnalyseur->setObjectName("btAnalyseur");
 	QLabel* lblAnalyseur = new QLabel("Analyseur");
 	lblAnalyseur->setObjectName("lblOutils");*/
-	
+	m_btSwitchConfig = new QPushButton();
+	connect(m_btSwitchConfig, SIGNAL(clicked()), m_pControler, SLOT(btSwitchConfigPressed()));
+	m_btSwitchConfig->setObjectName("btSwitchConfig");
+	QLabel* lblSwitchConfig = new QLabel(tr("Switch config"));
+	lblSwitchConfig->setObjectName("lblOutils");
 	m_btHistorique = new QPushButton();
 	m_btHistorique->setObjectName("btHistorique");
 	QLabel* lblHistorique = new QLabel(tr("Historique"));
@@ -476,7 +476,14 @@ void CWinMainView::init()
 
 	gridLayoutBt->addWidget(m_btHistorique, 2, 3, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblHistorique, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
+
+	gridLayoutBt->addWidget(m_btSwitchConfig, 4, 3, Qt::AlignHCenter);
+	gridLayoutBt->addWidget(lblSwitchConfig, 5, 3, Qt::AlignTop|Qt::AlignHCenter);
+#else
+	gridLayoutBt->addWidget(m_btSwitchConfig, 2, 3, Qt::AlignHCenter);
+	gridLayoutBt->addWidget(lblSwitchConfig, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
 #endif
+	
 	/*gridLayoutBt->addWidget(m_btHelp, 4, 0, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblHelp, 5, 0, Qt::AlignTop|Qt::AlignHCenter);*/
 	gridLayoutBt->addWidget(m_btMeasureCard, 0, 3, Qt::AlignHCenter);
@@ -576,6 +583,8 @@ void CWinMainView::init()
 	m_btHelp->setObjectName("btHelp");
 	QLabel* lblHelp = new QLabel("Aide");
 	lblHelp->setObjectName("lblOutils");*/
+	
+
 	QGridLayout *gridLayoutBtPlus = new QGridLayout();
 	
 	
@@ -583,6 +592,7 @@ void CWinMainView::init()
 	//gridLayoutBtPlus->addWidget(lblSequenceur, 1, 1, Qt::AlignTop|Qt::AlignHCenter);
 	/*gridLayoutBtPlus->addWidget(m_btParameter, 0, 1, Qt::AlignHCenter);
 	gridLayoutBtPlus->addWidget(lblParameter, 1, 1, Qt::AlignTop|Qt::AlignHCenter);*/
+	
 	gridLayoutBtPlus->addWidget(m_btExplorer, 0, 0, Qt::AlignHCenter);
 	gridLayoutBtPlus->addWidget(lblExplorer, 1, 0, Qt::AlignTop|Qt::AlignHCenter);
 	gridLayoutBtPlus->addWidget(m_btSave, 2, 0, Qt::AlignHCenter);

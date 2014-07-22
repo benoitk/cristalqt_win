@@ -94,22 +94,71 @@ void CWinSchedulerView::init()
 	//Onglet configuration cycles auto
 	{
 		QWidget* widgetPeriodique = new QWidget();
-
 		
+		TCHAR szText[260];
+
+		bCopyFile(szGetFullPathName(_T("ConfigAnalyseur.ini"),szText),SZ_FIC_TEMP,FALSE);
+		//Zero
+		dwGetPrivateProfileString(_T("Config"), _T("ZeroCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+		QString sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		QStringList sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("ZeroCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantZero = new QPushButton();
+	    m_btNbCyleAvantZero->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantZero, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantZeroPressed()));
+		m_lblNbCyleAvantZero = new QLabel(tr("Nombre de cycle \navant ") + sListLigneIni.at(2) +tr("\n(Si 0, pas de cyle de blanc)"));
+
+		//Calibration
+		dwGetPrivateProfileString(_T("Config"), _T("CalibrageCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
 		m_btNbCyleAvantCalib = new QPushButton();
 	    m_btNbCyleAvantCalib->setObjectName("btLineEdit");
 	    connect(m_btNbCyleAvantCalib, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCalibPressed()));
-		m_lblNbCyleAvantCalib = new QLabel(tr("Nombre de cycle \navant cycle de calibration"));
-
+		m_lblNbCyleAvantCalib = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+		
+		//Calibration en ligne
+		dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantCalibInLine = new QPushButton();
+	    m_btNbCyleAvantCalibInLine->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCalibInLine, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCalibInLinePressed()));
+		m_lblNbCyleAvantCalibInLine = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+		
+		//Mesure manuel (cleanup)
+		dwGetPrivateProfileString(_T("Config"), _T("CleanupCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CleanupCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
 		m_btNbCyleAvantCleanup = new QPushButton();
 	    m_btNbCyleAvantCleanup->setObjectName("btLineEdit");
 	    connect(m_btNbCyleAvantCleanup, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCleanupPressed()));
-		m_lblNbCyleAvantCleanup = new QLabel(tr("Nombre de cycle \navant cycle de controle de zero"));
+		m_lblNbCyleAvantCleanup = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
 
-	    m_btNbCyleAvantZero = new QPushButton();
-	    m_btNbCyleAvantZero->setObjectName("btLineEdit");
-	    connect(m_btNbCyleAvantZero, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantZeroPressed()));
-		m_lblNbCyleAvantZero = new QLabel(tr("Nombre de cycle \navant cycle de blanc \n(Si 0, pas de cyle de blanc)"));
+	   
 #ifdef MULTI_MEASURE
 		m_lblNbCyleAvantZero->setText(tr("Nombre de cycle \navant cycle nettoyage \n(Si 0, pas de cyle de nettoyage)"));
 #endif
@@ -126,6 +175,7 @@ void CWinSchedulerView::init()
 	    layoutGauche->addRow(m_lblNbCyleAvantZero, m_btNbCyleAvantZero);
 #else
 	    layoutGauche->addRow(m_lblNbCyleAvantCalib, m_btNbCyleAvantCalib);
+	    layoutGauche->addRow(m_lblNbCyleAvantCalibInLine, m_btNbCyleAvantCalibInLine);
 	    layoutGauche->addRow(m_lblValeurEtalon, m_btValeurEtalon);
 	    layoutGauche->addRow(m_lblNbCyleAvantCleanup, m_btNbCyleAvantCleanup);
 #endif
@@ -145,7 +195,9 @@ void CWinSchedulerView::init()
 	    layoutMain->addLayout(layoutMenu);
 	    widgetPeriodique->setLayout(layoutMain);
 	    //:Nom de l'onglet à garer en maj pour toutes les trad
+#ifndef CALCIUM_MAGNESIUM
 	    m_tabWidget->addTab(widgetPeriodique, tr("CYCLES AUTO"));
+#endif
 	}
 	//*** onglet Sequenceur
     {
@@ -415,11 +467,11 @@ void CWinSchedulerView::setNbCyleAvantCleanupValue(const QString& arg_sValue)
 	m_btNbCyleAvantCleanup->setText(arg_sValue);
 	m_pModel->setNbCycleAvantCleanup(arg_sValue);
 }
-//void CWinSchedulerView::setNbCyleAvantCalibInLineValue(const QString& arg_sValue)
-//{
-//	m_btNbCyleAvantCalibInLine->setText(arg_sValue);
-//	m_pModel->setNbCycleAvantCalibInLine(arg_sValue);
-//}
+void CWinSchedulerView::setNbCyleAvantCalibInLineValue(const QString& arg_sValue)
+{
+	m_btNbCyleAvantCalibInLine->setText(arg_sValue);
+	m_pModel->setNbCycleAvantCalibInLine(arg_sValue);
+}
 void CWinSchedulerView::setRemoteCtrlValue(const QString& arg_sValue)
 {
 	m_btRemoteCtrl->setText(arg_sValue);
@@ -471,26 +523,33 @@ void CWinSchedulerView::loadPage()
 	m_btHour->setText(m_pModel->getHour());
 	m_btMinute->setText(m_pModel->getMinute());
 
+
     switch(m_tabWidget->currentIndex())
     {
     case 0: //Options
 	    m_btNbCyleAvantZero->setText(m_pModel->getNbCycleAvantZero());
-	    m_btNbCyleAvantCalib->setText(m_pModel->getNbCycleAvantCalib());
 	    m_btNbCyleAvantCleanup->setText(m_pModel->getNbCycleAvantCleanup());
 		m_btValeurEtalon->setText(m_pModel->getValeurEtalon());
 	    m_btRemoteCtrl->setText(m_pModel->getRemoteControl());
 	    m_btConsigneGain->setText(m_pModel->getConsigneGain());
 	    m_btConsigneTemperature->setText(m_pModel->getConsigneTemperature());
-	    m_btRegalgePression->setText(m_pModel->getReglagePression());
+ 	    m_btRegalgePression->setText(m_pModel->getReglagePression());
 	    m_btTempsVoieAttente->setText(m_pModel->getTempsVoieAttente());
 	    m_btNumEscalveJBUS->setText(m_pModel->getNumEscalveJBUS());
+		m_btNbCyleAvantCalib->setText(m_pModel->getNbCycleAvantCalib());
+		m_btNbCyleAvantCalibInLine->setText(m_pModel->getNbCycleAvantCalibInLine());
         break;
-    case 1: //Sequenceur
+	case 1: //Cycle auto
+		m_btNbCyleAvantCalib->setText(m_pModel->getNbCycleAvantCalib());
+		m_btNbCyleAvantCalibInLine->setText(m_pModel->getNbCycleAvantCalibInLine());
+		m_btValeurEtalon->setText(m_pModel->getValeurEtalon());
+    case 2: //Sequenceur
         nbSequence = m_pModel->getNbSequence();
         for(int i=0; i<MAX_SEQUENCE ; ++i)
         {
             if(i<nbSequence)
             {
+
                 if(m_pModel->getSequence(i).iStream > NBR_STREAM_MAX)
                 {
                     m_listSequenceRow.at(i).btNumVoie->setText(tr("Pause"));

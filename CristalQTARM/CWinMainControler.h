@@ -29,6 +29,7 @@ public:
     void askRepaintGraph(int arg_numStream);
 	
 public slots:
+	void btSwitchConfigPressed();
 	void userSessionClosed();
 	void btPlayPausePressed();
 	void btStopPressed();

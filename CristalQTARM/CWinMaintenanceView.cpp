@@ -219,8 +219,31 @@ void CWinMaintenanceView::init()
 	m_btOpticalMeasurement->setObjectName("btLineEdit");
 	m_btZeroOpticalMeasurement = new QPushButton;
 	m_btZeroOpticalMeasurement->setObjectName("btLineEdit");
+	m_btAbsorbanceValue = new QPushButton;
+	m_btAbsorbanceValue->setObjectName("btLineEdit");
+	
 	QGridLayout* gridLayout = new QGridLayout();
     int row = 0;
+	
+	gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainLbl()), row,0);
+	gridLayout->addWidget(m_btOpticalGain, row, 1);
+	gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainUnit()), row++,2);
+	
+	gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementLbl()), row,0);
+	gridLayout->addWidget(m_btZeroOpticalMeasurement, row, 1);
+	gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementUnit()), row++,2);
+	
+	gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementLbl()), row,0);
+	gridLayout->addWidget(m_btOpticalMeasurement, row, 1);
+	gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementUnit()), row++,2);
+	
+	gridLayout->addWidget(new QLabel(m_pModel->getAbsorbanceValueLbl()), row,0);
+	gridLayout->addWidget(m_btAbsorbanceValue, row, 1);
+	gridLayout->addWidget(new QLabel(m_pModel->getAbsorbanceValueUnit()), row++,2);
+
+	gridLayout->addWidget(new QLabel(tr("Mesure optique")), row,0);
+	gridLayout->addWidget(m_btMesureOptique, row, 1);
+	gridLayout->addWidget(new QLabel(tr("pts")), row++,2);
 #ifndef COULEUR
 	gridLayout->addWidget(new QLabel(tr("Température Cuve")), row,0);
 	gridLayout->addWidget(m_btTemperatureCuve, row, 1);
@@ -229,18 +252,6 @@ void CWinMaintenanceView::init()
 	gridLayout->addWidget(new QLabel(tr("Pression d'eau")), row,0);
 	gridLayout->addWidget(m_btPressionEau, row, 1);
 	gridLayout->addWidget(new QLabel(tr("V")), row++,2);
-	gridLayout->addWidget(new QLabel(tr("Mesure optique")), row,0);
-	gridLayout->addWidget(m_btMesureOptique, row, 1);
-	gridLayout->addWidget(new QLabel(tr("pts")), row++,2);
-	gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainLbl()), row,0);
-	gridLayout->addWidget(m_btOpticalGain, row, 1);
-	gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainUnit()), row++,2);
-	gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementLbl()), row,0);
-	gridLayout->addWidget(m_btOpticalMeasurement, row, 1);
-	gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementUnit()), row++,2);
-	gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementLbl()), row,0);
-	gridLayout->addWidget(m_btZeroOpticalMeasurement, row, 1);
-	gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementUnit()), row++,2);
 
     //info du cycle
 	m_lblCurrentStepDiag = new QLabel("");
@@ -324,7 +335,7 @@ void CWinMaintenanceView::dataUpdateDiag()
 	m_btOpticalGain->setText(QString::number(m_pModel->getOpticalGainValue(), 'f', 2));
 	m_btOpticalMeasurement->setText(QString::number(m_pModel->getOpticalMeasurementValue(), 'f', 2));
 	m_btZeroOpticalMeasurement->setText(QString::number(m_pModel->getZeroOpticalMeasurementValue(), 'f', 2));
-
+	m_btAbsorbanceValue->setText(m_pModel->getAbsorbanceValueValue());
   
 	if(m_pModel->getCycleMaintenanceEnCours())
 	{

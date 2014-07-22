@@ -123,10 +123,10 @@ QString CWinMaintenanceModel::sGetMesureManuelleLbl(int arg_numStream, int arg_n
 	//qDebug() << "ETALON" << sLbl;
 	return sLbl;
 }
-QString CWinMaintenanceModel::sGetOffsetActuelLbl(int arg_numStream)const
+QString CWinMaintenanceModel::sGetOffsetActuelLbl(int arg_numStream, int arg_numMeasure)const
 {
-	QString sLbl = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(0)->m_CalibZeroWater.szGetLabel()
-    										 , m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(0)->m_CalibZeroWater.lGetLabelLength());
+	QString sLbl = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibZeroWater.szGetLabel()
+    										 , m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibZeroWater.lGetLabelLength());
 	//qDebug() << "ETALON" << sLbl;
 	return sLbl;
 }
@@ -170,10 +170,10 @@ QString CWinMaintenanceModel::sGetV2Lbl() const//KMnO4
 	return sLbl;
 }
 
-QString CWinMaintenanceModel::sGetOffsetCalculeLbl(int arg_numStream)const
+QString CWinMaintenanceModel::sGetOffsetCalculeLbl(int arg_numStream, int arg_numMeasure)const
 {
-	QString sLbl = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(0)->m_CalibZeroWaterNew.szGetLabel()
-    										 , m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(0)->m_CalibZeroWaterNew.lGetLabelLength());
+	QString sLbl = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibZeroWaterNew.szGetLabel()
+    										 , m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibZeroWaterNew.lGetLabelLength());
 	//qDebug() << "ETALON" << sLbl;
 	return sLbl;
 }
@@ -663,6 +663,19 @@ QString CWinMaintenanceModel::getOpticalMeasurementLbl()const{
 }
 QString CWinMaintenanceModel::getOpticalMeasurementUnit()const{
 	return QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_OpticalMeasurement.m_szUnit.szGetLabel());
+}
+QString CWinMaintenanceModel::getAbsorbanceValueValue()const
+{
+    float tmp = m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_AbsorbanceValue.fGetVal();
+    return QString::number(tmp, 'f', 5);
+}
+QString CWinMaintenanceModel::getAbsorbanceValueUnit()const
+{
+    return QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_AbsorbanceValue.m_szUnit.szGetLabel());;
+}
+QString CWinMaintenanceModel::getAbsorbanceValueLbl()const
+{
+    return QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_AbsorbanceValue.szGetLabel());
 }
 float CWinMaintenanceModel::getOpticalMeasurementValue()const{
 	return m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_OpticalMeasurement.fGetVal();

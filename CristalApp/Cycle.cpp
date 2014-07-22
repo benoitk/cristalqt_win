@@ -263,6 +263,8 @@ BOOL CElemCycleStep::bExecuteNumExchange(int iNum,CElemList *pListExchange, BOOL
 											
 
 										}
+										else TRACE_LOG_MSG(_T("Erreur write and read"));
+
 										Sleep(DW_DELAI_INTER_TRAME);// delai inter-trame
 										
 									}
@@ -271,6 +273,7 @@ BOOL CElemCycleStep::bExecuteNumExchange(int iNum,CElemList *pListExchange, BOOL
 										TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("taille buffer d'échange trop petit, taille buffer = %d, taille trame = %d"),Context.m_iSize,iSizeToRead);
 									}
 								}
+								else TRACE_LOG_MSG(_T("Erreur bSerialize"));
 							}
 						}
 						while (!bReturn && (iNbrRetry-- > 0));

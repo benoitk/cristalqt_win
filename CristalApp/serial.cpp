@@ -57,8 +57,10 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 	BOOL bReturn;
 
 	bReturn = CThreadInterface::bReadConfig(pszFileName);
+	TRACE_LOG_MSG(_T("! CThreadInterface::bReadConfig !"));
 	// taille du buffer
 	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,pszFileName);
+	TRACE_LOG_MSG(_T("! m_lSizeDataMax !"));
 
 	if (lSizeDataMax > 0)
 	{
@@ -72,27 +74,36 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 		}
 		m_lSizeDataMax = lSizeDataMax;
 	}
+	TRACE_LOG_MSG(_T("! if (m_pRxBuffer == NULL) !"));
 
 	// port com
 	m_nNumPort = iGetPrivateProfileInt(_T("Config"),_T("m_nNumPort"),m_nNumPort,pszFileName);
+	TRACE_LOG_MSG(_T("! m_nNumPort !"));
 	m_DCB.DCBlength = sizeof(DCB);
+	TRACE_LOG_MSG(_T("! sizeof(DCB) !"));
 	memset(&m_DCB,0,sizeof(m_DCB));
+	TRACE_LOG_MSG(_T("! memset !"));
 #ifdef _WIN32_WCE
 	_stprintf( szPort, _T("COM%d:"), m_nNumPort );
 #else
 	_stprintf( szPort, _T("\\\\.\\COM%d"), m_nNumPort );
 #endif
+	TRACE_LOG_MSG(_T("! szPort !"));
 	m_hTTY = CreateFile( szPort, GENERIC_READ | GENERIC_WRITE,0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_SYSTEM/*FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED*/, NULL );
+	TRACE_LOG_MSG(_T("! CreateFile !"));
 	if (m_hTTY != INVALID_HANDLE_VALUE)
 	{
 		GetCommState( m_hTTY, &m_DCB );
 		CloseHandle(m_hTTY);
 		m_hTTY = INVALID_HANDLE_VALUE;
+		TRACE_LOG_MSG(_T("! CreateFile  ok!"));
 	}
 	else
 	{
 		TRACE_DEBUG_LAST_ERROR(eDebug,eConfig,GetLastError());
+		TRACE_LOG_MSG(_T("! CreateFile fail!"));
 	}
+	TRACE_LOG_MSG(_T("! m_hTTY !"));
 	m_DCB.BaudRate = iGetPrivateProfileInt(_T("Com"), _T("BaudRate"),m_DCB.BaudRate, pszFileName);
 	m_DCB.ByteSize = iGetPrivateProfileInt(_T("Com"), _T("ByteSize"), m_DCB.ByteSize, pszFileName);
 	m_DCB.Parity = iGetPrivateProfileInt(_T("Com"), _T("Parity"), m_DCB.Parity, pszFileName);
@@ -119,6 +130,7 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 	m_DCB.wReserved = 0;
 	m_DCB.EofChar = iGetPrivateProfileInt(_T("Com"), _T("EofChar"), m_DCB.EofChar, pszFileName);//'\n';
 	m_DCB.EvtChar = iGetPrivateProfileInt(_T("Com"), _T("EvtChar"), m_DCB.EvtChar, pszFileName);//'\r'; 
+	TRACE_LOG_MSG(_T("! all DCB !"));
 	
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error"));
 

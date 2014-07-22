@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 37"
+#define NUM_VERSION_QT "4.0.7 build 45"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;
@@ -67,6 +67,9 @@ CDialogInfo::CDialogInfo()
 #if defined(MAGNESIUM)
     sTypeAnalyseur = "MAGNESIUM " + sTypeAnalyseur;
 #endif 
+#if defined(CALCIUM_MAGNESIUM)
+    sTypeAnalyseur = "Ca+Mg " + sTypeAnalyseur;
+#endif 
 
 #if defined(SELECTEUR)    
     sTypeAnalyseur = sTypeAnalyseur +tr(" avec SELECTEUR");
@@ -76,6 +79,8 @@ CDialogInfo::CDialogInfo()
 	sTypeAnalyseur = sTypeAnalyseur + "VERSION R&D";
 #endif
 
+	//QString lblConfig = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->m_CmdLoadNumConfig.szGetLabel());
+	
     //assemblage du menu et du layoutGauche
 	QHBoxLayout* layoutMain = new QHBoxLayout();
 	layoutMain->addWidget(new QLabel(tr("Version de l'IHM :") 
@@ -83,6 +88,7 @@ CDialogInfo::CDialogInfo()
 									+ "\n" + sTypeAnalyseur 
 									+ "\n" + tr("Version de la supervision : ")
 									+ "\n" + QString::number(NUM_VERSION_5)));
+									//+ "\n" + lblConfig));
 	layoutMain->addLayout(layoutMenu);
 	widgetDialog->setLayout(layoutMain);
 	

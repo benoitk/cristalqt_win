@@ -60,9 +60,11 @@ void CAnalyseur::run()
 	m_CmdCycleZero.bSetVal(0xFF);
 	m_CmdCycleCleanup.bSetVal(0xFF);
 	
-
-	m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
-	m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+#ifdef CALCIUM_MAGNESIUM
+	bool statusSaumure = true;
+#endif
+	//m_CmdSaveNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
+	//m_CmdLoadNumConfig.bSetVal(m_NumCurrentConfig.ucGetVal());
 
 	TCHAR szTrace[500];
 
@@ -191,11 +193,33 @@ void CAnalyseur::run()
 						//TRACE_LOG_MSG(szTrace);
 					}
 
+					
+					
+#ifdef CALCIUM_MAGNESIUM
 					while (    m_CmdRun.ucGetVal() 
 							&& ((m_CmdJumpStep.nGetVal() != BREAK_NBR) || (pStream->m_CounterCycle.nGetVal() != BREAK_NBR)) 
 							&& (m_iTimeElapse /*+ pStream->m_ElemCycle.m_Duration.nGetVal())*/ < pDuree->nGetVal()))//*60))
 					{
 						//TRACE_LOG_MSG(_T("CMD RUN ON  \n"));
+						if(pStream->m_StatusSaumureFailure.ucGetVal() != 0){
+							if(statusSaumure){
+								m_CmdCycleCleanup.bSetVal(this->m_NumCurrentStream.ucGetVal());
+								statusSaumure = false;
+							}
+							else{
+								while(pStream->m_StatusSaumureFailure.ucGetVal() != 0 && m_CmdRun.ucGetVal() && m_CmdRemoteControl.ucGetVal() != 1 /*mode sav*/ )Sleep(1000);
+								statusSaumure = true;
+							}
+						}
+						else
+							statusSaumure = true;
+#else
+					while (    m_CmdRun.ucGetVal() 
+							&& ((m_CmdJumpStep.nGetVal() != BREAK_NBR) || (pStream->m_CounterCycle.nGetVal() != BREAK_NBR)) 
+							&& (m_iTimeElapse /*+ pStream->m_ElemCycle.m_Duration.nGetVal())*/ < pDuree->nGetVal()))//*60))
+					{
+						//TRACE_LOG_MSG(_T("CMD RUN ON  \n"));
+#endif
 						qDebug() <<"CHECK MAINTENANCE";
 						if (m_CmdStopEndCycle.ucGetVal())
 						{
@@ -228,10 +252,11 @@ void CAnalyseur::run()
 									ExecuteCleanup();
 									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 									m_CmdCycleCleanup.bSetVal(0xFF);
+		
 								}
 								if (m_CmdCycleCalib.ucGetVal() != 0xFF)
 								{
-								qDebug() <<"CHECK MAINTENANCE m_CmdCycleCalib ON";
+									qDebug() <<"CHECK MAINTENANCE m_CmdCycleCalib ON";
 									//TRACE_LOG_MSG(_T("CALIB ON  \n"));
 									pStream->m_StatusWaterFailure.bSetVal(0);
 									ExecuteCalib();
@@ -298,11 +323,16 @@ void CAnalyseur::run()
 								ExecuteCleanup();
 									CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);	
 								m_CmdCycleCleanup.bSetVal(0xFF);
+
 							}
 						}
 
-
+#ifdef CALCIUM_MAGNESIUM
+						if(m_CmdRun.ucGetVal() && statusSaumure)
+#else					
 						if(m_CmdRun.ucGetVal())
+													
+#endif
 						{
 							//TRACE_LOG_MSG(_T("DEMARRAGE CYCLE  \n"));
 							// cycle mesure
@@ -315,7 +345,7 @@ void CAnalyseur::run()
 							//TRACE_LOG_MSG(_T("DEBT mesure"));
                             qDebug() << "m_bStatusFailure " << QString::number(m_bStatusFailure.ucGetVal());
                             qDebug() << "m_StatusWaterFailure " << QString::number(pStream->m_StatusWaterFailure.ucGetVal());
-							
+					
 							bReturn = pStream->bExecute( &m_CmdRun,&m_CmdStopEndCycle,&m_CmdPause
 													   , &m_CmdJumpStep,&m_bStatusRealTime,&m_CurrentTimeCycle
 													   , m_ExternalInterface,&m_NumCurrentStream
@@ -324,8 +354,7 @@ void CAnalyseur::run()
 													   , m_bNeedConditioning);
 							//TRACE_LOG_MSG(_T("FIN mesure"));
 							//Fait remonter le défaut d'eau sur le status analyseur
-                            
-                            m_bStatusFailure.bSetVal(m_bStatusFailure.ucGetVal()|pStream->m_StatusWaterFailure.ucGetVal());
+                            //m_bStatusFailure.bSetVal(m_bStatusFailure.ucGetVal()|pStream->m_StatusWaterFailure.ucGetVal());
                                                        
                             qDebug() << "m_bStatusFailure " << QString::number(m_bStatusFailure.ucGetVal());
                             qDebug() << "m_StatusWaterFailure " << QString::number(pStream->m_StatusWaterFailure.ucGetVal());

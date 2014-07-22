@@ -111,6 +111,7 @@ public:
 	CElemInt8 m_ConditioningMeasurement;
 
 	CElemInt8 m_StateConditioning;
+	CElemInt8 m_StatusSaumureFailure;
 
 	int m_iNbCycleCleanup;
 	int m_iNbCycleZero;

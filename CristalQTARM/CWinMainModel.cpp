@@ -356,7 +356,7 @@ QString CWinMainModel::getEtatAnalyseur()const
         sEtatAnalyseur = tr("EN ATTENTE");
     else if(bRun && m_pSupervision->getAnalyseur()->pGetAt(this->nGetCurrentStream())->m_Active.ucGetVal()==0)
 		sEtatAnalyseur = tr("CYCLE EN COURS \n(VOIE INHIBE)");
-	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
+	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
 			&& m_pSupervision->getAnalyseur()->m_CmdCycleZero.ucGetVal() != 0xFF)
 		sEtatAnalyseur = tr("ZERO EN COURS");
 	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
@@ -367,7 +367,14 @@ QString CWinMainModel::getEtatAnalyseur()const
 		sEtatAnalyseur = tr("CALIBRATION EN COURS");
 	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
 			&& m_pSupervision->getAnalyseur()->m_CmdCycleCleanup.ucGetVal() != 0xFF)
+#ifdef CALCIUM_MAGNESIUM
+		sEtatAnalyseur = tr("RISING IN PROGRESS");
+	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
+			&& m_pSupervision->getAnalyseur()->pGetAt(this->nGetCurrentStream())->m_StatusSaumureFailure.ucGetVal() != 0)
+		sEtatAnalyseur = tr("BRINE FAILURE");
+#else
 		sEtatAnalyseur = tr("CONTROLE ZERO EN COURS");
+#endif
 	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0)
 		sEtatAnalyseur = tr("CYCLE EN COURS");
 	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()!=0)

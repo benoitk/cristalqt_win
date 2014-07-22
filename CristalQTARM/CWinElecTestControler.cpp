@@ -149,7 +149,9 @@ void CWinElecTestControler::btOffEVPressed(int arg_numEV)
 //SLOT
 void CWinElecTestControler::btOnPompePressed(int arg_numPompe)
 {
+#ifndef R_D
     m_timerArretPompes->start(); // Démarre ou redémare le timer d'arrêt
+#endif
 	CUserSession::getInstance()->poke();
 #ifdef KMNO4
 	this->btOnLocalPressed(3);
