@@ -28,9 +28,17 @@ public:
 	virtual void RemoveAll();
 
 public:
+#ifndef TEST
 	BOOL bReadConfig(LPTSTR pszRub, LPCTSTR pszFileName,CListStream *pListStream);
+#else
+	BOOL bReadConfig(LPTSTR pszRub, HANDLE hf, long filelen,CListStream *pListStream);
+#endif
 	BOOL bWriteConfig(LPTSTR pszRub,LPCTSTR pszFileName);
+#ifndef TEST
 	BOOL bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTSTR pszKeyRP,LPCTSTR pszFileName,CElemList *pListExchange,CListStream *pListStream);
+#else
+	BOOL bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTSTR pszKeyRP, HANDLE hf, long filelen,CElemList *pListExchange,CListStream *pListStream);
+#endif
 	BOOL bWriteConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTSTR pszKeyRP, int iPos ,LPCTSTR pszFileName,CElemList *pListExchange);
 	BOOL bExecuteBegin(BOOL bCanRead, BOOL bCanWrite,CEnumInterface &EnumInterface);
 	BOOL bExecuteEnd(BOOL bCanRead, BOOL bCanWrite,CEnumInterface &EnumInterface);

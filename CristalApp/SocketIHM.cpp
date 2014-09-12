@@ -32,13 +32,26 @@ BOOL CSocketIHM::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 
 	bReturn = CThreadInterface::bReadConfig(pszFileName);
 	// taille du buffer
+#ifndef TEST
 	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,pszFileName);
 	// port TCP/IP
 	nNumPort = iGetPrivateProfileInt(_T("Config"),_T("m_nNumPort"),8192,pszFileName);
 	ConfigSocket(nNumPort,lSizeDataMax,_T("localhost"));
 	
 	if (bReturn) bReturn = m_ElemCycleStep.bReadConfig(_T("0"),pszFileName,pListStream);
+#else
+	HANDLE hf  ;
+	long filelen = openFile(pszFileName, hf);
 
+	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,hf, filelen);
+	// port TCP/IP
+	nNumPort = iGetPrivateProfileInt(_T("Config"),_T("m_nNumPort"),8192,hf, filelen);
+	ConfigSocket(nNumPort,lSizeDataMax,_T("localhost"));
+	
+	if (bReturn) bReturn = m_ElemCycleStep.bReadConfig(_T("0"),hf, filelen,pListStream);
+	
+	closeFile(hf);
+#endif
 	if (!bReturn) 
 	{
 		TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("BOOL CSocketIHM::bReadConfig"));

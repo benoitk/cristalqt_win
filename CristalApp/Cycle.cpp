@@ -18,7 +18,7 @@
 CElemCycleStep::CElemCycleStep() : CElemBase(),m_ListExchangeBegin(NBR_EXCHANGE_JBUS_MAX),m_ListExchangeEnd(NBR_EXCHANGE_JBUS_MAX),m_ListExchangeRealTime(NBR_EXCHANGE_JBUS_MAX)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_STEP,0xFF);
-	SetLabel(_T("CElemCycleStep"));
+	SetLabel(_T("CElemCycleStepxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_ListExchangeBegin.SetLabel(_T("CListExchangeBegin"));
 	m_ListExchangeEnd.SetLabel(_T("CListExchangeEnd"));
 	m_ListExchangeRealTime.SetLabel(_T("CListExchangeRealTime"));
@@ -64,7 +64,11 @@ int CElemCycleStep::iGetStreamSize(CContext &Context)
 	return iSize;
 }
 
+#ifndef TEST
 BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTSTR pszKeyRP,LPCTSTR pszFileName,CElemList *pListExchange,CListStream *pListStream)
+#else
+BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTSTR pszKeyRP,HANDLE hf, long filelen,CElemList *pListExchange,CListStream *pListStream)
+#endif
 {
 	BOOL bReturn = FALSE;
 	TCHAR szText[MAX_PATH*2];
@@ -76,7 +80,7 @@ BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTS
 		_stprintf(szText,_T("CElemCycleStep : (PAS=%s) -> %s - %s"),pszRub, pszKeyRQ,pszKeyRP);
 		pExchangeJbus->SetLabel(szText);
 		pExchangeJbus->SetAutoDelete(TRUE);
-
+#ifndef TEST
 		if (dwGetPrivateProfileString(pszRub,pszKeyRQ,_T(""),szText,sizeof(szText)/sizeof(TCHAR),pszFileName) > 0)
 		{
 			// requete
@@ -95,6 +99,29 @@ BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTS
 				}
 			}
 		}
+#else
+		if (dwGetPrivateProfileString(pszRub,pszKeyRQ,_T(""),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen) > 0)
+		{
+			// requete
+			iCurrentPos = 0;
+			if (bReturn = pExchangeJbus->bSetConfig(TRUE,szText,iCurrentPos,pListStream))
+			{
+				iCurrentPos = 0;
+				// reponse
+				if (dwGetPrivateProfileString(pszRub,pszKeyRP,_T(""),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen) > 0)
+				{
+
+					if (bReturn = pExchangeJbus->bSetConfig(FALSE,szText,iCurrentPos,pListStream))
+					{
+
+						bReturn = (pListExchange->pAdd(pExchangeJbus) != NULL);
+
+						pExchangeJbus = NULL;
+					}
+				}
+			}
+		}
+#endif
 	}
 	if (pExchangeJbus) delete pExchangeJbus;
 	if (!bReturn) 
@@ -106,7 +133,11 @@ BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTS
 	return bReturn;
 }
 
+#ifndef TEST
 BOOL CElemCycleStep::bReadConfig(LPTSTR pszRub, LPCTSTR pszFileName,CListStream *pListStream)
+#else
+BOOL CElemCycleStep::bReadConfig(LPTSTR pszRub, HANDLE hf, long filelen,CListStream *pListStream)
+#endif
 {
 	BOOL bReturn = TRUE;
 	TCHAR szKeyRQ[MAX_PATH];
@@ -119,6 +150,7 @@ BOOL CElemCycleStep::bReadConfig(LPTSTR pszRub, LPCTSTR pszFileName,CListStream 
 
 	RemoveAll();
 	// label
+#ifndef TEST
 	dwGetPrivateProfileString(pszRub,_T("Label"),_T(""),szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	if (lstrlen(szText) == 0) _stprintf(szText,_T("CElemCycleStep : (PAS=%s)"),pszRub);
 	SetLabel(szText);
@@ -146,6 +178,38 @@ BOOL CElemCycleStep::bReadConfig(LPTSTR pszRub, LPCTSTR pszFileName,CListStream 
 		_stprintf(szKeyRP,_T("RealTimeRP%d"),i+1);
 		bReturn = bReadConfigExchangeJbus(pszRub, szKeyRQ,szKeyRP,pszFileName,&m_ListExchangeRealTime,pListStream);
 	}
+#else
+	dwGetPrivateProfileString(pszRub,_T("Label"),_T(""),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (lstrlen(szText) == 0) _stprintf(szText,_T("CElemCycleStep : (PAS=%s)"),pszRub);
+	SetLabel(szText);
+	// nbr de trame begin
+	iNbrTrameBegin = iGetPrivateProfileInt(pszRub,_T("NbrBegin"),0,hf, filelen);
+	//_tprintf(_T("iGetPrivateProfileInt iNbrTrameBegin:%d \n"), iNbrTrameBegin);
+	for (i = 0;bReturn && (i < iNbrTrameBegin);i++)
+	{
+		_stprintf(szKeyRQ,_T("BeginRQ%d"),i+1);
+		_stprintf(szKeyRP,_T("BeginRP%d"),i+1);
+		bReturn = bReadConfigExchangeJbus(pszRub, szKeyRQ,szKeyRP,hf, filelen,&m_ListExchangeBegin,pListStream);
+	}
+	//_tprintf(_T("BeginRQ %d \n"), bReturn);
+	// nbr de trame end
+	iNbrTrameEnd = iGetPrivateProfileInt(pszRub,_T("NbrEnd"),0,hf, filelen);
+	for (i = 0;bReturn && (i < iNbrTrameEnd);i++)
+	{
+		_stprintf(szKeyRQ,_T("EndRQ%d"),i+1);
+		_stprintf(szKeyRP,_T("EndRP%d"),i+1);
+		bReturn = bReadConfigExchangeJbus(pszRub, szKeyRQ,szKeyRP,hf, filelen,&m_ListExchangeEnd,pListStream);
+	}
+	//_tprintf(_T("EndRQ %d \n"), bReturn);
+	// nbr de trame realtime
+	iNbrTrameRealTime = iGetPrivateProfileInt(pszRub,_T("NbrRealTime"),0,hf, filelen);
+	for (i = 0;bReturn && (i < iNbrTrameRealTime);i++)
+	{
+		_stprintf(szKeyRQ,_T("RealTimeRQ%d"),i+1);
+		_stprintf(szKeyRP,_T("RealTimeRP%d"),i+1);
+		bReturn = bReadConfigExchangeJbus(pszRub, szKeyRQ,szKeyRP,hf, filelen,&m_ListExchangeRealTime,pListStream);
+	}
+#endif
 	if (bReturn) bReturn = m_Step.bSetTextVal(pszRub);
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
@@ -451,7 +515,7 @@ CElemCycleStep CElemCycle::m_CurrentStep;
 CElemCycle::CElemCycle() : CElemList(NBR_CYCLE_STEP_MAX)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE,0xFF);
-	SetLabel(_T("CElemCycle"));
+	SetLabel(_T("CElemCyclexxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	//InitializeCriticalSection(&m_hCriticalSection);
 	CElemCycle::m_CurrentStep.SetType(MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_STEP,eID_STREAM_CURRENT_STEP));
 }
@@ -503,6 +567,7 @@ BOOL CElemCycle::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 
 	RemoveAll();
 	// label
+#ifndef TEST
 	dwGetPrivateProfileString(_T("Config"),_T("Label"),szGetLabel(),szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	SetLabel(szText);
 	// duree max
@@ -529,7 +594,39 @@ BOOL CElemCycle::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 	}
 
 	if (pCycleStep != NULL) delete pCycleStep;
+#else
+HANDLE hf;
+	long filelen = openFile(pszFileName, hf);
+	// label
+	dwGetPrivateProfileString(_T("Config"),_T("Label"),szGetLabel(),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	SetLabel(szText);
+	// duree max
+	bReturn = m_Duration.bSetVal(iGetPrivateProfileInt(_T("Config"),_T("Duration"),0,hf, filelen));
+	// dernier num de pas
+	iLastStep = iGetPrivateProfileInt(_T("Config"),_T("LastStepNum"),0,hf, filelen);
+	// trame d'arrêt
+	m_ElemCycleStepStop.bReadConfig(_T("Stop"),hf, filelen,pListStream);
+	// les pas
+	for (i = 0;bReturn && (i <= iLastStep); i++)
+	{
+		_stprintf(szRub,_T("%d"),i);
+		if (pCycleStep == NULL) pCycleStep = new CElemCycleStep();
+		if (bReturn = (pCycleStep != NULL))
+		{
+			pCycleStep->SetAutoDelete(TRUE);
+			if (pCycleStep->bReadConfig(szRub,hf, filelen,pListStream))
+			{
+				bReturn = (pAdd(pCycleStep) != NULL);
+				pCycleStep = NULL;
+			}
+			else pCycleStep->RemoveAll();
+		}
+	}
 
+	closeFile(hf);
+
+	if (pCycleStep != NULL) delete pCycleStep;
+#endif
 	if (!bReturn)
 	{
 		TRACE_DEBUG(eDebug,eCycle,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
@@ -632,21 +729,29 @@ CElemCycleStep *CElemCycle::pGetCurrentStep()
 {
 	CElemCycleStep *pStep = NULL;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	pStep = &CElemCycle::m_CurrentStep;
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	return pStep;
 }
 
 void CElemCycle::SetCurrentStep(CElemCycleStep *pStep)
 {
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (pStep != NULL)
 	{
 		CElemCycle::m_CurrentStep.SetLabel(pStep->szGetLabel());
 		CElemCycle::m_CurrentStep.m_Step.bSetVal(pStep->m_Step.nGetVal());
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 }
 
 BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemInt8 *pCmdPause,CElemInt16 *pCmdJumpStep,CElemInt16 *pStatusRealTime,CElemInt16 *pTimeCycle,CEnumInterface &EnumInterface, CStream* argpStream, CElemInt8* argNumCurrentStream)
@@ -755,7 +860,7 @@ BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemIn
 CElemCycleZero::CElemCycleZero() : CElemCycle()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_ZERO,0xFF);
-	SetLabel(_T("CElemCycleZero"));
+	SetLabel(_T("CElemCycleZeroxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemCycleZero::~CElemCycleZero()
@@ -847,7 +952,7 @@ BOOL CElemCycleZero::bExecute(CElemInt8 *pCmdRun ,CElemInt8 *pCmdStopEndCycle,CE
 CElemCycleCalib::CElemCycleCalib() : CElemCycleZero()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_CALIB,0xFF);
-	SetLabel(_T("CElemCycleCalib"));
+	SetLabel(_T("CElemCycleCalibxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemCycleCalib::~CElemCycleCalib()
@@ -937,7 +1042,7 @@ BOOL CElemCycleCalib::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CE
 CElemCycleCleanup::CElemCycleCleanup() : CElemCycle()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_CLEANUP,0xFF);
-	SetLabel(_T("CElemCycleCleanup"));
+	SetLabel(_T("CElemCycleCleanupxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemCycleCleanup::~CElemCycleCleanup()

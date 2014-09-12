@@ -18,7 +18,7 @@
 CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(NBR_COEFF_LINEAR),m_ListMesureMoy(NBR_MESURE_MOY),m_ListRealtimeData(NBR_REALTIME_DATA)
 {
 	m_iType = MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_MESURE,0xFF);
-	SetLabel(_T("CMesure"));
+	SetLabel(_T("CMesurexxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	SetElemName(QString("CMesure"));
 	// mesure
 	m_Val.SetLabel(_T("m_Val"));
@@ -454,7 +454,11 @@ int CMesure::iGetStreamSize(CContext &Context)
 	return iSize;
 }
 
+#ifndef TEST 
 BOOL CMesure::bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName)
+#else
+BOOL CMesure::bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName,HANDLE hf, long filelen)
+#endif
 {
 	BOOL bReturn = TRUE;
 	TCHAR szRub[MAX_PATH];
@@ -463,6 +467,7 @@ BOOL CMesure::bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName)
 	int i;
 	TCHAR szSeps[]   = _T("|");
 
+#ifndef TEST
 	_stprintf(szRub,_T("CStream%d_CMesure%d"),iNumStream, iNumMesure);
 	// StatusFailure
 	_stprintf(szText2,_T("0x%08x|m_StatusFailure|0.|BOOL|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_STATUS_FAILURE),m_StatusFailure.m_szFormat.szGetLabel());
@@ -882,6 +887,430 @@ BOOL CMesure::bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName)
 					  , m_NumProgram.m_szFormat.szGetLabel());
 	dwGetPrivateProfileString(_T("CListStream"),_T("m_NumProgram"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	if (bReturn) bReturn = m_NumProgram.bSetConfig(szText);
+#else
+
+	_stprintf(szRub,_T("CStream%d_CMesure%d"),iNumStream, iNumMesure);
+	// StatusFailure
+	_stprintf(szText2,_T("0x%08x|m_StatusFailure|0.|BOOL|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_STATUS_FAILURE),m_StatusFailure.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusFailure.bSetConfig(szText);
+	m_StatusFailure.bSetVal(0);
+	// mesure
+	_stprintf(szText2,_T("0x%08x|Valeur mesure|0.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_VAL),m_Val.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Val"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Val.bSetConfig(szText);
+	// valeur MIN MAX
+	_stprintf(szText2,_T("0x%08x|ValMin|0.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_VALMIN),m_ValMin.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValMin"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValMin.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|ValMax|0.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_VALMAX),m_ValMax.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValMax"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValMax.bSetConfig(szText);
+	// seuil1
+	_stprintf(szText2,_T("0x%08x|Threshold1|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_THRESHOLD1),m_Threshold1.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Threshold1"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Threshold1.bSetConfig(szText);
+	// seuil2
+	_stprintf(szText2,_T("0x%08x|Threshold2|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_THRESHOLD2),m_Threshold2.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Threshold2"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Threshold2.bSetConfig(szText);
+	// status seuil1
+	_stprintf(szText2,_T("0x%08x|StatusThreshold1|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),m_StatusThreshold1.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusThreshold1"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusThreshold1.bSetConfig(szText);
+	m_StatusThreshold1.bSetVal(0);
+	// status seuil2
+	_stprintf(szText2,_T("0x%08x|StatusThreshold2|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),m_StatusThreshold2.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusThreshold2"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusThreshold2.bSetConfig(szText);
+	m_StatusThreshold2.bSetVal(0);
+	// 4/20
+	_stprintf(szText2,_T("0x%08x|AnalogZero|0.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_ANALOG_ZERO),m_AnalogZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AnalogZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AnalogZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|AnalogMax|0.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_ANALOG_PLAGE),m_AnalogPlage.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AnalogPlage"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AnalogPlage.bSetConfig(szText);
+	// Coeff de calibration
+	_stprintf(szText2,_T("0x%08x|CalibCoeff|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_CALIB_COEFF),m_CalibCoeff.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibCoeff"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibCoeff.bSetConfig(szText);
+	// calib zero water
+	_stprintf(szText2,_T("0x%08x|CalibZeroWater|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_CALIB_ZERO_WATER),m_CalibZeroWater.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibZeroWater"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibZeroWater.bSetConfig(szText);
+	// calib zero air
+	_stprintf(szText2,_T("0x%08x|CalibZeroAir|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_CALIB_ZERO_AIR),m_CalibZeroAir.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibZeroAir"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibZeroAir.bSetConfig(szText);
+	// status calib coeff
+	_stprintf(szText2,_T("0x%08x|CalibStatusCoeff|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF),m_CalibStatusCoeff.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibStatusCoeff"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibStatusCoeff.bSetConfig(szText);
+	// status calib zero
+	_stprintf(szText2,_T("0x%08x|CalibStatusZero|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO),m_CalibStatusZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibStatusZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibStatusZero.bSetConfig(szText);
+	//Type de sueils (0=bas/bas 1=bas/haut 2=haut/haut)
+	_stprintf(szText2,_T("0x%08x|SettingThreshold|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT8,eID_MESURE_SETTING_THRESHOLD),m_SettingThreshold.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_SettingThreshold"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_SettingThreshold.bSetConfig(szText);
+
+	// coeff linearisation
+	for (i = 0; i < NBR_COEFF_LINEAR;i++) m_ListCoeffLinear.pAdd(new CElemFloat());
+	_stprintf(szText2,_T("0x%08x|m_ListCoeffLinear|1.0|2.0|3.0|4.0|5.0|6.0|7.0|8.0|9.0|10.0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_COEFF_LINEAR));
+	dwGetPrivateProfileString(szRub,_T("m_ListCoeffLinear"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListCoeffLinear.bSetConfig(szText);
+	// liste des moyennes
+	for (i = 0; i < NBR_MESURE_MOY;i++) m_ListMesureMoy.pAdd(new CElemFloat());
+	_stprintf(szText2,_T("0x%08x|m_ListMesureMoy|0|0|0|0|0|0|0|0|0|0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_MOYENNE));
+	dwGetPrivateProfileString(szRub,_T("m_ListMesureMoy"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListMesureMoy.bSetConfig(szText);
+	// données temps-reels
+	for (i = 0; i < NBR_REALTIME_DATA;i++) m_ListRealtimeData.pAdd(new CElemFloat());
+	_stprintf(szText2,_T("0x%08x|m_ListRealtimeData|1.0|2.0|3.0|4.0|5.0|6.0|7.0|8.0|9.0|10.0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_REALTIMEDATA));
+	dwGetPrivateProfileString(szRub,_T("m_ListRealtimeData"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListRealtimeData.bSetConfig(szText);
+
+
+
+
+	// valeur mesure pour Jbus Slave
+	_stprintf(szText2,_T("0x%08x|ValJbusSlave|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_VAL_JBUS_SLAVE),m_ValJbusSlave.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValJbusSlave"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValJbusSlave.bSetConfig(szText);
+	// coeff multiplicateur valeur mesure pour Jbus Slave
+	_stprintf(szText2,_T("0x%08x|m_CoeffValJbusSlave|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_COEFF_VAL_JBUS_SLAVE),m_CoeffValJbusSlave.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CoeffValJbusSlave"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CoeffValJbusSlave.bSetConfig(szText);
+	// valeur mesure pour carte IO
+	_stprintf(szText2,_T("0x%08x|m_ValAna|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_VAL_IO),m_ValAna.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValAna"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValAna.bSetConfig(szText);
+	// valeur conversisseur max pour carte IO
+	_stprintf(szText2,_T("0x%08x|m_ValMaxConvertisseur|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_VAL_IO_MAX_DAC),m_ValMaxConvertisseur.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValMaxConvertisseur"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValMaxConvertisseur.bSetConfig(szText);
+	// valeur conversisseur min pour carte IO
+	_stprintf(szText2,_T("0x%08x|m_ValMinConvertisseur|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_VAL_IO_MIN_DAC),m_ValMinConvertisseur.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ValMinConvertisseur"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ValMinConvertisseur.bSetConfig(szText);
+
+
+	// Gain optique
+	_stprintf(szText2,_T("0x%08x|m_OpticalGain|1.|.|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_INT16,eID_MESURE_OPTICAL_GAIN),m_OpticalGain.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_OpticalGain"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_OpticalGain.bSetConfig(szText);
+	// valeur etalon
+	_stprintf(szText2,_T("0x%08x|m_ZeroOpticalMeasurement|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_ZERO_OPTICAL_MEASUREMENT),m_ZeroOpticalMeasurement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ZeroOpticalMeasurement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ZeroOpticalMeasurement.bSetConfig(szText);
+	// mesure absorbance
+	_stprintf(szText2,_T("0x%08x|m_AbsorbanceValue|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_ABSORBANCE_VALUE),m_AbsorbanceValue.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AbsorbanceValue"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AbsorbanceValue.bSetConfig(szText);
+	// valeur étalon avant
+	_stprintf(szText2,_T("0x%08x|m_StandardValueBefore|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_STANDARD_VALUE_BEFORE),m_StandardValueBefore.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StandardValueBefore"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StandardValueBefore.bSetConfig(szText);
+	// valeur étalon après
+	_stprintf(szText2,_T("0x%08x|m_StandardValueAfter|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_STANDARD_VALUE_AFTER),m_StandardValueAfter.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StandardValueAfter"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StandardValueAfter.bSetConfig(szText);
+	// ancien coeff de calib
+	_stprintf(szText2,_T("0x%08x|m_CalibCoeffNew|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_CALIB_COEFF_NEW),m_CalibCoeffNew.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibCoeffNew"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibCoeffNew.bSetConfig(szText);
+	// mesure optique
+	_stprintf(szText2,_T("0x%08x|m_OpticalMeasurement|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_OPTICAL_MEASUREMENT),m_OpticalMeasurement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_OpticalMeasurement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_OpticalMeasurement.bSetConfig(szText);
+	// absorbance de reference 
+	_stprintf(szText2,_T("0x%08x|m_AbsorbanceReference|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_ABSORBANCE_REFERENCE),m_AbsorbanceReference.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AbsorbanceReference"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AbsorbanceReference.bSetConfig(szText);
+	// concentration brut 
+	_stprintf(szText2,_T("0x%08x|m_RawConcentration|1.|mV|%s"),MAKE_ID(iNumStream, iNumMesure,eTYPE_FLOAT,eID_MESURE_RAW_CONCENTRATION),m_RawConcentration.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_RawConcentration"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_RawConcentration.bSetConfig(szText);
+	
+	// Absorbance corrigé
+	_stprintf( szText2,_T("0x%08x|m_CorrectedAbsorbance|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_CORRECTED_ABSORBANCE)
+		    , m_CorrectedAbsorbance.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CorrectedAbsorbance"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CorrectedAbsorbance.bSetConfig(szText);
+
+	//Absorbance réel
+	_stprintf( szText2,_T("0x%08x|m_RealAbsorbance|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_REAL_ABSORBANCE)
+		    , m_RealAbsorbance.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_RealAbsorbance"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_RealAbsorbance.bSetConfig(szText);
+
+	//Delta entre deux mesures 
+	_stprintf( szText2,_T("0x%08x|m_Delta|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_DELTA)
+		    , m_Delta.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Delta"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Delta.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_CalibZeroWaterNew|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_CALIB_ZERO_WATER_NEW)
+		    , m_CalibZeroWaterNew.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CalibZeroWaterNew"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CalibZeroWaterNew.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AirSetPointAdjustement|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT16
+					  , eID_MESURE_AIR_SETPOINT_ADJUSTEMENT)
+		    , m_AirSetPointAdjustement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AirSetPointAdjustement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AirSetPointAdjustement.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AirRefMeasureRedrSync|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_AIR_REF_MEASURE_REDRSYNC)
+		    , m_AirRefMeasureRedrSync.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AirRefMeasureRedrSync"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AirRefMeasureRedrSync.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AirWaterFlag|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_AIR_WATER_FLAG)
+		    , m_AirWaterFlag.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AirWaterFlag"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AirWaterFlag.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_RefBaseline|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_REF_BASELINE)
+		    , m_RefBaseline.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_RefBaseline"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_RefBaseline.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_Water90|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_WATER_90)
+		    , m_Water90.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Water90"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Water90.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_Turbidity90|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TURBIDITY_90)
+		    , m_Turbidity90.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Turbidity90"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Turbidity90.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_TurbidityFinal|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TURBIDITY_FINAL)
+		    , m_TurbidityFinal.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_TurbidityFinal"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_TurbidityFinal.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_TurbidityCoef|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TURBIDITY_COEF)
+		    , m_TurbidityCoef.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_TurbidityCoef"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_TurbidityCoef.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_TurbidityStandard|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TURBIDITY_STANDARD)
+		    , m_TurbidityStandard.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_TurbidityStandard"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_TurbidityStandard.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AirOpticalGain|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_AIR_OPTICAL_GAIN)
+		    , m_AirOpticalGain.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AirOpticalGain"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AirOpticalGain.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AirRedrSync|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_AIR_REDRSYNC)
+		    , m_AirRedrSync.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AirRedrSync"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AirRedrSync.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AbsorbanceTurbidity180|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_ABSORBANCE_TURBIDITY_180)
+		    , m_AbsorbanceTurbidity180.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AbsorbanceTurbidity180"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AbsorbanceTurbidity180.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AbsorbanceCorrected|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_ABSORBANCE_CORRECTED)
+		    , m_AbsorbanceCorrected.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AbsorbanceCorrected"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AbsorbanceCorrected.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_OpticalGain90|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT16
+					  , eID_MESURE_OPTICAL_GAIN_90)
+		    , m_OpticalGain90.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_OpticalGain90"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_OpticalGain90.bSetConfig(szText);
+	
+	_stprintf( szText2,_T("0x%08x|m_CourantLedColo|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_COURANT_LED_COLO)
+		    , m_CourantLedColo.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CourantLedColo"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CourantLedColo.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_MeasureSetByLed|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_MEASURE_BY_LED)
+		    , m_MeasureSetByLed.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_MeasureSetByLed"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_MeasureSetByLed.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_Turbidity|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TURBIDITY)
+		    , m_Turbidity.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Turbidity"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Turbidity.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_Temperature|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_TEMPERATURE)
+		    , m_Temperature.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Temperature"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Temperature.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_ZeroStandard|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_ZERO_STANDARD)
+		    , m_ZeroStandard.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ZeroStandard"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ZeroStandard.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_CoefDilution|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_COEF_DILUTION)
+		    , m_CoefDilution.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CoefDilution"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CoefDilution.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_CoefAjustement|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_FLOAT
+					  , eID_MESURE_COEF_AJUSTEMENT)
+		    , m_CoefAjustement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CoefAjustement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CoefAjustement.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_StatusSonde|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT8
+					  , eID_LISTSTREAM_STATUS_SONDE)
+		    , m_StatusSonde.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusSonde"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusSonde.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_StatusConcentration|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT8
+					  , eID_LISTSTREAM_STATUS_CONCENTRATION)
+		    , m_StatusConcentration.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusConcentration"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusConcentration.bSetConfig(szText);
+
+	_stprintf( szText2,_T("0x%08x|m_AlarmDelta|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT8
+					  , eID_MESURE_ALARM_DELTA)
+		    , m_AlarmDelta.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AlarmDelta"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AlarmDelta.bSetConfig(szText);
+
+    _stprintf( szText2,_T("0x%08x|m_AlarmDelta2|1.|mV|%s")
+			 , MAKE_ID( iNumStream
+				      , iNumMesure
+					  , eTYPE_INT8
+					  , eID_MESURE_ALARM_DELTA2)
+		    , m_AlarmDelta2.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_AlarmDelta2"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_AlarmDelta2.bSetConfig(szText);
+
+
+// numéro de programme
+	_stprintf( szText2,_T("0x%x|m_NumProgram|0|.|%s")
+		     , MAKE_ID( iNumStream
+			          , iNumMesure
+					  , eTYPE_INT8
+					  , eID_MESURE_NUM_PROGRAM)
+					  , m_NumProgram.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_NumProgram"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_NumProgram.bSetConfig(szText);
+
+
+#endif
 
 	if (!bReturn) 
 	{

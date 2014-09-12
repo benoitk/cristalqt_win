@@ -70,6 +70,7 @@ CWinMainModel::CWinMainModel(CSupervision* argoSupervision, CWinMainView* argoVi
 
 	TCHAR szText[250];
 	TCHAR szText2[250];
+#ifndef TEST
 	dwGetPrivateProfileString(_T("Config"), _T("NbrDayLog"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), szGetFullPathName(SZ_CONFIG_ANALYSEUR_FILE,szText2));
 	QString sConfigNbrDayLog = QString::fromUtf16 ((const ushort *)szText);//.split("|")[2];
 	if(sConfigNbrDayLog.count() > 3 ) //Si la ligne de conf est pas foireuse
@@ -91,7 +92,32 @@ CWinMainModel::CWinMainModel(CSupervision* argoSupervision, CWinMainView* argoVi
 	{
 		m_nbrDayRetentionLog = NB_FILES_LOG;
 	}
-	
+#else
+	HANDLE hf  ;
+	long filelen = openFile(szGetFullPathName(SZ_CONFIG_ANALYSEUR_FILE,szText2), hf);
+
+	dwGetPrivateProfileString(_T("Config"), _T("NbrDayLog"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+	QString sConfigNbrDayLog = QString::fromUtf16 ((const ushort *)szText);//.split("|")[2];
+	if(sConfigNbrDayLog.count() > 3 ) //Si la ligne de conf est pas foireuse
+	{
+		m_nbrDayRetentionLog = sConfigNbrDayLog.split("|")[2].toInt();
+		m_nbrDayRetentionErrorLog = m_nbrDayRetentionLog;
+	}
+	else
+	{
+		m_nbrDayRetentionLog = NB_FILES_LOG;
+	}
+	dwGetPrivateProfileString(_T("Config"), _T("NbrDayMeasurement"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+	sConfigNbrDayLog = QString::fromUtf16 ((const ushort *)szText);//.split("|")[2];
+	if(sConfigNbrDayLog.count() > 3 ) //Si la ligne de conf est pas foireuse
+	{
+		m_nbrDayRetentionUserLog = sConfigNbrDayLog.split("|")[2].toInt();
+	}
+	else
+	{
+		m_nbrDayRetentionLog = NB_FILES_LOG;
+	}
+#endif
 
 	/*m_nbrDayRetentionLog;
 	m_nbrDayRetentionErrorLog;
@@ -571,6 +597,9 @@ void CWinMainModel::setRun()
 	m_iPreviousStep = 0; 
 	m_iCurrentStep =0;
 	
+	//Ecriture dans le fichier config de la commande
+	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdRun")
+           , &m_pSupervision->getAnalyseur()->m_CmdRun);
 }
 
 bool CWinMainModel::getStatusWaterFailure(int arg_numStream)const
@@ -624,6 +653,10 @@ void CWinMainModel::setStop()
 	m_bStop = !m_bRun;
 	m_sEtatAnalyseur = tr("EN ARRET");
 
+	//Ecriture dans le fichier config de la commande
+	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdRun")
+           , &m_pSupervision->getAnalyseur()->m_CmdRun);
+
 	////pour pas qu'une nouvelle bar se mette dans le graph quand on rappuit sur play
 	//CElemCycle::m_CurrentStep.m_Step.bSetVal(0);
 	//m_iPreviousStep = 0; 
@@ -635,6 +668,10 @@ void CWinMainModel::setStopEndCycle()
 {
 	m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.bSetVal(1);
 	m_sEtatAnalyseur = tr("CYCLE EN COURS \n(ARRET EN FIN DE CYCLE)");
+
+	//Ecriture dans le fichier config de la commande
+	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdStopEndCycle")
+           , &m_pSupervision->getAnalyseur()->m_CmdStopEndCycle);
 	
 }
 void CWinMainModel::setPause()
@@ -642,6 +679,10 @@ void CWinMainModel::setPause()
 	m_pSupervision->getAnalyseur()->m_CmdPause.bSetVal(1);
 	m_bPause = m_pSupervision->getAnalyseur()->m_CmdPause.ucGetVal();
 	m_sEtatAnalyseur = tr("EN PAUSE");
+
+	//Ecriture dans le fichier config de la commande
+	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdPause")
+           , &m_pSupervision->getAnalyseur()->m_CmdPause);
 }
 
 void CWinMainModel::setUnpause()
@@ -649,6 +690,10 @@ void CWinMainModel::setUnpause()
 	m_pSupervision->getAnalyseur()->m_CmdPause.bSetVal(0);
 	m_bPause = m_pSupervision->getAnalyseur()->m_CmdPause.ucGetVal();
 	m_sEtatAnalyseur = tr("CYCLE EN COURS");
+
+	//Ecriture dans le fichier config de la commande
+	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdPause")
+           , &m_pSupervision->getAnalyseur()->m_CmdPause);
 }
 
 void CWinMainModel::setNext()

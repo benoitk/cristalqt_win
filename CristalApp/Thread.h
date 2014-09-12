@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QThread>
+#include <QMutex>
 #define WM_EXCEPTION			0
 #define WM_TRACE				1
 #define WM_TCP_CNX				2
@@ -22,9 +23,15 @@
 #define TYPE_MSG_TOUS			3
 
 
-class  CThread : public QThread
+class  CThread : 
+#ifdef TEST 
+	public QObject 
+#else 
+	public QThread 
+#endif
 {
 // Operations
+	Q_OBJECT
 public:                 
 
     CThread(); 
@@ -38,7 +45,7 @@ public:
 	BOOL bGetInRunThread(){return m_bInRunThread;};
 	void SetPause(BOOL bPause);
 	BOOL bGetPause(){return m_bPause;};
-
+	
 // Overrideables
 public:
     //virtual DWORD RunThread() = 0;
@@ -58,8 +65,9 @@ protected:
 	BOOL m_bPause;
 	BOOL m_bInRunThread;
 
+	QMutex* m_mutex;
 public:
-	CRITICAL_SECTION  m_hCriticalSection;
+//	CRITICAL_SECTION  m_hCriticalSection;
 	HANDLE m_hThread;
 	DWORD m_dwThreadID;
 };

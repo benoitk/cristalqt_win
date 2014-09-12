@@ -1,5 +1,6 @@
 #pragma once
-
+//#include <QObject>
+//#include "thread.h"
 #define NUM_INTERFACE_CARTE_IO_MIN			1			// 1 a 6
 #define NUM_INTERFACE_CARTE_IO_MAX			6			// 1 a 6
 #define NUM_INTERFACE_CARTE_MESURE			10			
@@ -16,7 +17,7 @@ public:
 	virtual ~CEnumInterface();
 	CThreadInterface *pGetSelectedInterface(int iNum);
 	void SetExternalInterface(CThreadInterface *pSocketIHM,CThreadInterface *pCarteIO,CThreadInterface *pCarteMesure,CThreadInterface *pCarteJbusSlave);
-	BOOL bSelectedInterfaceIsSocketIHM(CThreadInterface *pInterface){return (pInterface == m_pSocketIHM);};
+	bool bSelectedInterfaceIsSocketIHM(CThreadInterface *pInterface){return (pInterface == m_pSocketIHM);};
 public:
 	CThreadInterface *m_pSocketIHM;
 	CThreadInterface *m_pCarteIO;
@@ -27,6 +28,7 @@ public:
 
 class  CThreadInterface : public CThread
 {
+	//Q_OBJECT
 // Operations
 public:                 
 

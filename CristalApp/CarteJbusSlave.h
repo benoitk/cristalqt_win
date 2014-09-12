@@ -1,4 +1,5 @@
 #pragma once
+#include "network.h"
 
 ////////////////////////////////////////////////////////////////////////////
 // CSerialPort window
@@ -10,6 +11,9 @@
 
 class CCarteJbusSlave : public CSerialPort
 {
+#ifdef TEST
+	Q_OBJECT
+#endif
 public:
 	CCarteJbusSlave();
 	virtual ~CCarteJbusSlave();
@@ -23,6 +27,13 @@ public:
 
 protected:
 	virtual long lDispatchTrame(BYTE* lpData,long lSizeTotal);
+#ifdef TEST
+
+public slots:
+	void run();
+#else
+	virtual void run();
+#endif
 };
 
 /////////////////////////////////////////////////////////////////////////////

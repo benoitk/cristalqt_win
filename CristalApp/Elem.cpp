@@ -15,29 +15,60 @@
 *****************************************************************************************@!)*/
 CElemBase::CElemBase()
 {
+#if !defined(TEST2)
 	InitializeCriticalSection(&m_hCriticalSection);
+#endif
 	m_bAutoDelete = FALSE;
 	m_pcLabel = NULL;
 	m_iLabelLength = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_TXT,0xFF);
-	SetLabel(_T("CElemBase"));
+	SetLabel(_T("CElemBasexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemBase::~CElemBase()
 {
 	if (m_pcLabel) free(m_pcLabel);
+#ifndef	TEST2
 	DeleteCriticalSection(&m_hCriticalSection);
+#endif
 }
 
 BOOL CElemBase::bSetLabelLength(int iSize)
 {
+	
 	if (m_iLabelLength < iSize)
 	{
+#ifndef TEST	
 		m_iLabelLength = iSize; 
 		if (m_pcLabel == NULL) m_pcLabel=(TCHAR*)malloc((m_iLabelLength));
-		else m_pcLabel = (TCHAR*)realloc(m_pcLabel,(m_iLabelLength));
+		else 
+		{
+			//_tprintf(_T("AV %d %d \n"),m_pcLabel, tmp);
+     		m_pcLabel = (TCHAR*)realloc(m_pcLabel,(m_iLabelLength));
+			//_tprintf(_T("AP %d %d \n"),m_pcLabel, iSize);
+		}
+#else
+		int tmp = m_iLabelLength;
+		m_iLabelLength = iSize; 
+		
+			
+				
+		if (m_pcLabel == NULL) m_pcLabel=(TCHAR*)HeapAlloc(getPrivateHeap(), 1, m_iLabelLength);
+		else 
+		{
+			_tprintf(_T("AV %d %d \n"),m_pcLabel, tmp);
+ 			m_pcLabel = (TCHAR*)HeapReAlloc(getPrivateHeap(), HEAP_GENERATE_EXCEPTIONS, m_pcLabel,m_iLabelLength);
+			_tprintf(_T("AP %d %d \n"),m_pcLabel, iSize);
+		}
+		
+		if (m_pcLabel == NULL){
+		
+			_tprintf(_T("AV no RIEN %d %d"), privateHeap, m_pcLabel);
+			while(1){Sleep(1000);}
+		}
+	
+#endif
 	}
-
 	return ((m_iLabelLength == 0) || (m_pcLabel != NULL));
 }
 
@@ -50,13 +81,18 @@ void CElemBase::SetLabel(LPCTSTR szText)
 {
 	int iSize;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
-	iSize = lstrlen(szText);
-	if (bSetLabelLength(iSize * (sizeof(TCHAR)+1)))// +1 pour la prise en compte du \0
+#endif
+	iSize = lstrlen(szText)* (sizeof(TCHAR)+1);
+	//if(iSize  < 255) iSize = 255; 
+	if (bSetLabelLength(iSize * (sizeof(TCHAR)+1)))//iSize * (sizeof(TCHAR)+1)))// +1 pour la prise en compte du \0 //bSetLabelLength(255)
 	{
 		lstrcpy(m_pcLabel,szText);
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 }
 
 void CElemBase::SetElemName(const QString& arg_elemName)
@@ -102,13 +138,16 @@ BOOL CElemBase::bLoadSaveLabel(CContext &Context)
 	BOOL bReturn;
 	long lDataSize;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bSave) lDataSize = (lstrlen(m_pcLabel) + 1) * sizeof(TCHAR);
 	bReturn = bLoadSaveInt32(lDataSize,Context);
 	if (!Context.m_bSave) bReturn = bSetLabelLength(lDataSize);
 	if (bReturn) bReturn = bLoadSave(m_pcLabel,lDataSize,Context);
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
-
+#endif
 	if (bReturn) TRACE_DEBUG(eInformation,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Info:label = %s"),szGetLabel());
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 	return bReturn;
@@ -120,7 +159,9 @@ BOOL CElemBase::bLoadSaveFloat(float &fData,CContext &Context)
 	short nVal;
 	BYTE ucVal;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bModeInteger && Context.m_bForceWord)
 	{
 		if (Context.m_bSave) nVal = (short)fData;
@@ -134,8 +175,9 @@ BOOL CElemBase::bLoadSaveFloat(float &fData,CContext &Context)
 		if (bReturn && !Context.m_bSave) fData = ucVal;
 	}
 	else bReturn = bLoadSave(&fData,sizeof(float),Context);
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
-
+#endif
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 	return bReturn;
 }
@@ -145,7 +187,9 @@ BOOL CElemBase::bLoadSaveInt8(BYTE &ucData,CContext &Context)
 	BOOL bReturn;
 	short nVal;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (/*Context.m_bModeInteger && */Context.m_bForceWord)
 	{
 		if (Context.m_bSave) nVal = (short)ucData;
@@ -153,7 +197,9 @@ BOOL CElemBase::bLoadSaveInt8(BYTE &ucData,CContext &Context)
 		if (bReturn && !Context.m_bSave) ucData = (BYTE)nVal;
 	}
 	else bReturn = bLoadSave(&ucData,sizeof(ucData),Context);
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 
@@ -166,7 +212,9 @@ BOOL CElemBase::bLoadSaveInt16(short &nData,CContext &Context)
 	BYTE ucVal;
 	short nDataMemo;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bModeInteger && Context.m_bForceByte)
 	{
 		if (Context.m_bSave) ucVal = (BYTE)nData;
@@ -180,7 +228,9 @@ BOOL CElemBase::bLoadSaveInt16(short &nData,CContext &Context)
 		bReturn = bLoadSave(&nDataMemo,sizeof(nDataMemo),Context);
 		if (!Context.m_bSave) nData = MAKEWORD(HIBYTE(nDataMemo),LOBYTE(nDataMemo));
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 
@@ -192,7 +242,9 @@ BOOL CElemBase::bLoadSaveUInt16(unsigned short &nData,CContext &Context)
 	BOOL bReturn;
 	BYTE ucVal;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bModeInteger && Context.m_bForceByte)
 	{
 		if (Context.m_bSave) ucVal = (BYTE)nData;
@@ -205,7 +257,9 @@ BOOL CElemBase::bLoadSaveUInt16(unsigned short &nData,CContext &Context)
 		bReturn = bLoadSave(&nData,sizeof(nData),Context);
 		if (!Context.m_bSave) nData = MAKEWORD(HIBYTE(nData),LOBYTE(nData));
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 
@@ -217,7 +271,9 @@ BOOL CElemBase::bLoadSaveInt32(long &iData,CContext &Context)
 	BOOL bReturn;
 	short nVal;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bModeInteger && Context.m_bForceWord)
 	{
 		if (Context.m_bSave) nVal = (short)iData;
@@ -225,7 +281,9 @@ BOOL CElemBase::bLoadSaveInt32(long &iData,CContext &Context)
 		if (bReturn && !Context.m_bSave) iData = nVal;
 	}
 	else bReturn = bLoadSave(&iData,sizeof(long),Context);
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
 
@@ -251,14 +309,18 @@ int CElemBase::iGetStreamSize(CContext &Context)
 {
 	int iSize = 0;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bAllData)
 	{
 		iSize = sizeof(m_iType);
 		iSize += sizeof(m_iLabelLength);
 		iSize += (lstrlen(m_pcLabel) + 1) * sizeof(TCHAR);//m_iLabelLength;
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	return iSize;
 }
 
@@ -316,13 +378,17 @@ LPTSTR CElemBase::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemList::CElemList(int iNbrElem):CElemBase()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_LIST,0xFF);
-	SetLabel(_T("CElemList"));
+	SetLabel(_T("CElemListxxxxxxxxxxxxxxxxxxxxx"));
 	m_iSize = 0;
 	m_iSizeMax = 0;
 	m_ppElem = NULL;
 	if (iNbrElem > 0)
 	{
+#ifndef TEST
 		m_ppElem = (CElemBase**)malloc(iNbrElem * sizeof(CElemBase*));
+#else
+		m_ppElem = (CElemBase**)HeapAlloc(getPrivateHeap(), 1, iNbrElem * sizeof(CElemBase*));
+#endif
 		if (m_ppElem != NULL)
 		{
 			memset(m_ppElem,0,iNbrElem * sizeof(CElemBase*));
@@ -336,14 +402,18 @@ CElemList::~CElemList()
 	RemoveAll();
 	if (m_ppElem) free(m_ppElem);
 	m_ppElem = NULL;
+#ifndef	TEST2
 	DeleteCriticalSection(&m_hCriticalSection);
+#endif
 }
 
 void CElemList::RemoveAll()
 {
 	int i;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	i = m_iSize;
 	while (i-- > 0)
 	{
@@ -358,19 +428,25 @@ void CElemList::RemoveAll()
 		}
 	}
 	m_iSize = 0;
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 }
 
 CElemBase *CElemList::pGetAt(int iPos)
 {
 	CElemBase *pElem = NULL;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if ((iPos < m_iSize) && (iPos > -1))
 	{
 		pElem = m_ppElem[iPos];
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	return pElem;
 }
 
@@ -378,7 +454,9 @@ BOOL CElemList::bSetAt(int iPos,CElemBase *pElem)
 {
 	BOOL bReturn = FALSE;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if ((iPos < m_iSize) && (iPos > -1))
 	{
 		m_ppElem[iPos] = pElem;
@@ -386,21 +464,26 @@ BOOL CElemList::bSetAt(int iPos,CElemBase *pElem)
 	}
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
-
+#endif
 	return bReturn;
 }
 
 CElemBase *CElemList::pAdd(CElemBase* pElem)
 {
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (m_iSize < m_iSizeMax)
 	{
 		m_ppElem[m_iSize] = pElem;
 		m_iSize++;
 	}
 	else pElem = NULL;
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	return pElem;
 }
 
@@ -410,7 +493,9 @@ BOOL CElemList::bAddAndRollText(LPCTSTR szText)
 	BOOL bReturn = TRUE;
 	CElemBase *pElemMemo;
 
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (pElemMemo = pGetAt(m_iSize-1))
 	{
 		i = m_iSize-1;
@@ -424,8 +509,9 @@ BOOL CElemList::bAddAndRollText(LPCTSTR szText)
 			if (bReturn) pElemMemo->SetLabel(szText);
 		}
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
-	
+#endif
 	return (bReturn);
 }
 
@@ -434,7 +520,9 @@ BOOL CElemList::bSerialize(CContext &Context)
 	int i;
 	BOOL bReturn = TRUE;
 	
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bAllData)
 	{
 		bReturn = CElemBase::bSerialize(Context);
@@ -455,8 +543,9 @@ BOOL CElemList::bSerialize(CContext &Context)
 	}
 
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
-
+#endif
 	return bReturn;
 }
 
@@ -465,7 +554,9 @@ int CElemList::iGetStreamSize(CContext &Context)
 	int i;
 	int iSize = 0;
 	
+#ifndef	TEST2
 	EnterCriticalSection(&m_hCriticalSection);
+#endif
 	if (Context.m_bAllData)
 	{
 		iSize = CElemBase::iGetStreamSize(Context);
@@ -479,7 +570,9 @@ int CElemList::iGetStreamSize(CContext &Context)
 			iSize += m_ppElem[i]->iGetStreamSize(Context);
 		}
 	}
+#ifndef	TEST2
 	LeaveCriticalSection(&m_hCriticalSection);
+#endif
 	return iSize;
 }
 
@@ -567,7 +660,7 @@ LPTSTR CElemList::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemFieldBit8::CElemFieldBit8():CElemList(8)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD8,0xFF);
-	SetLabel(_T("CElemFieldBit8"));
+	SetLabel(_T("CElemFieldBit8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemFieldBit8::~CElemFieldBit8()
@@ -760,7 +853,7 @@ LPTSTR CElemFieldBit8::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemFieldBit16::CElemFieldBit16():CElemList(16)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD16,0xFF);
-	SetLabel(_T("CElemFieldBit16"));
+	SetLabel(_T("CElemFieldBit16xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 }
 
 CElemFieldBit16::~CElemFieldBit16()
@@ -858,7 +951,7 @@ int CElemFieldBit16::iGetStreamSize(CContext &Context)
 *****************************************************************************************@!)*/
 CElemNbr::CElemNbr():CElemBase()
 {
-	m_szUnit.SetLabel(_T("V"));
+	m_szUnit.SetLabel(_T("Vxxxxxxxxxx"));
 	m_szFormat.SetLabel(_T("%08x"));
 }
 
@@ -978,7 +1071,7 @@ CElemFloat::CElemFloat():CElemNbr()
 {
 	m_fVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,0xFF);
-	SetLabel(_T("FLOAT"));
+	SetLabel(_T("FLOATxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_szFormat.SetLabel(_T("%7.3f"));
 }
 
@@ -1045,7 +1138,7 @@ CElemInt8::CElemInt8():CElemNbr()
 {
 	m_ucVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT8,0xFF);
-	SetLabel(_T("INT8"));
+	SetLabel(_T("INT8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 
@@ -1092,7 +1185,7 @@ CElemInt16::CElemInt16():CElemNbr()
 {
 	m_nVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT16,0xFF);
-	SetLabel(_T("INT16"));
+	SetLabel(_T("INT16xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 
@@ -1138,7 +1231,7 @@ CElemInt32::CElemInt32():CElemNbr()
 {
 	m_lVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT32,0xFF);
-	SetLabel(_T("INT32"));
+	SetLabel(_T("INT32xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 

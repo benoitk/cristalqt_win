@@ -64,7 +64,11 @@ void  CSocketBase::ConfigSocket(unsigned short nNumPort,long lSizeDataMax,LPTSTR
 	}
 	else
 	{
+			_tprintf(_T("AV %d \n"),m_pRxBuffer);
+
 		m_pRxBuffer = (BYTE*)realloc(m_pRxBuffer,lSizeDataMax + 16);
+			_tprintf(_T("AV %d \n"),m_pRxBuffer);
+
 	}
 
 }
@@ -210,12 +214,13 @@ long CSocketBase::lRead(long *plExtraHeader,BYTE* lpData,long lSizeMax,long *plN
 ***********************************************************************@!)*/
 long CSocketBase::lProtectedWrite (BYTE* lpData,long lSizeTotal)
 {
+	QMutexLocker locker(m_mutex);
 	long erreur = 0;
 	long rw=1;
 
 	if ((m_nSocket != INVALID_SOCKET) && m_bConnected)
 	{
-		::EnterCriticalSection(&m_hCriticalSection);
+//		::EnterCriticalSection(&m_hCriticalSection);
 		/* Tant que la longueur voulue n'est pas atteinte */
 		while( (lSizeTotal > 0 ) && (rw>0) ) 
 		{
@@ -242,7 +247,7 @@ long CSocketBase::lProtectedWrite (BYTE* lpData,long lSizeTotal)
 				}
 			}
 		}
-		::LeaveCriticalSection(&m_hCriticalSection);
+//		::LeaveCriticalSection(&m_hCriticalSection);
 	}
 
 	return (rw); 

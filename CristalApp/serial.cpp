@@ -57,6 +57,7 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 	BOOL bReturn;
 
 	bReturn = CThreadInterface::bReadConfig(pszFileName);
+#ifndef TEST
 	TRACE_LOG_MSG(_T("! CThreadInterface::bReadConfig !"));
 	// taille du buffer
 	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,pszFileName);
@@ -131,7 +132,97 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 	m_DCB.EofChar = iGetPrivateProfileInt(_T("Com"), _T("EofChar"), m_DCB.EofChar, pszFileName);//'\n';
 	m_DCB.EvtChar = iGetPrivateProfileInt(_T("Com"), _T("EvtChar"), m_DCB.EvtChar, pszFileName);//'\r'; 
 	TRACE_LOG_MSG(_T("! all DCB !"));
+#else
+	HANDLE hf  ;
+	long filelen = openFile(pszFileName, hf);
+	// taille du buffer
+	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,hf, filelen);
+	_tprintf(_T(" lSizeDataMax\n"));
+
+	if (lSizeDataMax > 0)
+	{
+		if (m_pRxBuffer == NULL) 
+		{
+#ifndef TEST
+			m_pRxBuffer = (BYTE*)malloc(lSizeDataMax + 16);
+#else
+			m_pRxBuffer = (BYTE*)HeapAlloc(getPrivateHeap(), 1, lSizeDataMax + 16);
+#endif
+		}
+		else if (m_lSizeDataMax != lSizeDataMax)
+		{
+			_tprintf(_T("AV %d \n"),m_pRxBuffer);
+			m_pRxBuffer = (BYTE*)realloc(m_pRxBuffer,lSizeDataMax + 16);
+			_tprintf(_T("AV %d \n"),m_pRxBuffer);
+		}
+		m_lSizeDataMax = lSizeDataMax;
+	}
+
+	// port com
+	m_nNumPort = iGetPrivateProfileInt(_T("Config"),_T("m_nNumPort"),m_nNumPort,hf, filelen);
+	m_DCB.DCBlength = sizeof(DCB);
+	memset(&m_DCB,0,sizeof(m_DCB));
+	_tprintf(_T(" memset\n"));
+	closeFile(hf);
+#ifdef _WIN32_WCE
+	_tprintf(_T(" _WIN32_WCE\n"));
+
+	_stprintf( szPort, _T("COM%d:"), m_nNumPort );
+#else
+	_stprintf( szPort, _T("\\\\.\\COM%d"), m_nNumPort );
+#endif
+	_tprintf(_T(" m_hTTY\n"));
+
+	m_hTTY = CreateFile( szPort, GENERIC_READ | GENERIC_WRITE,0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_SYSTEM/*FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED*/, NULL );
 	
+	_tprintf(_T(" CreateFile\n"));
+	if (m_hTTY != INVALID_HANDLE_VALUE)
+	{
+	_tprintf(_T(" INVALID_HANDLE_VALUE\n"));
+		GetCommState( m_hTTY, &m_DCB );
+		CloseHandle(m_hTTY);
+		m_hTTY = INVALID_HANDLE_VALUE;
+	}
+	else
+	{
+	_tprintf(_T(" TRACE_DEBUG_LAST_ERROR\n"));
+
+		TRACE_DEBUG_LAST_ERROR(eDebug,eConfig,GetLastError());
+	}
+	filelen = openFile(pszFileName, hf);
+
+	_tprintf(_T(" TRACE_DEBUG_LAST_ERROR\n"));
+	m_DCB.BaudRate = iGetPrivateProfileInt(_T("Com"), _T("BaudRate"),m_DCB.BaudRate, hf, filelen);
+	m_DCB.ByteSize = iGetPrivateProfileInt(_T("Com"), _T("ByteSize"), m_DCB.ByteSize, hf, filelen);
+	m_DCB.Parity = iGetPrivateProfileInt(_T("Com"), _T("Parity"), m_DCB.Parity, hf, filelen);
+	m_DCB.fParity = iGetPrivateProfileInt(_T("Com"), _T("fParity"), m_DCB.fParity, hf, filelen);
+	m_DCB.StopBits = iGetPrivateProfileInt(_T("Com"), _T("StopBits"),m_DCB.StopBits, hf, filelen); 
+	m_DCB.fBinary = iGetPrivateProfileInt(_T("Com"), _T("fBinary"), m_DCB.fBinary, hf, filelen);
+	m_DCB.fOutxCtsFlow = iGetPrivateProfileInt(_T("Com"), _T("fOutxCtsFlow"),m_DCB.fOutxCtsFlow, hf, filelen);
+	m_DCB.fOutxDsrFlow = iGetPrivateProfileInt(_T("Com"), _T("fOutxDsrFlow"),m_DCB.fOutxDsrFlow, hf, filelen);
+	m_DCB.fDtrControl = iGetPrivateProfileInt(_T("Com"), _T("fDtrControl"), m_DCB.fDtrControl, hf, filelen);
+	m_DCB.fDsrSensitivity = iGetPrivateProfileInt(_T("Com"), _T("fDsrSensitivity"), m_DCB.fDsrSensitivity, hf, filelen);
+	m_DCB.fTXContinueOnXoff = iGetPrivateProfileInt(_T("Com"), _T("fTXContinueOnXoff"),m_DCB.fTXContinueOnXoff, hf, filelen);
+	m_DCB.fOutX = iGetPrivateProfileInt(_T("Com"), _T("fOutX"), m_DCB.fOutX, hf, filelen);
+	m_DCB.fInX = iGetPrivateProfileInt(_T("Com"), _T("fInX"),m_DCB.fInX, hf, filelen);
+	m_DCB.fErrorChar = iGetPrivateProfileInt(_T("Com"), _T("fErrorChar"),m_DCB.fErrorChar, hf, filelen);
+	m_DCB.fNull = iGetPrivateProfileInt(_T("Com"), _T("fNull"),m_DCB.fNull, hf, filelen);
+	m_DCB.fRtsControl = iGetPrivateProfileInt(_T("Com"), _T("fRtsControl"), m_DCB.fRtsControl, hf, filelen);
+	m_DCB.fAbortOnError = iGetPrivateProfileInt(_T("Com"), _T("fAbortOnError"), m_DCB.fAbortOnError, hf, filelen);
+	m_DCB.XonLim = iGetPrivateProfileInt(_T("Com"), _T("XonLim"),m_DCB.XonLim, hf, filelen);
+	m_DCB.XoffLim = iGetPrivateProfileInt(_T("Com"), _T("XoffLim"),m_DCB.XoffLim, hf, filelen);
+	m_DCB.ErrorChar = iGetPrivateProfileInt(_T("Com"), _T("ErrorChar"),m_DCB.ErrorChar, hf, filelen);
+	m_DCB.XonChar = iGetPrivateProfileInt(_T("Com"), _T("XonChar"), m_DCB.XonChar, hf, filelen);
+	m_DCB.XoffChar = iGetPrivateProfileInt(_T("Com"), _T("XoffChar"), m_DCB.XoffChar, hf, filelen);
+	m_DCB.fDummy2 = 17;
+	m_DCB.wReserved = 0;
+	m_DCB.EofChar = iGetPrivateProfileInt(_T("Com"), _T("EofChar"), m_DCB.EofChar, hf, filelen);//'\n';
+	m_DCB.EvtChar = iGetPrivateProfileInt(_T("Com"), _T("EvtChar"), m_DCB.EvtChar, hf, filelen);//'\r'; 
+	_tprintf(_T(" m_DCB\n"));
+	
+	closeFile(hf);
+	_tprintf(_T(" closeFile(hf);\n"));
+#endif
 	if (!bReturn) TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error"));
 
 	return bReturn;
@@ -317,9 +408,10 @@ BOOL CSerialPort::bRead(BYTE* lpData,long lSizeDataMax,long *plNbrLu,BOOL bByPas
 
 BOOL CSerialPort::bWriteAndRead(long lExtraHeader,BYTE* pBufferWrite,long iSizeToWrite,BYTE* pBufferRead, long iSizeToRead,long iSizeToReadMax, long *piSizeRead,BOOL bByPass)
 {
+    QMutexLocker locker(m_mutex);
 	BOOL bReturn = FALSE;
 
-	EnterCriticalSection(&m_hCriticalSection);
+	//EnterCriticalSection(&m_hCriticalSection);
 	
 	PurgeComm( m_hTTY, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR );
 	
@@ -353,7 +445,7 @@ BOOL CSerialPort::bWriteAndRead(long lExtraHeader,BYTE* pBufferWrite,long iSizeT
 		m_lNbrErrCom++;
 	}
 
-	LeaveCriticalSection(&m_hCriticalSection);
+//	LeaveCriticalSection(&m_hCriticalSection);
 	
 	if (!bReturn && ( m_iNbrErrRead>3 || m_iNbrErrRead>3 ))
 	{

@@ -1,5 +1,6 @@
 #pragma once
-
+//#include <QObject>
+//#include "network.h"
 class CListStream;
 class CElemList;
 
@@ -8,6 +9,7 @@ class CElemList;
 // CSerialPort window
 class CSerialPort : public CThreadInterface
 {
+	//Q_OBJECT
 public:
 	CSerialPort();
 	virtual ~CSerialPort();

@@ -32,7 +32,7 @@ CWinMeasureCardModel::CWinMeasureCardModel(CSupervision* argpSupervision)//, CWi
 	TCHAR szRQ[500];
 	TCHAR szRP[500];
 	TCHAR szText[260];
-
+#ifndef TEST
 	bCopyFile(szGetFullPathName(_T("InterfaceMesure.ini"),szText),SZ_FIC_TEMP,FALSE);
 
 	dwGetPrivateProfileString(_T("Config_local"), _T("Config_Local"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
@@ -159,7 +159,138 @@ CWinMeasureCardModel::CWinMeasureCardModel(CSupervision* argpSupervision)//, CWi
 			}
 		}
 	}
+#else
 
+	bCopyFile(szGetFullPathName(_T("InterfaceMesure.ini"),szText),SZ_FIC_TEMP,FALSE);
+	
+	HANDLE hf  ;
+	long filelen = openFile(SZ_FIC_TEMP, hf);
+
+	dwGetPrivateProfileString(_T("Config_local"), _T("Config_Local"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+	QString sConfigLocal = QString::fromUtf16 ((const ushort *)szText);
+	QStringList sListConfigLocal = sConfigLocal.split("|");
+	QString sConfigTemp = "";
+	int nNumLocalPhysique = 0;
+	int nNumLocalVirtuel = 0;
+	
+	foreach(sConfigTemp, sListConfigLocal)
+	{
+		++nNumLocalPhysique;
+		if(sConfigTemp == "1")
+		{
+			m_pSupervision->addKeyOnMapRQTComJBUSMesure(ORGANNE_LOCAL_ON + QString::number(nNumLocalVirtuel));
+			m_pSupervision->addKeyOnMapRQTComJBUSMesure(ORGANNE_LOCAL_OFF + QString::number(nNumLocalVirtuel++));
+			qDebug() << "### Instance CWinMeasureCardModel | nNumLocalPhysique:"<< nNumLocalPhysique << endl;
+			switch(nNumLocalPhysique)
+			{	
+				case 1:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_0"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1200|1|0"));
+					_stprintf(szRP,_T("10|5|0x1200|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1200|0|0"));
+					_stprintf(szRP,_T("10|5|0x1200|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 2:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_1"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1201|1|0"));
+					_stprintf(szRP,_T("10|5|0x1201|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1201|0|0"));
+					_stprintf(szRP,_T("10|5|0x1201|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 3:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_2"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1202|1|0"));
+					_stprintf(szRP,_T("10|5|0x1202|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1202|0|0"));
+					_stprintf(szRP,_T("10|5|0x1202|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 4:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_3"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1203|1|0"));
+					_stprintf(szRP,_T("10|5|0x1203|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1203|0|0"));
+					_stprintf(szRP,_T("10|5|0x1203|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 5:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_4"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(true);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1204|1|0"));
+					_stprintf(szRP,_T("10|5|0x1204|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1204|0|0"));
+					_stprintf(szRP,_T("10|5|0x1204|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 6:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_5"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1205|1|0"));
+					_stprintf(szRP,_T("10|5|0x1205|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1205|0|0"));
+					_stprintf(szRP,_T("10|5|0x1205|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 7:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_6"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1206|1|0"));
+					_stprintf(szRP,_T("10|5|0x1206|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1206|0|0"));
+					_stprintf(szRP,_T("10|5|0x1206|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+				case 8:
+					dwGetPrivateProfileString(_T("Config_local"), _T("Local_Label_7"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+					m_vLocalLabels.append(QString::fromUtf16 ((const ushort *)szText).split("|").first());
+					m_vLocalSecuriteOn.append(false);
+					//LOCAL1_ON
+					_stprintf(szRQ,_T("10|5|0x1207|1|0"));
+					_stprintf(szRP,_T("10|5|0x1207|1|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					//LOCAL2_OFF
+					_stprintf(szRQ,_T("10|5|0x1207|0|0"));
+					_stprintf(szRP,_T("10|5|0x1207|0|0"));
+					m_pSupervision->getCarteMesure()->bAddExchangeJbus(szRQ,szRP,m_pSupervision->getAnalyseur());
+					break;
+			}
+		}
+	}
+#endif
 	
 }
 

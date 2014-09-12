@@ -96,7 +96,7 @@ void CWinSchedulerView::init()
 		QWidget* widgetPeriodique = new QWidget();
 		
 		TCHAR szText[260];
-
+#ifndef TEST
 		bCopyFile(szGetFullPathName(_T("ConfigAnalyseur.ini"),szText),SZ_FIC_TEMP,FALSE);
 		//Zero
 		dwGetPrivateProfileString(_T("Config"), _T("ZeroCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
@@ -157,7 +157,70 @@ void CWinSchedulerView::init()
 	    m_btNbCyleAvantCleanup->setObjectName("btLineEdit");
 	    connect(m_btNbCyleAvantCleanup, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCleanupPressed()));
 		m_lblNbCyleAvantCleanup = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+#else
+		bCopyFile(szGetFullPathName(_T("ConfigAnalyseur.ini"),szText),SZ_FIC_TEMP,FALSE);
+		HANDLE hf  ;
+		long filelen = openFile(SZ_FIC_TEMP, hf);
+		//Zero
+		dwGetPrivateProfileString(_T("Config"), _T("ZeroCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+		QString sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		QStringList sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("ZeroCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantZero = new QPushButton();
+	    m_btNbCyleAvantZero->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantZero, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantZeroPressed()));
+		m_lblNbCyleAvantZero = new QLabel(tr("Nombre de cycle \navant ") + sListLigneIni.at(2) +tr("\n(Si 0, pas de cyle de blanc)"));
 
+		//Calibration
+		dwGetPrivateProfileString(_T("Config"), _T("CalibrageCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantCalib = new QPushButton();
+	    m_btNbCyleAvantCalib->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCalib, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCalibPressed()));
+		m_lblNbCyleAvantCalib = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+		
+		//Calibration en ligne
+		dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantCalibInLine = new QPushButton();
+	    m_btNbCyleAvantCalibInLine->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCalibInLine, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCalibInLinePressed()));
+		m_lblNbCyleAvantCalibInLine = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+		
+		//Mesure manuel (cleanup)
+		dwGetPrivateProfileString(_T("Config"), _T("CleanupCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+		sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+		sListLigneIni = sLigneIni.split("|");
+		if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+		{
+			dwGetPrivateProfileString(_T("Config"), _T("CleanupCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+		}
+		m_btNbCyleAvantCleanup = new QPushButton();
+	    m_btNbCyleAvantCleanup->setObjectName("btLineEdit");
+	    connect(m_btNbCyleAvantCleanup, SIGNAL(clicked()), m_pControler, SLOT(btNbCyleAvantCleanupPressed()));
+		m_lblNbCyleAvantCleanup = new QLabel(tr("Nombre de cycle \navant ")+ sListLigneIni.at(2));
+#endif
 	   
 #ifdef MULTI_MEASURE
 		m_lblNbCyleAvantZero->setText(tr("Nombre de cycle \navant cycle nettoyage \n(Si 0, pas de cyle de nettoyage)"));

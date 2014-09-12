@@ -46,11 +46,27 @@ BOOL CCarteIO::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 	BOOL bReturn;
 
 	bReturn = CSerialPort::bReadConfig(pszFileName);
+#ifndef TEST
 	m_dwDelay = iGetPrivateProfileInt(_T("Config"), _T("m_dwDelay"), m_dwDelay, pszFileName);
 	if (bReturn)
 	{
 		bReturn = m_ElemCycleStep.bReadConfig(_T("0"),pszFileName,pListStream);
 	}
+#else
+	HANDLE hf  ;
+	long filelen = openFile(pszFileName, hf);
+
+	m_dwDelay = iGetPrivateProfileInt(_T("Config"), _T("m_dwDelay"), m_dwDelay, hf, filelen);
+	_tprintf(_T(" CSerialPort::iGetPrivateProfileInt( %d \n "), m_dwDelay);
+	_tprintf(_T(" CSerialPort::iGetPrivateProfileInt( %d \n "), hf);
+
+	if (bReturn)
+	{
+		bReturn = m_ElemCycleStep.bReadConfig(_T("0"),hf, filelen,pListStream);
+		_tprintf(_T(" m_ElemCycleStep %d \n "), bReturn);
+	}
+	closeFile(hf);
+#endif
 	if (!bReturn) 
 	{
 		_tprintf(_T(" Ierror "));
@@ -89,10 +105,14 @@ BOOL CCarteIO::bWriteConfig(LPCTSTR pszFileName)
 //DWORD CCarteIO::RunThread()
 void CCarteIO::run()
 {
+	
+	TRACE_LOG_MSG(_T("! pCarteIO->start(); ok !"));
+	m_bInRunThread = TRUE;
+	/*while(1){Sleep(1000);}*/
 	m_bRun = bOpen();
     qDebug() << "Interface : " << this->m_bNumInterface << " Thread : " << QThread::currentThreadId  ();
 
-	m_bInRunThread = TRUE;
+	
 	while (m_bRun)
 	{
 		if (m_ElemCycleStep.bExecuteBegin(m_bCanRead,m_bCanWrite,m_ExternalInterface))

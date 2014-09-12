@@ -31,17 +31,23 @@
 	#define DIR_APP  "\\ResidentFlash\\CristalQTARM"
 	//#define DIR_APP  "\\Program Files\\CristalQTARM"
 #endif
-
 CWinMainControler::CWinMainControler(CListStream* argAnalyseur,CCarteIO* argCarteIO,CCarteMesure* argCarteMesure, CSocketIHM* argInterfaceIHM)
     :m_CurrentGraphPage(0)
 {
-	qDebug() << "#### CWinMainControler::CWinMainControler" << endl;
-	
 	m_pSupervision = new CSupervision();
 	m_pSupervision->setAnalyseur((CAnalyseur*)argAnalyseur);
 	m_pSupervision->setCarteMesure(argCarteMesure);
 	m_pSupervision->setCarteIO(argCarteIO);
 	m_pSupervision->setInterfaceIHM(argInterfaceIHM);
+	qDebug() << "#### CWinMainControler::CWinMainControler" << endl;
+#ifdef TEST
+}
+void CWinMainControler::load()
+{
+	TRACE_LOG_MSG(_T("CWinMainControler STARTED"));
+	for(int i=0; i<160; ++i){Sleep(1000);}
+#endif
+
 
 	//Fenêtre alarme
 	m_pDialogAlarm = new CDialogAlarm(m_pSupervision);
@@ -92,7 +98,9 @@ CWinMainControler::CWinMainControler(CListStream* argAnalyseur,CCarteIO* argCart
 	timerScreenShot->start();
 	//Fin screenshot
 #endif
-
+#ifdef TEST
+	this->execControler();
+#endif
 }
 
 //SLOT

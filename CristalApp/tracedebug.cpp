@@ -49,6 +49,7 @@ static TCHAR *aszOrigineMsgTrace[] = {
 void ReadConfigMsgError(LPTSTR szFileMsg)
 {
 	memset(&_aszErrorText[0][0],0,sizeof(_aszErrorText));
+#ifndef TEST
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorFindRqAndExecuteFromIHM"),_T("Paramètre ou variable inconnu"),_aszErrorText[eErrorFindRqAndExecuteFromIHM],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleReadConfig"),_T("Erreur de lecture de la configuration du cycle"),_aszErrorText[eErrorCycleReadConfig],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleWriteConfig"),_T("Erreur d'écriture de la configuration du cycle"),_aszErrorText[eErrorCycleWriteConfig],MAX_PATH,szFileMsg);
@@ -143,7 +144,106 @@ void ReadConfigMsgError(LPTSTR szFileMsg)
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg403"),_T("eErrorPrg403"),_aszErrorText[eErrorPrg403],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg405"),_T("eErrorPrg405"),_aszErrorText[eErrorPrg405],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg413"),_T("eErrorPrg413"),_aszErrorText[eErrorPrg413],MAX_PATH,szFileMsg);
+#else
+HANDLE hf  ;
+	long filelen=0;
+	filelen = openFile(szFileMsg, hf);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorFindRqAndExecuteFromIHM"),_T("Paramètre ou variable inconnu"),_aszErrorText[eErrorFindRqAndExecuteFromIHM],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleReadConfig"),_T("Erreur de lecture de la configuration du cycle"),_aszErrorText[eErrorCycleReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleWriteConfig"),_T("Erreur d'écriture de la configuration du cycle"),_aszErrorText[eErrorCycleWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleExecute"),_T("Erreur d'exécution du cycle"),_aszErrorText[eErrorCycleExecute],MAX_PATH, hf, filelen);
 
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleZeroReadConfig"),_T("Erreur de lecture de la configuration du cycle de zero"),_aszErrorText[eErrorCycleZeroReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleZeroWriteConfig"),_T("Erreur d'écriture de la configuration du cycle de zero"),_aszErrorText[eErrorCycleZeroWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleZeroExecute"),_T("Erreur d'exécution du cycle de zero"),_aszErrorText[eErrorCycleZeroExecute],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCalibReadConfig"),_T("Erreur de lecture de la configuration du cycle de calibration"),_aszErrorText[eErrorCycleCalibReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCalibWriteConfig"),_T("Erreur d'écriture de la configuration du cycle de calibration"),_aszErrorText[eErrorCycleCalibWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCalibExecute"),_T("Erreur d'exécution du cycle de calibration"),_aszErrorText[eErrorCycleCalibExecute],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCleanupReadConfig"),_T("Erreur de lecture de la configuration du cycle de nettoyage"),_aszErrorText[eErrorCycleCleanupReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCleanupWriteConfig"),_T("Erreur d'écriture de la configuration du cycle de nettoyage"),_aszErrorText[eErrorCycleCleanupWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCycleCleanupExecute"),_T("Erreur d'exécution du cycle de nettoyage"),_aszErrorText[eErrorCycleCleanupExecute],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorSocketReadConfig"),_T("Erreur de lecture de la configuration de la socket"),_aszErrorText[eErrorSocketReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorSocketWriteConfig"),_T("Erreur d'écriture de la configuration de la socket"),_aszErrorText[eErrorSocketWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorSocketRunThread"),_T("Erreur d'exécution de la socket"),_aszErrorText[eErrorSocketRunThread],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorAppReadConfig"),_T("Erreur de lecture de la configuration de l'application"),_aszErrorText[eErrorAppReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorAppWriteConfig"),_T("Erreur d'écriture de la configuration de l'application"),_aszErrorText[eErrorAppWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorAppRunThread"),_T("Erreur d'exécution de l'application"),_aszErrorText[eErrorAppRunThread],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteIOReadConfig"),_T("Erreur de lecture sur la carte IO"),_aszErrorText[eErrorCarteIOReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteIOWriteConfig"),_T("Erreur d'écriture sur la carte IO"),_aszErrorText[eErrorCarteIOWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteIOExecute"),_T("Erreur d'exécution sur la carte IO"),_aszErrorText[eErrorCarteIOExecute],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteJBusSlaveReadConfig"),_T("Erreur de lecture de la configuration de la carte JBUS esclave"),_aszErrorText[eErrorCarteJBusSlaveReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteJBusSlavebWriteConfig"),_T("Erreur d'écriture de la configuration de la carte JBUS esclave"),_aszErrorText[eErrorCarteJBusSlavebWriteConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteJBusSlaveRead"),_T("Erreur de lecture sur la carte JBUS esclave"),_aszErrorText[eErrorCarteJBusSlaveRead],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteJBusSlaveDispatchTrame"),_T("Erreur de traitement sur la carte JBUS esclave"),_aszErrorText[eErrorCarteJBusSlaveDispatchTrame],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteMesureReadConfig"),_T("Erreur de lecture de la configuration de la carte mesure"),_aszErrorText[eErrorCarteMesureReadConfig],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorCarteMesureWriteConfig"),_T("Erreur d'écriture de la configuration de la carte mesure"),_aszErrorText[eErrorCarteMesureWriteConfig],MAX_PATH, hf, filelen);
+
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorMesureStatusThreshold1"),_T("Erreur dépassement seuil 1"),_aszErrorText[eErrorMesureStatusThreshold1],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorMesureStatusThreshold2"),_T("Erreur dépassement seuil 2"),_aszErrorText[eErrorMesureStatusThreshold2],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorMesureValMax"),_T("Erreur dépassement valeur max"),_aszErrorText[eErrorMesureValMax],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorMesureValMin"),_T("Erreur dépassement valeur min"),_aszErrorText[eErrorMesureValMin],MAX_PATH, hf, filelen);
+	
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgRegulControlLuggageHeatingUnattained"),_T("eErrorPrgRegulControlLuggageHeatingUnattained"),_aszErrorText[eErrorPrgRegulControlLuggageHeatingUnattained],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgRegulControlHeatingTemperatureUnstable"),_T("eErrorPrgRegulControlHeatingTemperatureUnstable"),_aszErrorText[eErrorPrgRegulControlHeatingTemperatureUnstable],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgWaterDefaultLackOfWater"),_T("eErrorPrgWaterDefaultLackOfWater"),_aszErrorText[eErrorPrgWaterDefaultLackOfWater],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgWaterDefaultDefaultMeasure"),_T("eErrorPrgWaterDefaultDefaultMeasure"),_aszErrorText[eErrorPrgWaterDefaultDefaultMeasure],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgDefaultOpticalSetting"),_T("eErrorPrgDefaultOpticalSetting"),_aszErrorText[eErrorPrgDefaultOpticalSetting],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgDefaultIncorrectOpticalSetting"),_T("eErrorPrgDefaultIncorrectOpticalSetting"),_aszErrorText[eErrorPrgDefaultIncorrectOpticalSetting],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgDefaultCurrentProjector"),_T("eErrorPrgDefaultCurrentProjector"),_aszErrorText[eErrorPrgDefaultCurrentProjector],MAX_PATH, hf, filelen);
+	
+	
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgOpticalMeasureDefaultMeasure"),_T("eErrorPrgOpticalMeasureDefaultMeasure"),_aszErrorText[eErrorPrgOpticalMeasureDefaultMeasure],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgOpticalMeasureDefaultStability"),_T("eErrorPrgOpticalMeasureDefaultStability"),_aszErrorText[eErrorPrgOpticalMeasureDefaultStability],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgAbsorbanceCalculDivByZero"),_T("eErrorPrgAbsorbanceCalculDivByZero"),_aszErrorText[eErrorPrgAbsorbanceCalculDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgConcentrationCalculDivByZero"),_T("eErrorPrgConcentrationCalculDivByZero"),_aszErrorText[eErrorPrgConcentrationCalculDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgConcentrationCalculOutOfBound"),_T("eErrorPrgConcentrationCalculOutOfBound"),_aszErrorText[eErrorPrgConcentrationCalculOutOfBound],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgCalibrationCoefCalculDivByZero"),_T("eErrorPrgCalibrationCoefCalculDivByZero"),_aszErrorText[eErrorPrgCalibrationCoefCalculDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgCalibrationCoefCalculOutOfBound"),_T("eErrorPrgCalibrationCoefCalculOutOfBound"),_aszErrorText[eErrorPrgCalibrationCoefCalculOutOfBound],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgLinearisationDivByZero"),_T("eErrorPrgLinearisationDivByZero"),_aszErrorText[eErrorPrgLinearisationDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgLinearisationOutOfRange"),_T("eErrorPrgLinearisationOutOfRange"),_aszErrorText[eErrorPrgLinearisationOutOfRange],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgInverseLinDivByZero"),_T("eErrorPrgInverseLinDivByZero"),_aszErrorText[eErrorPrgInverseLinDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgInverseLinOutOfRange"),_T("eErrorPrgInverseLinOutOfRange"),_aszErrorText[eErrorPrgInverseLinOutOfRange],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgConfigInitNegativeGain"),_T("eErrorPrgConfigInitNegativeGain"),_aszErrorText[eErrorPrgConfigInitNegativeGain],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgCalibrationCoefCalculM2DivByZero"),_T("eErrorPrgCalibrationCoefCalculM2DivByZero"),_aszErrorText[eErrorPrgCalibrationCoefCalculM2DivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgCalibrationCoefCalculM2OutOfGap"),_T("eErrorPrgCalibrationCoefCalculM2OutOfGap"),_aszErrorText[eErrorPrgCalibrationCoefCalculM2OutOfGap],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgOffsetZeroCalculDivByZero"),_T("eErrorPrgOffsetZeroCalculDivByZero"),_aszErrorText[eErrorPrgOffsetZeroCalculDivByZero],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgOffsetZeroCalculOutOfBound"),_T("eErrorPrgOffsetZeroCalculOutOfBound"),_aszErrorText[eErrorPrgOffsetZeroCalculOutOfBound],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgConfigInitNegativeProbeGain"),_T("eErrorPrgConfigInitNegativeProbeGain"),_aszErrorText[eErrorPrgConfigInitNegativeProbeGain],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrgHeatWaterControlDefaultHeatWater"),_T("eErrorPrgHeatWaterControlDefaultHeatWater"),_aszErrorText[eErrorPrgHeatWaterControlDefaultHeatWater],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg203"),_T("eErrorPrg203"),_aszErrorText[eErrorPrg203],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg205"),_T("eErrorPrg205"),_aszErrorText[eErrorPrg205],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg213"),_T("eErrorPrg213"),_aszErrorText[eErrorPrg213],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg215"),_T("eErrorPrg215"),_aszErrorText[eErrorPrg215],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg219"),_T("eErrorPrg219"),_aszErrorText[eErrorPrg219],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg223"),_T("eErrorPrg223"),_aszErrorText[eErrorPrg223],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg225"),_T("eErrorPrg225"),_aszErrorText[eErrorPrg225],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg229"),_T("eErrorPrg229"),_aszErrorText[eErrorPrg229],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg22D"),_T("eErrorPrg22D"),_aszErrorText[eErrorPrg22D],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg233"),_T("eErrorPrg233"),_aszErrorText[eErrorPrg233],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg235"),_T("eErrorPrg235"),_aszErrorText[eErrorPrg235],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg245"),_T("eErrorPrg245"),_aszErrorText[eErrorPrg245],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg243"),_T("eErrorPrg243"),_aszErrorText[eErrorPrg243],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg253"),_T("eErrorPrg253"),_aszErrorText[eErrorPrg253],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg255"),_T("eErrorPrg255"),_aszErrorText[eErrorPrg255],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg259"),_T("eErrorPrg259"),_aszErrorText[eErrorPrg259],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg443"),_T("eErrorPrg443"),_aszErrorText[eErrorPrg443],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg453"),_T("eErrorPrg453"),_aszErrorText[eErrorPrg453],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg463"),_T("eErrorPrg463"),_aszErrorText[eErrorPrg463],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg465"),_T("eErrorPrg465"),_aszErrorText[eErrorPrg465],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg173"),_T("eErrorPrg173"),_aszErrorText[eErrorPrg173],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg393"),_T("eErrorPrg393"),_aszErrorText[eErrorPrg393],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg403"),_T("eErrorPrg403"),_aszErrorText[eErrorPrg403],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg405"),_T("eErrorPrg405"),_aszErrorText[eErrorPrg405],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg413"),_T("eErrorPrg413"),_aszErrorText[eErrorPrg413],MAX_PATH, hf, filelen);
+	closeFile(hf);
+#endif
 }
 
 void WriteConfigMsgError(LPTSTR szFileMsg)
@@ -894,6 +994,11 @@ BOOL bEcrireFichierLog(WCHAR* argpszMessage, WCHAR* argpszFullPath, WCHAR* argps
 	}
 	else
 	{
+		/*_stprintf( argpszFileName
+			, _T( "%s, %s"), argpszMessage, argpszFileName);*/
+		OutputDebugString(argpszFullPath);
+		OutputDebugString(argpszFileName);
+			 
 		OutputDebugString(_T("ERREUR OUVERTURE FICHIER TRACE\r\n"));
 	}
 

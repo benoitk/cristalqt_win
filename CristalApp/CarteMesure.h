@@ -1,9 +1,12 @@
 #pragma once
-
+#include "network.h"
 ////////////////////////////////////////////////////////////////////////////
 // CSerialPort window
 class CCarteMesure : public CSerialPort
 {
+#ifdef TEST
+	Q_OBJECT
+#endif
 public:
 	CCarteMesure();
 	virtual ~CCarteMesure();
@@ -12,7 +15,13 @@ public:
 
 protected:
     //virtual DWORD RunThread();
-    virtual void run();
+#ifdef TEST
+
+public slots:
+	void run();
+#else
+	virtual void run();
+#endif
 };
 
 /////////////////////////////////////////////////////////////////////////////

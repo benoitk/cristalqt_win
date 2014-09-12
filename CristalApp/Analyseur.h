@@ -2,6 +2,7 @@
 #include "Network.h"
 class CAnalyseur : public CListStream
 {
+	Q_OBJECT
 public:
 	int getIndexSeq()const{return m_indexSeqence;};
 	int getTimeElapse()const{return m_iTimeElapse;};
@@ -11,7 +12,9 @@ public:
 
 protected:
     //virtual DWORD RunThread();
-    virtual void run();
+   
+public slots:
+	void run();
 
 private :
 	int m_indexSeqence;

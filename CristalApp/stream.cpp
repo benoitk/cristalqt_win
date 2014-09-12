@@ -371,8 +371,11 @@ int CStream::iGetStreamSize(CContext &Context)
 	return iSize;
 }
 
-
+#ifndef TEST
 BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream)
+#else
+BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream,HANDLE hf, long filelen)
+#endif
 {
 	BOOL bReturn = TRUE;
 	int i;
@@ -389,6 +392,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 //	dwGetPrivateProfileString(szRub,_T("m_StreamName"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 //	m_StreamName.bSetConfig(szText);
 
+#ifndef TEST
 	// temps de cycle max
 	_stprintf(szText2,_T("0x%08x|CycleTimeMax|100.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT16,eID_STREAM_CYCLE_TIME_MAX),m_CycleTimeMax.m_szFormat.szGetLabel());
 	dwGetPrivateProfileString(szRub,_T("m_CycleTimeMax"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
@@ -632,6 +636,249 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 	dwGetPrivateProfileString(szRub,_T("m_StatusSaumureFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_StatusSaumureFailure.bSetConfig(szText);
 	
+#else
+	
+	// temps de cycle max
+	_stprintf(szText2,_T("0x%08x|CycleTimeMax|100.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT16,eID_STREAM_CYCLE_TIME_MAX),m_CycleTimeMax.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CycleTimeMax"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CycleTimeMax.bSetConfig(szText);
+	// temps de cycle courant
+	_stprintf(szText2,_T("0x%08x|CycleTimeCurrent|0.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT16,eID_STREAM_CYCLE_TIME_CURRENT),m_CycleTimeCurrent.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CycleTimeCurrent"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CycleTimeCurrent.bSetConfig(szText);
+	m_CycleTimeCurrent.bSetVal(0);
+	// etat actif
+	_stprintf(szText2,_T("0x%08x|Active|1.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),m_Active.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_Active"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_Active.bSetConfig(szText);
+	// Status Failure
+	_stprintf(szText2,_T("0x%08x|StatusFailure|0.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT8,eID_STREAM_STATUS_FAILURE),m_StatusFailure.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusFailure.bSetConfig(szText);
+	m_StatusFailure.bSetVal(0);
+	// Status water Failure
+	_stprintf(szText2,_T("0x%08x|StatusWaterFailure|0.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT8,eID_STREAM_STATUS_WATER_FAILURE),m_StatusWaterFailure.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StatusWaterFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StatusWaterFailure.bSetConfig(szText);
+	m_StatusWaterFailure.bSetVal(0);
+
+	// m_IsRunning
+	_stprintf(szText2,_T("0x%08x|m_IsRunning|0|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),m_IsRunning.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_IsRunning"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_IsRunning.bSetConfig(szText);
+	m_IsRunning.bSetVal(0);
+	// m_CounterCycle
+	_stprintf(szText2,_T("0x%08x|m_CounterCycle|0|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT16,eID_STREAM_COUNTER_CYCLE),m_CounterCycle.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CounterCycle"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CounterCycle.bSetConfig(szText);
+	m_CounterCycle.bSetVal(0);
+
+	iNbrMesure = iGetPrivateProfileInt(szRub,_T("m_iNbrMesure"),NBR_MESURE_MAX,hf, filelen);
+//	for (i = 0; bReturn && (i < NBR_MESURE_MAX /*iNbrMesure*/); i++)
+	for (i = 0; bReturn && (i < iNbrMesure); i++)
+	{
+		pMesure = pGetAt(i);
+		if (pMesure == NULL) pMesure = pNew();
+		if (pMesure)
+		{
+			bReturn = pMesure->bReadConfig(iNumStream,i,pszFileName, hf, filelen);
+		}
+	}
+
+
+	// m_CellTemperature
+	_stprintf(szText2,_T("0x%08x|m_CellTemperature|1.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_FLOAT,eID_STREAM_CELL_TEMPERATURE),m_CellTemperature.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CellTemperature"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CellTemperature.bSetConfig(szText);
+	// m_WaterFailureSetPoint
+	_stprintf(szText2,_T("0x%08x|m_WaterFailureSetPoint|1.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_FLOAT,eID_STREAM_WATER_FAILURE_SET_POINT),m_WaterFailureSetPoint.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_WaterFailureSetPoint"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_WaterFailureSetPoint.bSetConfig(szText);
+	// m_OpticalSetPoint
+	_stprintf(szText2,_T("0x%08x|m_OpticalSetPoint|1.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_INT16,eID_STREAM_OPTICAL_SET_POINT),m_OpticalSetPoint.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_OpticalSetPoint"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_OpticalSetPoint.bSetConfig(szText);
+	// m_CellTemperatureSetPoint
+	_stprintf(szText2,_T("0x%08x|m_CellTemperatureSetPoint|1.|.|%s"),MAKE_ID(iNumStream,0xFF,eTYPE_FLOAT,eID_STREAM_CELL_TEMPERATURE_SET_POINT),m_CellTemperatureSetPoint.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_CellTemperatureSetPoint"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_CellTemperatureSetPoint.bSetConfig(szText);
+	// mesure pression 
+	_stprintf(szText2,_T("0x%08x|m_PressureMeasurement|1.|mV|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_FLOAT,eID_STREAM_PRESSURE_MEASUREMENT),m_PressureMeasurement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_PressureMeasurement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_PressureMeasurement.bSetConfig(szText);
+
+	_stprintf(szText2,_T("0x%08x|m_ThresholdTemperatureProbe|1.|mV|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_FLOAT,eID_STREAM_THRESHOLD_TEMPERATURE_PROBE),m_ThresholdTemperatureProbe.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ThresholdTemperatureProbe"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ThresholdTemperatureProbe.bSetConfig(szText); 
+
+	_stprintf(szText2,_T("0x%08x|m_TemperatureProbe|1.|mV|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_FLOAT,eID_STREAM_TEMPERATURE_PROBE),m_TemperatureProbe.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_TemperatureProbe"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_TemperatureProbe.bSetConfig(szText);
+
+	_stprintf(szText2,_T("0x%08x|m_SettingColorThreshold1|1.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_FLOAT,eID_STREAM_SETTING_COLOR_THRESHOLD1),m_SettingColorThreshold1.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_SettingColorThreshold1"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_SettingColorThreshold1.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_SettingColorThreshold2|1.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_FLOAT,eID_STREAM_SETTING_COLOR_THRESHOLD2),m_SettingColorThreshold2.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_SettingColorThreshold2"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_SettingColorThreshold2.bSetConfig(szText); 
+
+	_stprintf(szText2,_T("0x%08x|m_PeriodicCycleCleanup|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_PERIODIC_CYCLE_CLEANUP),m_PeriodicCycleCleanup.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_PeriodicCycleCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_PeriodicCycleCleanup.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_PeriodicCycleZero|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_PERIODIC_CYCLE_ZERO),m_PeriodicCycleZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_PeriodicCycleZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_PeriodicCycleZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_PeriodicCycleCalib|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_PERIODIC_CYCLE_CALIB),m_PeriodicCycleCalib.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_PeriodicCycleCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_PeriodicCycleCalib.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_PeriodicCycleCalibInLine|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_PERIODIC_CYCLE_CALIB_INLINE),m_PeriodicCycleCalibInLine.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_PeriodicCycleCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_PeriodicCycleCalibInLine.bSetConfig(szText);
+
+
+	//Init des listes pour les periodiques
+	for (i = 0; i < 24;i++) //Liste de 24 heures 
+	{
+		if (m_ListPeriodicHourCycleCleanup.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicHourCycleCleanup.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicHourCycleZero.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicHourCycleZero.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicHourCycleCalib.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicHourCycleCalib.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicHourCycleCalibInLine.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicHourCycleCalibInLine.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+	}
+	_stprintf(szText2,_T("0x%x|m_ListPeriodicHourCycleCleanup|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_HOUR_CYCLE_CLEANUP));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicHourCycleCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicHourCycleCleanup.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicHourCycleZero|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_HOUR_CYCLE_ZERO));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicHourCycleZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicHourCycleZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicHourCycleCalib|0|0|0|0|0|0|0|0|0|1|1|0|0|1|0|1|0|1|0|0|0|0|0|0"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_HOUR_CYCLE_CALIB));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicHourCycleCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicHourCycleCalib.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicHourCycleCalibInLine|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_HOUR_CYCLE_CALIB_INLINE));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicHourCycleCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicHourCycleCalibInLine.bSetConfig(szText);
+	
+	for (i = 0; i < 7;i++) //Liste de 7 jours 
+	{
+		if (m_ListPeriodicDayCycleCleanup.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicDayCycleCleanup.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicDayCycleZero.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicDayCycleZero.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicDayCycleCalib.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicDayCycleCalib.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+		if (m_ListPeriodicDayCycleCalibInLine.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListPeriodicDayCycleCalibInLine.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+	}
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicDayCycleCleanup|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_DAY_CYCLE_CLEANUP));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicDayCycleCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicDayCycleCleanup.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicDayCycleZero|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_DAY_CYCLE_ZERO));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicDayCycleZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicDayCycleZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicDayCycleCalib|0|1|0|1|0|1|0"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_DAY_CYCLE_CALIB));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicDayCycleCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicDayCycleCalib.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ListPeriodicDayCycleCalibInLine|0|1|2|3"),MAKE_ID(iNumStream, 0xFF,eTYPE_LIST,eID_STREAM_LIST_PERIODIC_DAY_CYCLE_CALIB_INLINE));
+	dwGetPrivateProfileString(szRub,_T("m_ListPeriodicDayCycleCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ListPeriodicDayCycleCalibInLine.bSetConfig(szText);
+
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCycleCleanup|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CYCLE_CLEANUP),m_ConditioningCycleCleanup.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCycleCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCycleCleanup.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCycleZero|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CYCLE_ZERO),m_ConditioningCycleZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCycleZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCycleZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCycleCalib|0|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CYCLE_CALIB),m_ConditioningCycleCalib.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCycleCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCycleCalib.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCycleCalibInLine|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CYCLE_CALIB_INLINE),m_ConditioningCycleCalibInLine.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCycleCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCycleCalibInLine.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCycleMeasurement|0|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CYCLE_MEASUREMENT),m_ConditioningCycleMeasurement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCycleMeasurement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCycleMeasurement.bSetConfig(szText);
+	
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCleanup|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CLEANUP),m_ConditioningCleanup.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCleanup.bSetConfig(szText); 
+	_stprintf(szText2,_T("0x%08x|m_ConditioningZero|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_ZERO),m_ConditioningZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningZero.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCalib|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CALIB),m_ConditioningCalib.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCalib.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningCalibInLine|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_CALIB_INLINE),m_ConditioningCalibInLine.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningCalibInLine.bSetConfig(szText);
+	_stprintf(szText2,_T("0x%08x|m_ConditioningMeasurement|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_CONDITIONING_MEASUREMENT),m_ConditioningMeasurement.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_ConditioningMeasurement"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ConditioningMeasurement.bSetConfig(szText);
+	
+	_stprintf(szText2,_T("0x%08x|m_StateConditioning|0.|.|%s"),MAKE_ID(iNumStream, 0xFF,eTYPE_INT8,eID_STREAM_STATE_CONDITIONING),m_StateConditioning.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(szRub,_T("m_StateConditioning"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_StateConditioning.bSetConfig(szText);
+	
+	
+#endif
 	if (!bReturn) 
 	{
 		TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
@@ -640,15 +887,18 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 	return bReturn;
 }
 
-
+#ifndef TEST 
 BOOL CStream::bReadCycle(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream)
+#else
+BOOL CStream::bReadCycle(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream,HANDLE hf, long filelen)
+#endif
 {
 	BOOL bReturn = TRUE;
 	TCHAR szRub[MAX_PATH];
 	TCHAR szText[MAX_PATH];
 
 	_stprintf(szRub,_T("CStream%d"),iNumStream);
-
+#ifndef TEST
 	// m_ElemCycleFilenamee
 	dwGetPrivateProfileString(szRub,_T("m_ElemCycleFilename"),_T("cycle.ini"),szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_ElemCycleFilename.SetLabel(szText);
@@ -692,7 +942,41 @@ BOOL CStream::bReadCycle(int iNumStream, LPCTSTR pszFileName,CListStream *pListS
 	if (bReturn) bReturn = m_ElemCycleCalib.bReadConfig(szGetFullPathName(m_ElemCycleCalibFilename.szGetLabel(),szText),pListStream);
 
 	if (bReturn) bReturn = m_ElemCycleCalibInLine.bReadConfig(szGetFullPathName(m_ElemCycleCalibInLineFilename.szGetLabel(),szText),pListStream);
+#else
+	
+	
+	// m_ElemCycleFilenamee
+	dwGetPrivateProfileString(szRub,_T("m_ElemCycleFilename"),_T("cycle.ini"),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ElemCycleFilename.SetLabel(szText);
 
+	// m_ElemCycleCleanupFilename
+	dwGetPrivateProfileString(szRub,_T("m_ElemCycleCleanupFilename"),_T("cyclecleanup.ini"),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ElemCycleCleanupFilename.SetLabel(szText);
+	// m_ElemCycleZeroFilename
+	dwGetPrivateProfileString(szRub,_T("m_ElemCycleZeroFilename"),_T("cyclezero.ini"),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ElemCycleZeroFilename.SetLabel(szText);
+
+	// m_ElemCycleCalibFilename
+	dwGetPrivateProfileString(szRub,_T("m_ElemCycleCalibFilename"),_T("cyclecalib.ini"),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ElemCycleCalibFilename.SetLabel(szText);
+
+	// m_ElemCycle2CalibFilename
+	dwGetPrivateProfileString(szRub,_T("m_ElemCycleCalibInLineFilename"),_T("cyclecalib2.ini"),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	m_ElemCycleCalibInLineFilename.SetLabel(szText);
+
+	// lecture des config 
+	if (bReturn) bReturn = m_ElemCycle.bReadConfig(szGetFullPathName(m_ElemCycleFilename.szGetLabel(),szText),pListStream);
+
+	if (bReturn) bReturn = m_ElemCycleCleanup.bReadConfig(szGetFullPathName(m_ElemCycleCleanupFilename.szGetLabel(),szText),pListStream);
+
+	if (bReturn) bReturn = m_ElemCycleZero.bReadConfig(szGetFullPathName(m_ElemCycleZeroFilename.szGetLabel(),szText),pListStream);
+
+	if (bReturn) bReturn = m_ElemCycleCalib.bReadConfig(szGetFullPathName(m_ElemCycleCalibFilename.szGetLabel(),szText),pListStream);
+
+	if (bReturn) bReturn = m_ElemCycleCalibInLine.bReadConfig(szGetFullPathName(m_ElemCycleCalibInLineFilename.szGetLabel(),szText),pListStream);
+
+	
+#endif
 	if (!bReturn) 
 	{
 		TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());
@@ -1042,7 +1326,7 @@ CElemList CListStream::m_ListMessageError(NBR_MSG_ERROR_MAX);
 CListStream::CListStream():CElemBase(),CThread(),m_ListSequenceNum(NBR_SEQUENCE_CYCLE_MAX),m_ListSequenceDuree(NBR_SEQUENCE_CYCLE_MAX)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_LIST_VOIE,0xEF);
-	SetLabel(_T("CListStream"));
+	SetLabel(_T("CListStreamxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_CmdLoadNumConfig.SetLabel(_T("m_CmdLoadNumConfig"));;
 	m_CmdLoadNumConfig.SetType(MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_LOAD_NUM_CONFIG));
 
@@ -1530,8 +1814,7 @@ BOOL CListStream::bReadTempConfig(LPCTSTR pszFileName)
 	while(bReadLineFromPos(pszFileName,szLine,nPositionInFile))
 	{
 		// Récupération de l'id à partir de la ligne (1er champ)
-		pcId = _tcstok( szLine, _T("|") ); 
-		
+		pcId = _tcstok( szLine, _T("|") ); 		
 		//Convertion de l'Id
 		_stscanf(pcId,_T("%x"),&lId);
 		pElem = pFindOrCreateElemFromID(lId);
@@ -1551,7 +1834,7 @@ BOOL CListStream::bReadConfig(LPCTSTR pszFileName)
 	CStream *pStream;
 	CElemBase *pElem;
 
-
+#ifndef TEST
 	// parametres de DEBUG et TRACE
 	dwGetPrivateProfileString(_T("Divers"),_T("_szLogFileDir"),_T("\\"),_szLogFileDir,sizeof(_szLogFileDir)/sizeof(TCHAR),pszFileName);
 	dwGetPrivateProfileString(_T("Divers"),_T("_szLogErrorPrgFileDir"),_T("\\"),_szLogErrorPrgFileDir,sizeof(_szLogErrorPrgFileDir)/sizeof(TCHAR),pszFileName);
@@ -1795,7 +2078,261 @@ BOOL CListStream::bReadConfig(LPCTSTR pszFileName)
 			bReturn = pStream->bReadConfig(i, pszFileName,this);
 		}
 	}
+#else
+HANDLE hf  ;
+	long filelen = 0;
 
+	filelen = openFile(pszFileName, hf);//check 2
+
+	// parametres de DEBUG et TRACE
+	dwGetPrivateProfileString(_T("Divers"),_T("_szLogFileDir"),_T("\\"),_szLogFileDir,sizeof(_szLogFileDir)/sizeof(TCHAR),hf, filelen);
+	dwGetPrivateProfileString(_T("Divers"),_T("_szLogErrorPrgFileDir"),_T("\\"),_szLogErrorPrgFileDir,sizeof(_szLogErrorPrgFileDir)/sizeof(TCHAR),hf, filelen);
+	dwGetPrivateProfileString(_T("Divers"),_T("_szUserLogFileDir"),_T("\\"),_szUserLogFileDir,sizeof(_szUserLogFileDir)/sizeof(TCHAR),hf, filelen);
+	_bTraceScreen = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bTraceScreen"),0,hf, filelen);
+	_bDebugView = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bDebugView"),0,hf, filelen);
+	_bLogFile = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bLogFile"),0,hf, filelen);
+	_bErrFile = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bErrFile"),1,hf, filelen);
+
+	_bShowError = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bShowError"),0,hf, filelen);  
+	_bShowWarning = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bShowWarning"),0,hf, filelen);
+	_bShowInformation = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bShowInformation"),0,hf, filelen);
+	_bShowDebug = iGetPrivateProfileInt(_T("TRACE_DEBUG"),_T("_bShowDebug"),0,hf, filelen);
+	
+
+
+	// utile pour info sur pas en cours
+	_stprintf(szText2,_T("0x%x|En Attente"),MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_STEP,eID_STREAM_CURRENT_STEP));
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CurrentStep"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	bReturn = CElemCycle::m_CurrentStep.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CurrentStep"));
+	// cmd m_CmdSaveNumConfig
+	_stprintf(szText2,_T("0x%x|CmdSaveNumConfig|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_SAVE_NUM_CONFIG),m_CmdSaveNumConfig.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdSaveNumConfig"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn)bReturn = m_CmdSaveNumConfig.bSetConfig(szText);
+	// cmd m_CmdLoadNumConfig
+	_stprintf(szText2,_T("0x%x|CmdLoadNumConfig|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_LOAD_NUM_CONFIG),m_CmdLoadNumConfig.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdLoadNumConfig"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdLoadNumConfig.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdLoadNumConfig"));
+	
+	// cmd run/stop
+	_stprintf(szText2,_T("0x%x|CmdRun|33|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_RUN),m_CmdRun.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdRun"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdRun.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdRun"));
+	_tprintf(_T("####### m_CmdRun %d  ...\n"), m_CmdRun.ucGetVal());
+
+	// cmd pause
+	_stprintf(szText2,_T("0x%x|CmdPause|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_PAUSE),m_CmdPause.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdPause"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdPause.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdPause"));
+	// cmd cycle calib
+	_stprintf(szText2,_T("0x%x|CmdCycleCalib|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_CYCLE_CALIB),m_CmdCycleCalib.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdCycleCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdCycleCalib.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdCycleCalib"));
+	// cmd cycle CalibInLine
+	_stprintf(szText2,_T("0x%x|m_CmdCycleCalibInLine|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_CYCLE_CALIB_IN_LINE),m_CmdCycleCalibInLine.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdCycleCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdCycleCalibInLine.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdCycleCalibInLine"));
+	// cmd cycle zero 
+	_stprintf(szText2,_T("0x%x|CmdCycleZero|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_CYCLE_ZERO),m_CmdCycleZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdCycleZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdCycleZero.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdCycleZero"));
+	// cmd cleanup
+	_stprintf(szText2,_T("0x%x|CmdCycleCleanup|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_CYCLE_CLEANUP),m_CmdCycleCleanup.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdCycleCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdCycleCleanup.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdCycleCleanup"));
+	// cmd jump step
+	_stprintf(szText2,_T("0x%x|CmdJumpStep|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT16,eID_LISTSTREAM_CMD_JUMP_STEP),m_CmdJumpStep.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdJumpStep"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdJumpStep.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdJumpStep"));
+	// cmd remote Control
+	_stprintf(szText2,_T("0x%x|CmdRemoteControl|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_REMOTE_CONTROL),m_CmdRemoteControl.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdRemoteControl"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdRemoteControl.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdRemoteControl"));
+	SetRemoteControl();
+	// cmd stop fin de cycle
+	_stprintf(szText2,_T("0x%x|m_CmdStopEndCycle|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_STOP_END_CYCLE),m_CmdStopEndCycle.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdStopEndCycle"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdStopEndCycle.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdStopEndCycle"));
+
+	// m_CmdMaintenanceManuel
+	_stprintf(szText2,_T("0x%x|m_CmdMaintenanceManuel|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_MAINTENANCE),m_CmdMaintenanceManuel.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CmdMaintenanceManuel"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CmdMaintenanceManuel.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CmdMaintenanceManuel"));
+
+	// num voie courante
+	_stprintf(szText2,_T("0x%x|NumCurrentStream|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_NUM_CURRENT_STREAM),m_NumCurrentStream.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_NumCurrentStream"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_NumCurrentStream.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_NumCurrentStream"));
+	// num config courante
+	_stprintf(szText2,_T("0x%x|NumCurrentConfig|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_NUM_CURRENT_CONFIG),m_NumCurrentConfig.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_NumCurrentConfig"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_NumCurrentConfig.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_NumCurrentConfig"));
+	// num version
+	_stprintf(szText2,_T("0x%x|m_NumVersion|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_NUM_VERSION),m_NumVersion.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_NumVersion"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_NumVersion.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_NumVersion"));
+	m_NumVersion.bSetVal(NUM_LAST_VERSION);
+	// state SAV
+	_stprintf(szText2,_T("0x%x|m_bStateMaintenance|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_MAINTENANCE),m_bStateMaintenance.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStateMaintenance"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStateMaintenance.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStateMaintenance"));
+	// state calib
+	_stprintf(szText2,_T("0x%x|m_bStateCalib|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_CALIB),m_bStateCalib.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStateCalib"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStateCalib.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStateCalib"));
+
+	// state calib2
+	_stprintf(szText2,_T("0x%x|m_bStateCalibInLine|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_CALIB_IN_LINE),m_bStateCalibInLine.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStateCalibInLine"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStateCalibInLine.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStateCalibInLine"));
+
+	// state zero 
+	_stprintf(szText2,_T("0x%x|m_bStateZero|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_ZERO),m_bStateZero.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStateZero"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStateZero.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStateZero"));
+	// state cleanup
+	_stprintf(szText2,_T("0x%x|m_bStateCleanup|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_CLEANUP),m_bStateCleanup.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStateCleanup"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStateCleanup.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStateCleanup"));
+	// status analyseur
+	_stprintf(szText2,_T("0x%x|m_bStatusFailure|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATUS_FAILURE),m_bStatusFailure.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStatusFailure"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStatusFailure.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStatusFailure"));
+	m_bStatusFailure.bSetVal(0);
+
+	//Status de la supervision
+	_stprintf(szText2,_T("0x%x|m_bStatusSupervision|1|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATUS_SUPPERVISION),m_bStatusSupervision.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStatusSupervision"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStatusSupervision.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStatusSupervision"));
+	m_bStatusSupervision.bSetVal(1);
+	//m_TimeRemaingUntilNextCycle
+	_stprintf(szText2,_T("0x%x|m_TimeRemaingUntilNextCycle|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT16,eID_LISTSTREAM_TIMER),m_TimeRemaingUntilNextCycle.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_TimeRemaingUntilNextCycle"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_TimeRemaingUntilNextCycle.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_TimeRemaingUntilNextCycle"));
+	m_TimeRemaingUntilNextCycle.bSetVal(0);
+	// durée du cycle en cours 
+	_stprintf(szText2,_T("0x%x|m_CurrentTimeCycle|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CURRENT_TIME_CYCLE),m_CurrentTimeCycle.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CurrentTimeCycle"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CurrentTimeCycle.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CurrentTimeCycle"));
+	m_CurrentTimeCycle.bSetVal(0);
+	// status des commandes temps-reel
+	_stprintf(szText2,_T("0x%x|m_bStatusRealTime|0|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT16,eID_LISTSTREAM_STATUS_REALTIME),m_bStatusRealTime.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_bStatusRealTime"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_bStatusRealTime.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_bStatusRealTime"));
+	m_bStatusRealTime.bSetVal(0);
+
+	// m_CellTemperatureOrder
+	_stprintf(szText2,_T("0x%08x|m_CellTemperatureOrder|1.|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,eID_LISTSTREAM_CELL_TEMPERATURE_ORDER),m_CellTemperatureOrder.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CellTemperatureOrder"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CellTemperatureOrder.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CellTemperatureOrder"));
+	// m_CellTemperatureOffset
+	_stprintf(szText2,_T("0x%08x|m_CellTemperatureOffset|1.|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,eID_LISTSTREAM_CELL_OFFSET),m_CellTemperatureOffset.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_CellTemperatureOffset"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_CellTemperatureOffset.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_CellTemperatureOffset"));
+	
+	// m_Average
+	_stprintf(szText2,_T("0x%08x|m_Average|1.|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_AVERAGE),m_Average.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_Average"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_Average.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_Average"));
+
+	_stprintf(szText2,_T("0x%08x|m_GainProbe|1.|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,eID_LISTSTREAM_PROBE_GAIN),m_GainProbe.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_GainProbe"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_GainProbe.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_GainProbe"));
+	
+	_stprintf(szText2,_T("0x%08x|m_OffsetProbe|1.|.|%s"),MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,eID_LISTSTREAM_PROBE_OFFSET),m_OffsetProbe.m_szFormat.szGetLabel());
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_OffsetProbe"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_OffsetProbe.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_OffsetProbe"));
+
+	// num de cycle du sequenceur
+	for (i = 0; i < NBR_SEQUENCE_CYCLE_MAX;i++) 
+	{
+		if (m_ListSequenceNum.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt8())
+			{
+				m_ListSequenceNum.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+	}
+	_stprintf(szText2,_T("0x%x|m_ListSequenceNum|0|1|2|3"),MAKE_ID(0xFF,0xFF,eTYPE_LIST,eID_LISTSTREAM_LIST_SEQUENCE_NUM));
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_ListSequenceNum"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_ListSequenceNum.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_ListSequenceNum"));
+	// durée du cycle dans le sequenceur
+	for (i = 0; i < NBR_SEQUENCE_CYCLE_MAX;i++) 
+	{
+		if (m_ListSequenceDuree.pGetAt(i) == NULL)
+		{
+			if (pElem = new CElemInt16())
+			{
+				m_ListSequenceDuree.pAdd(pElem);
+				pElem->SetAutoDelete(TRUE);
+			}
+			else bReturn = FALSE;
+		}
+	}
+	_stprintf(szText2,_T("0x%x|m_ListSequenceDuree|10|11|20|30"),MAKE_ID(0xFF,0xFF,eTYPE_LIST,eID_LISTSTREAM_LIST_SEQUENCE_DUREE));
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_ListSequenceDuree"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) bReturn = m_ListSequenceDuree.bSetConfig(szText);
+	if (!bReturn) _stprintf(szFailureField,_T("m_ListSequenceDuree"));
+	// liste des messages d'erreur
+	_stprintf(szText2,_T("0x%x|m_ListMessageError"),MAKE_ID(0xFF,0xFF,eTYPE_LIST,eID_LISTSTREAM_LIST_MESSAGE_ERROR));
+	dwGetPrivateProfileString(_T("CListStream"),_T("m_ListMessageError"),szText2,szText,sizeof(szText)/sizeof(TCHAR),hf, filelen);
+	if (bReturn) 
+	{
+		bReturn = m_ListMessageError.bSetConfig(szText);
+		for (i = 0; i < NBR_MSG_ERROR_MAX; i++)
+		{
+			m_ListMessageError.pAdd(new CElemBase());
+		}
+	}
+
+
+	iNbrVoie = iGetPrivateProfileInt(_T("CListStream"),_T("m_iNbrStream"),NBR_STREAM_MAX,hf, filelen);
+	//for (i = 0;bReturn && (i < NBR_STREAM_MAX/*iNbrVoie*/);i++)
+	for (i = 0;bReturn && (i < iNbrVoie);i++)
+	{
+		pStream = pGetAt(i);
+		if (pStream == NULL) pStream = pNew();
+		if (bReturn = (pStream != NULL))
+		{
+			bReturn = pStream->bReadConfig(i, pszFileName,this,hf, filelen);
+		}
+	}
+
+	closeFile(hf); 
+#endif
 	if (!bReturn) 
 	{
 		TRACE_DEBUG(eError,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Erreur sur %s dans la section %s"),szFailureField,szGetLabel());
@@ -1810,7 +2347,7 @@ BOOL CListStream::bReadCycle(LPCTSTR pszFileName)
 	BOOL bReturn = TRUE;
 	int i;
 	CStream *pStream;
-
+#ifndef TEST
 	//lecture des cycles
 	//for (i = 0;bReturn && (i < NBR_STREAM_MAX/*m_iNbrStream*/);i++)
 	for (i = 0;bReturn && (i < m_iNbrStream);i++)
@@ -1823,6 +2360,25 @@ BOOL CListStream::bReadCycle(LPCTSTR pszFileName)
 		}
 	}
 
+#else
+	HANDLE hf;
+	long filelen = 0;
+	filelen = openFile(pszFileName, hf);
+	//lecture des cycles
+	//for (i = 0;bReturn && (i < NBR_STREAM_MAX/*m_iNbrStream*/);i++)
+	for (i = 0;bReturn && (i < m_iNbrStream);i++)
+	{
+		pStream = pGetAt(i);
+		if (bReturn = (pStream != NULL))
+		{
+			
+			bReturn = pStream->bReadCycle(i, pszFileName,this, hf, filelen);
+		}
+	}
+	closeFile(hf);
+
+#endif
+	
 	if (!bReturn) 
 	{
 		TRACE_DEBUG(eDebug,eConfig,_T(__FILE__),_T(__FUNCTION__),__LINE__,_T("Error: %s"),szGetLabel());

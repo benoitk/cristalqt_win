@@ -81,6 +81,9 @@ BOOL CCarteMesure::bWriteConfig(LPCTSTR pszFileName)
 //DWORD CCarteMesure::RunThread()
 void CCarteMesure::run()
 {
+	TRACE_LOG_MSG(_T("! CCarteMesure->start(); ok !"));
+	/*m_bInRunThread = TRUE;
+	while(1){Sleep(1000);}*/
 	m_bRun = bOpen();
     qDebug() << "Interface : " << this->m_bNumInterface << " Thread : " << QThread::currentThreadId  ();
 

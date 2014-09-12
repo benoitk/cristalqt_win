@@ -10,6 +10,155 @@
 //#define _WIN_INI
 #define SIZE_CODE_UNICODE		2
 
+#ifdef TEST
+	//HANDLE openFile(LPCTSTR lpszFileIni, long& filelen){
+long openFile(LPCTSTR lpszFileIni, HANDLE& hf){
+	int ntry=0;
+	
+//	HANDLE hf;
+	long filelen=0;
+	do
+	{
+		ntry ++;
+
+		hf = CreateFile(lpszFileIni, GENERIC_READ,
+			FILE_SHARE_READ|FILE_SHARE_WRITE,
+			NULL, 
+			OPEN_EXISTING, 
+			FILE_ATTRIBUTE_READONLY|FILE_FLAG_NO_BUFFERING , 
+			NULL);
+
+		if (hf == INVALID_HANDLE_VALUE)  
+		{
+
+			filelen = GetLastError();
+			_tprintf(_T("INVALID_HANDLE_VALUE %d \n"), filelen);
+
+			if (filelen == ERROR_ACCESS_DENIED)
+			{
+				Sleep(50);
+			}
+			else break;
+		}
+	}
+	while ((hf == INVALID_HANDLE_VALUE) && (ntry < 100));
+	_tprintf(_T("FIN openFile %s %d \n"),lpszFileIni, hf);
+
+	return filelen;
+}
+
+void closeFile(HANDLE hf){
+	CloseHandle(hf);
+	hf = INVALID_HANDLE_VALUE;
+}
+DWORD dwGetPrivateProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszDefault,LPTSTR lpszReturnedString,int iSizeMax,HANDLE hf, long filelen)//LPCTSTR lpszFileIni)
+{
+#ifdef _WIN_INI
+	return GetPrivateProfileString( lpszSection, lpszEntry, lpszDefault,lpszReturnedString,iSizeMax,lpszFileIni);
+#endif
+
+	/*HANDLE hf;*/
+	BOOL bReturn = FALSE;
+	TCHAR *lpbuf = NULL;
+//	long filelen = 0;
+	DWORD nReadSize;
+	TCHAR szRub[MAX_PATH];
+	TCHAR *pStart;
+	TCHAR *pEnd;
+//	_tprintf(_T("# dwGetPrivateProfileString %s %s %s %d #\n"), lpszSection, lpszEntry, lpszFileIni, iSizeMax);
+
+	int ntry = 0;
+	lstrcpy(lpszReturnedString,lpszDefault);
+	/*do
+	{
+		ntry ++;
+
+		hf = CreateFile(lpszFileIni, GENERIC_READ,
+			FILE_SHARE_READ|FILE_SHARE_WRITE,
+			NULL, 
+			OPEN_EXISTING, 
+			FILE_ATTRIBUTE_TEMPORARY , 
+			NULL);
+
+		if (hf == INVALID_HANDLE_VALUE)  
+		{
+
+			filelen = GetLastError();
+			_tprintf(_T("INVALID_HANDLE_VALUE %d \n"), filelen);
+
+			if (filelen == ERROR_ACCESS_DENIED)
+			{
+				Sleep(50);
+			}
+			else break;
+		}
+	}
+	while ((hf == INVALID_HANDLE_VALUE) && (ntry < 100));*/
+		
+//	_tprintf(_T("INVALID_HANDLE_VALUE %l %d %l\n"), hf, INVALID_HANDLE_VALUE, filelen);
+
+	if (hf != INVALID_HANDLE_VALUE)
+	{
+		filelen = (long)GetFileSize(hf, NULL);
+		if (filelen > 0) 
+		{
+			if (filelen >= SIZE_CODE_UNICODE) 
+			{
+				SetFilePointer(hf, SIZE_CODE_UNICODE, 0, FILE_BEGIN);
+				filelen -= SIZE_CODE_UNICODE;
+			}
+			lpbuf = new TCHAR[filelen/sizeof(TCHAR) + 2];
+			if (lpbuf) 
+			{
+				if (ReadFile(hf, lpbuf, filelen, &nReadSize, NULL)) 
+				{
+					lpbuf[nReadSize/sizeof(TCHAR)] = 0;
+					// debut de RUB
+					_stprintf(szRub,_T("[%s]"),lpszSection);
+					if (pStart = _tcsstr(lpbuf,szRub))
+					{
+						// recherche fin rub
+						pStart++;
+						pEnd = _tcsstr(pStart,_T("[")); // peut être null
+						// recherche clef
+						_stprintf(szRub,_T("%s="),lpszEntry);
+						pStart = _tcsstr(pStart,szRub);
+						bReturn = (pStart != NULL);
+						if (bReturn)
+						{
+							pStart += lstrlen(szRub);
+							if (pEnd != NULL) bReturn = (pStart < pEnd);
+							if (bReturn)
+							{
+								pEnd = _tcsstr(pStart,_T("\r"));
+								if (pEnd == NULL)
+								{
+									pEnd = _tcsstr(pStart,_T("\n"));
+								}
+							}
+							if (pEnd == NULL) pEnd = lpbuf + nReadSize/2;
+							filelen = (int)(pEnd - pStart);
+							if ((filelen > 0) && (filelen < iSizeMax))
+							{
+								*pEnd = 0;
+								lstrcpy(lpszReturnedString,pStart);
+							}
+						}
+
+					}
+				}
+				delete [] lpbuf;
+			}
+		}
+	}
+	/*CloseHandle(hf);
+	hf = INVALID_HANDLE_VALUE;*/
+	
+
+	return (lstrlen(lpszReturnedString));
+}
+
+#else
 
 DWORD dwGetPrivateProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszDefault,LPTSTR lpszReturnedString,int iSizeMax,LPCTSTR lpszFileIni)
 {
@@ -51,7 +200,7 @@ DWORD dwGetPrivateProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR 
 			FILE_SHARE_READ|FILE_SHARE_WRITE,
 			NULL, 
 			OPEN_EXISTING, 
-			FILE_FLAG_RANDOM_ACCESS,//FILE_ATTRIBUTE_NORMAL, 
+			FILE_FLAG_RANDOM_ACCESS,//FILE_FLAG_NO_BUFFERING, 
 			NULL);
 
 		if (hf == INVALID_HANDLE_VALUE)  
@@ -131,7 +280,7 @@ DWORD dwGetPrivateProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR 
 
 	return (lstrlen(lpszReturnedString));
 }
-
+#endif
 
 
 BOOL bWritePrivateProfileString( LPCTSTR lpszSection, LPCTSTR lpszEntry,LPTSTR lpszString,LPCTSTR lpszFileIni)
@@ -294,6 +443,7 @@ BOOL bWritePrivateProfileInt( LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue
 * Role                         : ecriture d'un entier dans le fichier INI
 *
 *****************************************************************@!)*/
+#ifndef TEST
 int iGetPrivateProfileInt( LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefaultValue ,LPCTSTR lpszFileIni)
 {
 	TCHAR szText[CONV_BUFFER_SIZE];
@@ -302,6 +452,16 @@ int iGetPrivateProfileInt( LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefaultV
 	if (lstrlen(szText) > 0) nDefaultValue = _ttoi(szText);
 	return nDefaultValue;
 }
+#else
+int iGetPrivateProfileInt( LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefaultValue ,HANDLE hf, long filelen)
+{
+	TCHAR szText[CONV_BUFFER_SIZE];
+
+	dwGetPrivateProfileString(lpszSection,lpszEntry,_T(""),szText,sizeof(szText) / sizeof(TCHAR),hf, filelen);
+	if (lstrlen(szText) > 0) nDefaultValue = _ttoi(szText);
+	return nDefaultValue;
+}
+#endif
 
 /*(@!*****************************************************************
 * Nom                          : WritePrivateProfileFloat
@@ -322,6 +482,7 @@ BOOL bWritePrivateProfileFloat( LPCTSTR lpszSection, LPCTSTR lpszEntry, float fV
 * Role                         : lecture d'un flottant dans le fichier INI
 *
 *****************************************************************@!)*/
+#ifndef TEST
 float fGetPrivateProfileFloat( LPCTSTR lpszSection, LPCTSTR lpszEntry, float fDefaultValue ,LPCTSTR lpszFileIni) 
 {
 	TCHAR szText[CONV_BUFFER_SIZE];
@@ -330,7 +491,16 @@ float fGetPrivateProfileFloat( LPCTSTR lpszSection, LPCTSTR lpszEntry, float fDe
 	if (lstrlen(szText) > 0) _stscanf( szText, _T("%f"), &fDefaultValue );
 	return fDefaultValue;
 }
-
+#else
+float fGetPrivateProfileFloat( LPCTSTR lpszSection, LPCTSTR lpszEntry, float fDefaultValue ,HANDLE hf, long filelen) 
+{
+	TCHAR szText[CONV_BUFFER_SIZE];
+	
+	dwGetPrivateProfileString(lpszSection, lpszEntry,_T(""),szText,sizeof(szText)/sizeof(TCHAR),hf, filelen );
+	if (lstrlen(szText) > 0) _stscanf( szText, _T("%f"), &fDefaultValue );
+	return fDefaultValue;
+}
+#endif
 long lConvString2Long(LPTSTR szVal)
 {
 	long lID = 0;

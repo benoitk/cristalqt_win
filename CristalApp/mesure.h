@@ -27,7 +27,11 @@ public:
 	virtual int iGetStreamSize(CContext &Context);
 
 public:
+#ifndef TEST 
 	BOOL bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName);
+#else
+	BOOL bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName,HANDLE hf, long filelen);
+#endif
 	BOOL bWriteConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName);
 	BOOL bTraitement(CElemInt8* argNumCurrentStream);
 

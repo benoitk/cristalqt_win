@@ -404,7 +404,7 @@ void CWinElecTestControler::tabChanged(int index)
 	//		m_pModelEVPompe->setStartTimer();
 	//		break;
 		//Tab ENtree
-#ifdef COULEUR
+#if defined(COULEUR) || !defined(RES_640_480)
 		case 3:
 #else
 		case 4:

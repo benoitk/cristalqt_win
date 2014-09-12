@@ -69,7 +69,7 @@
 *****************************************************************@!)*/
 CThread::~CThread()
 {
-	DeleteCriticalSection(&m_hCriticalSection);
+//	DeleteCriticalSection(&m_hCriticalSection);
 }
 
 /*(@!*****************************************************************
@@ -94,7 +94,8 @@ CThread::CThread()
 	m_sTypeMsgHwnd = TYPE_MSG_AUCUN;
 	m_hWnd = NULL;
 	m_bInRunThread = FALSE;
-	InitializeCriticalSection(&m_hCriticalSection);
+//	InitializeCriticalSection(&m_hCriticalSection);
+	m_mutex = new QMutex();
 }
 
 void CThread::SetPause(BOOL bPause)

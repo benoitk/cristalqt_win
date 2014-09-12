@@ -21,14 +21,18 @@ class CWinMainControler : public InterfaceUserSession
 	Q_OBJECT
 
 public:
+
 	CWinMainControler(CListStream* argAnalyseur,CCarteIO* argCarteIO,CCarteMesure* argCarteMesure, CSocketIHM* argInterfaceIHM);
-	
+
 	void execControler();
 	CSupervision* getpSupervision(){return m_pSupervision;};
     CWinMainModel* getMainModel();
     void askRepaintGraph(int arg_numStream);
 	
 public slots:
+#ifdef TEST
+	void load();
+#endif
 	void btSwitchConfigPressed();
 	void userSessionClosed();
 	void btPlayPausePressed();

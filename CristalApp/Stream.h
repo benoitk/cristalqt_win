@@ -32,8 +32,13 @@ public:
 	CMesure *pNew();
 	CMesure *pGetAt(int iPos);
 	long iGetNbrMesure(){return m_iNbrMesure;};
+#ifndef TEST
 	BOOL bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream);
 	BOOL bReadCycle(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream);
+#else
+	BOOL bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream,HANDLE hf, long filelen);
+	BOOL bReadCycle(int iNumStream, LPCTSTR pszFileName,CListStream *pListStream,HANDLE hf, long filelen);
+#endif
 	BOOL bWriteConfig(int iNumStream, LPCTSTR pszFileName);
 	BOOL bExecute( CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemInt8 *pCmdPause
 				 , CElemInt16 *pCmdJumpStep,CElemInt16 *pStatusRealTime

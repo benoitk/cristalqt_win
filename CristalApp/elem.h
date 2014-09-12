@@ -16,7 +16,19 @@
 #define NUM_ID(a)							((BYTE)(a & 0x000000FF))
 #define MAKE_ID(iVoie,iMesure,iType,iId)	((iVoie << 24) | (iMesure << 16) | (iType << 8) | iId)
 
-
+#ifdef TEST
+static HANDLE privateHeap;
+static HANDLE getPrivateHeap(){
+	if(privateHeap==0){
+		privateHeap = HeapCreate(
+					 0,
+					 100000000,
+					 100000000
+					);
+	}
+	return privateHeap;
+};
+#endif
 enum eTypeElem{
 	eTYPE_TXT	= 0,
 	eTYPE_BITFIELD8	,			
@@ -336,7 +348,9 @@ protected:
 	short m_iLabelLength;
 	long m_iType; //ID
 	BOOL m_bAutoDelete;
+#ifndef TEST2
 	CRITICAL_SECTION m_hCriticalSection;
+#endif
 };
 
 /*(@!*****************************************************************************************

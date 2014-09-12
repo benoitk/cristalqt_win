@@ -76,7 +76,7 @@ void CWinMaintenanceView::init()
 			/*toto = 10;
 			while(toto-->0){Sleep(1000);}*/
 			TCHAR szText[260];
-
+#ifndef TEST
 			bCopyFile(szGetFullPathName(_T("ConfigAnalyseur.ini"),szText),SZ_FIC_TEMP,FALSE);
 
 			//Zero
@@ -139,6 +139,72 @@ void CWinMaintenanceView::init()
 				layoutCentral->addRow(lblCleanup, btExecuteCleanup); //Mesure manuel
 #endif
 			}
+#else //TEST
+			bCopyFile(szGetFullPathName(_T("ConfigAnalyseur.ini"),szText),SZ_FIC_TEMP,FALSE);
+			HANDLE hf  ;
+			long filelen = openFile(SZ_FIC_TEMP, hf);
+
+			//Zero
+			dwGetPrivateProfileString(_T("Config"), _T("ZeroCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			QString sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			QStringList sListLigneIni = sLigneIni.split("|");
+			if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+			{
+				dwGetPrivateProfileString(_T("Config"), _T("ZeroCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+				sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+				sListLigneIni = sLigneIni.split("|");
+				lblZero->setText(sListLigneIni.at(2));
+				layoutCentral->addRow(lblZero, btExecuteZero);
+     		}
+			//Calibration
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+			if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+			{
+				dwGetPrivateProfileString(_T("Config"), _T("CalibrageCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+				sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+				sListLigneIni = sLigneIni.split("|");
+#ifdef CERIUM
+				if(i == 3)
+					lblCalib->setText("Calibration Cat");
+				else
+					lblCalib->setText("Calibration A" + QString::number(i+1));
+#else
+				lblCalib->setText(sListLigneIni.at(2));
+#endif
+				layoutCentral->addRow(lblCalib, btExecuteCalib);
+			}
+			//Calibration en ligne
+			dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+			if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+			{
+				dwGetPrivateProfileString(_T("Config"), _T("CalibrageInLineCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+				sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+				sListLigneIni = sLigneIni.split("|");
+				lblCalibInLine->setText(sListLigneIni.at(2));
+				layoutCentral->addRow(lblCalibInLine, btExecuteCalibInLine);
+			}
+			//Mesure manuel
+			dwGetPrivateProfileString(_T("Config"), _T("CleanupCyclePresent"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+			sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+			sListLigneIni = sLigneIni.split("|");
+			if (sListLigneIni.count() > 1 && sListLigneIni.at(2).toInt())
+			{
+				dwGetPrivateProfileString(_T("Config"), _T("CleanupCycleLabel"),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), hf, filelen);
+				sLigneIni = QString::fromUtf16 ((const ushort *)szText);
+				sListLigneIni = sLigneIni.split("|");
+				lblCleanup->setText(sListLigneIni.at(2));
+#ifdef CERIUM
+				if(i == 2)
+				layoutCentral->addRow(lblCleanup, btExecuteCleanup); //Mesure manuel
+#else
+				layoutCentral->addRow(lblCleanup, btExecuteCleanup); //Mesure manuel
+#endif
+			}
+#endif //TEST
 		}
 
 		//info du cycle

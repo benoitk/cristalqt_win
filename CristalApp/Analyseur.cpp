@@ -37,6 +37,8 @@ CAnalyseur::~CAnalyseur()
 //DWORD CAnalyseur::RunThread()
 void CAnalyseur::run()
 {
+	TRACE_LOG_MSG(_T("CAnalyseur::run() !"));	
+
 #define BREAK_NBR		9999
 	//int i;
 //	int j;
@@ -69,7 +71,14 @@ void CAnalyseur::run()
 	TCHAR szTrace[500];
 
 	//bReadTempConfig(_T("\\Hard Disk2\\backup.ini"));
-
+#ifdef TEST
+	TCHAR szText[MAX_PATH];
+	if (bReturn) bReturn = this->bReadConfig(szGetFullPathName(_T("config.ini"),szText));
+	TRACE_LOG_MSG(_T("lecture config.ini DONE !"));	
+	
+	if (bReturn) bReturn = this->bReadCycle(szGetFullPathName(_T("config.ini"),szText));
+	TRACE_LOG_MSG(_T("lecture fichiers cycles DONE !"));	
+#endif
 	m_bInRunThread = TRUE;
 	while (m_bRun)
 	{

@@ -484,9 +484,9 @@ void CWinElecTestView::init()
 	layoutMainEntree->addLayout(layoutMenuEntree);
 	widgetEntree->setLayout(layoutMainEntree);
 	//: Nom de l'onglet à laisser en maj pour toute les trad
-//#ifdef RES_640_480
+#ifdef RES_640_480
 	m_tabWidget->addTab(widgetEntree, tr("ENTREES"));
-//#endif
+#endif
     //*** Onglet SELECTEUR de voie rotatif
     QWidget* widgetSelector = new QWidget();
 	QFormLayout* layoutCentralSelector = new QFormLayout();

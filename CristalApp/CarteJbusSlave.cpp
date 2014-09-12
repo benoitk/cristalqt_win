@@ -22,6 +22,13 @@ CCarteJbusSlave::CCarteJbusSlave():CSerialPort(),m_ListDataCanRead(NBR_CMD_READ_
 	m_ExternalInterface.SetExternalInterface(NULL,NULL,NULL,this);
 }
 
+void CCarteJbusSlave::run()
+{
+	TRACE_LOG_MSG(_T("! CCarteJbusSlave->start(); ok !"));
+	m_bInRunThread = TRUE;
+	//while(1){Sleep(1000);}
+	CSerialPort::run();
+}
 
 /*@!************************************************************************
 * NOM:                      CCarteJbusSlave::~CCarteJbusSlave
