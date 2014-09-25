@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 45"
+#define NUM_VERSION_QT "4.0.7 build 46"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;
@@ -76,7 +76,7 @@ CDialogInfo::CDialogInfo()
 #endif
 
 #if defined(R_D)
-	sTypeAnalyseur = sTypeAnalyseur + "VERSION R&D";
+	sTypeAnalyseur = sTypeAnalyseur + " VERSION R&D";
 #endif
 
 	//QString lblConfig = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->m_CmdLoadNumConfig.szGetLabel());

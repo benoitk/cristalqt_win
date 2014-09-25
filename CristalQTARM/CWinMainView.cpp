@@ -476,9 +476,10 @@ void CWinMainView::init()
 
 	gridLayoutBt->addWidget(m_btHistorique, 2, 3, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblHistorique, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
-
+#if !defined(RES_640_480)
 	gridLayoutBt->addWidget(m_btSwitchConfig, 4, 3, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblSwitchConfig, 5, 3, Qt::AlignTop|Qt::AlignHCenter);
+#endif
 #else
 	gridLayoutBt->addWidget(m_btSwitchConfig, 2, 3, Qt::AlignHCenter);
 	gridLayoutBt->addWidget(lblSwitchConfig, 3, 3, Qt::AlignTop|Qt::AlignHCenter);
@@ -583,10 +584,8 @@ void CWinMainView::init()
 	m_btHelp->setObjectName("btHelp");
 	QLabel* lblHelp = new QLabel("Aide");
 	lblHelp->setObjectName("lblOutils");*/
-	
 
 	QGridLayout *gridLayoutBtPlus = new QGridLayout();
-	
 	
 	//gridLayoutBtPlus->addWidget(m_btSequenceur, 0, 1, Qt::AlignHCenter);
 	//gridLayoutBtPlus->addWidget(lblSequenceur, 1, 1, Qt::AlignTop|Qt::AlignHCenter);

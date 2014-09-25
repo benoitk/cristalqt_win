@@ -400,7 +400,7 @@ Do you want stop the cycle ?</translation>
         <location filename="CWinMainControler.cpp" line="141"/>
         <source>
 configuration will be charged !</source>
-        <translation type="unfinished"></translation>
+        <translation>configuration will be charged !</translation>
     </message>
     <message>
         <location filename="CWinMainControler.cpp" line="166"/>
@@ -439,7 +439,8 @@ go to the next cycle ?</translation>
         <location filename="CWinMainControler.cpp" line="327"/>
         <source>Can&apos;t execute maintenance cycles
  because of brine failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Can&apos;t execute maintenance cycles
+ because of brine failure</translation>
     </message>
     <message>
         <location filename="CWinMainControler.cpp" line="442"/>
@@ -455,21 +456,21 @@ the application ?</translation>
         <location filename="CWinMainModel.cpp" line="30"/>
         <location filename="CWinMainModel.cpp" line="405"/>
         <location filename="CWinMainModel.cpp" line="594"/>
-        <location filename="CWinMainModel.cpp" line="677"/>
+        <location filename="CWinMainModel.cpp" line="692"/>
         <source>CYCLE EN COURS</source>
         <translation>CYCLE IN PROGRESS</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="32"/>
         <location filename="CWinMainModel.cpp" line="380"/>
-        <location filename="CWinMainModel.cpp" line="670"/>
+        <location filename="CWinMainModel.cpp" line="681"/>
         <source>EN PAUSE</source>
         <translation>PAUSE</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="34"/>
         <location filename="CWinMainModel.cpp" line="409"/>
-        <location filename="CWinMainModel.cpp" line="651"/>
+        <location filename="CWinMainModel.cpp" line="654"/>
         <source>EN ARRET</source>
         <translation>STOPPED</translation>
     </message>
@@ -504,12 +505,12 @@ the application ?</translation>
     <message>
         <location filename="CWinMainModel.cpp" line="397"/>
         <source>RISING IN PROGRESS</source>
-        <translation type="unfinished"></translation>
+        <translation>RISING IN PROGRESS</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="400"/>
         <source>BRINE FAILURE</source>
-        <translation type="unfinished"></translation>
+        <translation>BRINE FAILURE</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="402"/>
@@ -518,7 +519,7 @@ the application ?</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="407"/>
-        <location filename="CWinMainModel.cpp" line="663"/>
+        <location filename="CWinMainModel.cpp" line="670"/>
         <source>CYCLE EN COURS 
 (ARRET EN FIN DE CYCLE)</source>
         <translation>CYCLE IN PROGRESS
@@ -630,12 +631,12 @@ the application ?</translation>
     <message>
         <location filename="CWinMainView.cpp" line="460"/>
         <source>Switch config</source>
-        <translation type="unfinished"></translation>
+        <translation>Switch config</translation>
     </message>
     <message>
         <location filename="CWinMainView.cpp" line="464"/>
         <source>Historique</source>
-        <translation>History</translation>
+        <translation>Records</translation>
     </message>
     <message>
         <location filename="CWinMainView.cpp" line="560"/>
@@ -779,7 +780,7 @@ the application ?</translation>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="299"/>
         <source>Mes avant étalonnage</source>
-        <translation>Measue before calib</translation>
+        <translation>Measure before calib</translation>
     </message>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="300"/>
@@ -817,7 +818,7 @@ the application ?</translation>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="405"/>
         <source>BRINE + 25µg TEST</source>
-        <translation type="unfinished"></translation>
+        <translation>BRINE + 25µg TEST</translation>
     </message>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="482"/>
@@ -832,7 +833,7 @@ the application ?</translation>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="511"/>
         <source>BRINE + 75µg TEST</source>
-        <translation type="unfinished"></translation>
+        <translation>BRINE + 75µg TEST</translation>
     </message>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="516"/>

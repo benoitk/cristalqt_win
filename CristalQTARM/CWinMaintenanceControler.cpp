@@ -513,7 +513,11 @@ void CWinMaintenanceControler::cycleMaintenanceFinished()
 		m_pDialogResultatEtalon->exec();
 #else
 		m_bCycleZeroEnCours=false;
+#ifndef SONDE
 		m_pDialogResultatEtalon->setTittle(tr("RESULTATS ETALONNAGE ZERO"));
+#else
+		m_pDialogResultatEtalon->setTittle(tr("RESULTATS CALCUL PENTE"));
+#endif
 		m_pDialogResultatEtalon->setLine(m_pModel->sGetOffsetActuelLbl(m_numStream,0), m_sAncienOffsetActuel);
 		m_pDialogResultatEtalon->setLine2(m_pModel->sGetOffsetCalculeLbl(m_numStream,0), m_pModel->sGetOffsetCalculeVal(m_numStream));
 #ifdef MULTI_MEASURE

@@ -61,7 +61,7 @@ WORD wCalculCRC16(BYTE* pucBuffer, long lSize)
 CElemTrameJbus::CElemTrameJbus(): CElemBase(),m_ListParams(NBR_PARAM_MAX)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_JBUS_TRAME,0xFF);
-	SetLabel(_T("CElemTrameJbusxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemTrameJbus"));
 }
 
 CElemTrameJbus::~CElemTrameJbus()
@@ -1867,7 +1867,7 @@ LPTSTR CElemTrameJbusSocket_20::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemExchangeJbus::CElemExchangeJbus() : CElemBase()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_JBUS_EXCHANGE,0xFF);
-	SetLabel(_T("CElemExchangeJbusxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemExchangeJbus"));
 	m_pTrameJbusRQ = NULL;
 	m_pTrameJbusRP = NULL;
 }

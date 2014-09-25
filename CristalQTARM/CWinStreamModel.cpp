@@ -95,6 +95,8 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061b");//listValuesNames.append("m_AnalogPlage");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"060c");//listValuesNames.append("m_AnalogPlage");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061c");//listValuesNames.append("m_AnalogPlage");
+	        
+			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d2");
     #elif defined(COULEUR)
             listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0601");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0602");

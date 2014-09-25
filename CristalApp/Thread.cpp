@@ -94,7 +94,9 @@ CThread::CThread()
 	m_sTypeMsgHwnd = TYPE_MSG_AUCUN;
 	m_hWnd = NULL;
 	m_bInRunThread = FALSE;
+//#ifndef TEST2
 //	InitializeCriticalSection(&m_hCriticalSection);
+//#endif
 	m_mutex = new QMutex();
 }
 

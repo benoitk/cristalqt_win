@@ -220,7 +220,9 @@ long CSocketBase::lProtectedWrite (BYTE* lpData,long lSizeTotal)
 
 	if ((m_nSocket != INVALID_SOCKET) && m_bConnected)
 	{
+//#ifndef TEST2
 //		::EnterCriticalSection(&m_hCriticalSection);
+//#endif
 		/* Tant que la longueur voulue n'est pas atteinte */
 		while( (lSizeTotal > 0 ) && (rw>0) ) 
 		{
@@ -247,7 +249,9 @@ long CSocketBase::lProtectedWrite (BYTE* lpData,long lSizeTotal)
 				}
 			}
 		}
+//#ifndef TEST2
 //		::LeaveCriticalSection(&m_hCriticalSection);
+//#endif
 	}
 
 	return (rw); 

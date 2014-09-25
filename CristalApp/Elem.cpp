@@ -22,7 +22,7 @@ CElemBase::CElemBase()
 	m_pcLabel = NULL;
 	m_iLabelLength = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_TXT,0xFF);
-	SetLabel(_T("CElemBasexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemBase"));
 }
 
 CElemBase::~CElemBase()
@@ -378,7 +378,7 @@ LPTSTR CElemBase::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemList::CElemList(int iNbrElem):CElemBase()
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_LIST,0xFF);
-	SetLabel(_T("CElemListxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemList"));
 	m_iSize = 0;
 	m_iSizeMax = 0;
 	m_ppElem = NULL;
@@ -660,7 +660,7 @@ LPTSTR CElemList::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemFieldBit8::CElemFieldBit8():CElemList(8)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD8,0xFF);
-	SetLabel(_T("CElemFieldBit8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemFieldBit8"));
 }
 
 CElemFieldBit8::~CElemFieldBit8()
@@ -853,7 +853,7 @@ LPTSTR CElemFieldBit8::szGetConfig(LPTSTR pszText, int iSizeMax)
 CElemFieldBit16::CElemFieldBit16():CElemList(16)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD16,0xFF);
-	SetLabel(_T("CElemFieldBit16xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CElemFieldBit16"));
 }
 
 CElemFieldBit16::~CElemFieldBit16()
@@ -951,7 +951,7 @@ int CElemFieldBit16::iGetStreamSize(CContext &Context)
 *****************************************************************************************@!)*/
 CElemNbr::CElemNbr():CElemBase()
 {
-	m_szUnit.SetLabel(_T("Vxxxxxxxxxx"));
+	m_szUnit.SetLabel(_T("V"));
 	m_szFormat.SetLabel(_T("%08x"));
 }
 
@@ -1071,7 +1071,7 @@ CElemFloat::CElemFloat():CElemNbr()
 {
 	m_fVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,0xFF);
-	SetLabel(_T("FLOATxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("FLOAT"));
 	m_szFormat.SetLabel(_T("%7.3f"));
 }
 
@@ -1138,7 +1138,7 @@ CElemInt8::CElemInt8():CElemNbr()
 {
 	m_ucVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT8,0xFF);
-	SetLabel(_T("INT8xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("INT8"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 
@@ -1185,7 +1185,7 @@ CElemInt16::CElemInt16():CElemNbr()
 {
 	m_nVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT16,0xFF);
-	SetLabel(_T("INT16xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("INT16"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 
@@ -1231,7 +1231,7 @@ CElemInt32::CElemInt32():CElemNbr()
 {
 	m_lVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT32,0xFF);
-	SetLabel(_T("INT32xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("INT32"));
 	m_szFormat.SetLabel(_T("%d"));
 }
 
