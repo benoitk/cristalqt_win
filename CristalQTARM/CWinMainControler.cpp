@@ -135,36 +135,39 @@ void CWinMainControler::takeScreenshot()
 //SLOT
 void CWinMainControler::btSwitchConfigPressed()
 {
-	int numConfig = m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.ucGetVal();
-	qDebug() << "num conf " << numConfig ;
-	QString lblMessage = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.szGetLabel());
-	lblMessage = lblMessage + tr("\nconfiguration will be charged !");
-	CDialogMessage::getInstance()->setLblMsg(lblMessage, true);
-	
-	if(CDialogMessage::getInstance()->exec()){
+	if(CUserSession::getInstance()->loginAdmin())
+	{
+		int numConfig = m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.ucGetVal();
+		qDebug() << "num conf " << numConfig ;
+		QString lblMessage = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->m_CmdSaveNumConfig.szGetLabel());
+		lblMessage = lblMessage + tr("\nconfiguration will be charged !");
+		CDialogMessage::getInstance()->setLblMsg(lblMessage, true);
 		
-						
-		QDir majDir(QString(DIR_APP) + "/config_" + QString::number(numConfig));
-		QDir appDir(DIR_APP);
-		QString sFilePath; 
-		qDebug() << majDir.entryList();
-		qDebug() << DIR_APP;
-		foreach(sFilePath, majDir.entryList ())
-		{
-			QFile fileUpdate(majDir.absolutePath()+ "/" + sFilePath);
-			QFile fileSource(appDir.absolutePath()+ "/" + sFilePath);
-			qDebug() << "majDir " << majDir.absolutePath() ;
-			qDebug() << "appDir " << appDir.absolutePath() ;
-			qDebug() << "sFilePath " << sFilePath ;
-
-			if(fileSource.exists()) 
+		if(CDialogMessage::getInstance()->exec()){
+			
+							
+			QDir majDir(QString(DIR_APP) + "/config_" + QString::number(numConfig));
+			QDir appDir(DIR_APP);
+			QString sFilePath; 
+			qDebug() << majDir.entryList();
+			qDebug() << DIR_APP;
+			foreach(sFilePath, majDir.entryList ())
 			{
-				fileSource.remove();
+				QFile fileUpdate(majDir.absolutePath()+ "/" + sFilePath);
+				QFile fileSource(appDir.absolutePath()+ "/" + sFilePath);
+				qDebug() << "majDir " << majDir.absolutePath() ;
+				qDebug() << "appDir " << appDir.absolutePath() ;
+				qDebug() << "sFilePath " << sFilePath ;
+
+				if(fileSource.exists()) 
+				{
+					fileSource.remove();
+				}
+				fileUpdate.copy(fileSource.fileName());
 			}
-			fileUpdate.copy(fileSource.fileName());
+			CDialogMessage::getInstance()->setLblMsg(tr("Restauration réussi. \nVeuillez redémarrer électriquement\nl'appareil"), false);
+			CDialogMessage::getInstance()->exec();
 		}
-		CDialogMessage::getInstance()->setLblMsg(tr("Restauration réussi. \nVeuillez redémarrer électriquement\nl'appareil"), false);
-		CDialogMessage::getInstance()->exec();
 	}
 }
 //SLOT

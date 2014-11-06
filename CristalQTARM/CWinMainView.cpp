@@ -541,7 +541,7 @@ void CWinMainView::init()
     #endif
         QWidget* widgetGraphTool = new QWidget();
         widgetGraphTool->setLayout(layoutMain);
-#ifndef MULTI_MEASURE
+#if !defined(MULTI_MEASURE) &&  !defined(MULTI_STREAM)
 #ifndef CERIUM
 	    m_tabWidgetCentral->addTab(widgetGraphTool, tr("HISTOGRAMME"));
 #endif

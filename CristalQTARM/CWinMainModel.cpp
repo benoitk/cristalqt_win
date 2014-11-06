@@ -739,41 +739,64 @@ void CWinMainModel::setConnexion()
 //Appelé lors de getDataFromSupervision
 void CWinMainModel::checkAgeLog()
 {
-	//une vérfie toute les heures pendant la mesure
-	if(++m_iCptPurgeLog>3600)
+	//une vérfie toute les 1/2 heures pendant la mesure
+	/*qDebug() << "CWinMainModel::checkAgeLog()" << m_iCptPurgeLog;
+	if(++m_iCptPurgeLog>10)//1800)
 	{
+		m_logErrorPrgFileDir->refresh();
 		QStringList listErrorPrgFiles = m_logErrorPrgFileDir->entryList(QDir::Files, QDir::Time);
-		int nbFilesToDelete = m_logErrorPrgFileDir->count()-m_nbrDayRetentionErrorLog;
-		if(nbFilesToDelete>0)
+		qDebug()<< "listErrorPrgFiles" << listErrorPrgFiles;
+		qDebug()<< "m_logErrorPrgFileDir->count()" << m_logErrorPrgFileDir->count();
+		qDebug()<< "m_nbrDayRetentionErrorLog" <<m_nbrDayRetentionErrorLog;
+		for(int nbFilesToDelete = m_logErrorPrgFileDir->count()-m_nbrDayRetentionErrorLog;
+			nbFilesToDelete>0; --nbFilesToDelete)
 		{
-			for(; nbFilesToDelete<0; --nbFilesToDelete)
-			{
+			qDebug()<<"nbFilesToDelete"<<nbFilesToDelete;
+			if(!listErrorPrgFiles.isEmpty()){
 				qDebug() << listErrorPrgFiles.last();
-				m_logErrorPrgFileDir->remove(listErrorPrgFiles.takeLast());
+				QString last = listErrorPrgFiles.takeLast(); 
+				qDebug() << "last is " << last;
+				qDebug() << "m_logErrorPrgFileDir" << m_logErrorPrgFileDir->currentPath();
+				m_logErrorPrgFileDir->remove(last);
 			}
 		}
+
+		m_logFileDir->refresh();
 		QStringList listFiles = m_logFileDir->entryList(QDir::Files, QDir::Time);
-		nbFilesToDelete = m_logFileDir->count()-m_nbrDayRetentionLog;
-		if(nbFilesToDelete>0)
+		qDebug()<< "listFiles" << listFiles;
+		qDebug()<< "m_logFileDir->count()" << m_logFileDir->count();
+		qDebug()<< "m_nbrDayRetentionLog" <<m_nbrDayRetentionLog;
+		for(int nbFilesToDelete = m_logFileDir->count()-m_nbrDayRetentionLog;
+			nbFilesToDelete>0; --nbFilesToDelete)
 		{
-			for(; nbFilesToDelete<0; --nbFilesToDelete)
-			{
+			qDebug()<<"nbFilesToDelete"<<nbFilesToDelete;
+			if(!listFiles.isEmpty()){
 				qDebug() << listFiles.last();
-				m_logFileDir->remove(listFiles.takeLast());
+				QString last = listFiles.takeLast(); 
+				qDebug() << "last is " << last;
+				qDebug() << "m_logFileDir" << m_logFileDir->currentPath();
+				m_logFileDir->remove(last);
 			}
 		}
+		m_logUserFileDir->refresh();
 		QStringList listUserFiles = m_logUserFileDir->entryList(QDir::Files, QDir::Time);
-		nbFilesToDelete = m_logUserFileDir->count()-m_nbrDayRetentionUserLog;
-		if(nbFilesToDelete>0)
+		qDebug()<< "listUserFiles" << listUserFiles;
+		qDebug()<< "m_logUserFileDir->count()" << m_logUserFileDir->count();
+		qDebug()<< "m_nbrDayRetentionUserLog" <<m_nbrDayRetentionUserLog;
+		for(int nbFilesToDelete = m_logUserFileDir->count()-m_nbrDayRetentionUserLog;
+			nbFilesToDelete>0; --nbFilesToDelete)
 		{
-			for(; nbFilesToDelete<0; --nbFilesToDelete)
-			{
+			qDebug()<<"nbFilesToDelete"<<nbFilesToDelete;
+			if(!listUserFiles.isEmpty()){
 				qDebug() << listUserFiles.last();
-				m_logUserFileDir->remove(listUserFiles.takeLast());
+				QString last = listUserFiles.takeLast(); 
+				qDebug() << "last is " << last;
+				qDebug() << "m_logUserFileDir" << m_logUserFileDir->currentPath();
+				m_logUserFileDir->remove(last);
 			}
 		}
 		m_iCptPurgeLog = 0;
-	}
+	}*/
 }
 
 bool CWinMainModel::getFlagEndCycle()
@@ -818,7 +841,7 @@ QString CWinMainModel::getMesureValue(int numStream, int numMeasure)const
 {
 	if(    m_pSupervision->getAnalyseur()->pGetAt(numStream) 
 		&& m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure))
-        return QString::number(m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure)->m_Val.fGetVal(), 'f', 2);
+        return QString::number(m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure)->m_Val.fGetVal(), 'f', 3);
 	else
 		return "NaN";
 }

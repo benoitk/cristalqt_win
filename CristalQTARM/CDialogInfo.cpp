@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 46"
+#define NUM_VERSION_QT "4.0.7 build 50"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;

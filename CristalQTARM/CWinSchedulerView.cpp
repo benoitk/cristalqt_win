@@ -258,7 +258,7 @@ void CWinSchedulerView::init()
 	    layoutMain->addLayout(layoutMenu);
 	    widgetPeriodique->setLayout(layoutMain);
 	    //:Nom de l'onglet à garer en maj pour toutes les trad
-#ifndef CALCIUM_MAGNESIUM
+#if !defined(CALCIUM_MAGNESIUM) && defined(RES_640_480) 
 	    m_tabWidget->addTab(widgetPeriodique, tr("CYCLES AUTO"));
 #endif
 	}
@@ -627,13 +627,15 @@ void CWinSchedulerView::loadPage()
                                     + ((m_pModel->getSequence(i).iDuree>1)?tr(" Cycles"):tr(" Cycle")));
                 }
                 m_listSequenceRow.at(i).btTempsSeq->setVisible(true);
-                m_listSequenceRow.at(i).btDelete->setVisible(true);
+				if(i!=0) //ne pas afficher le bouton pour la première ligne
+					m_listSequenceRow.at(i).btDelete->setVisible(true);
             }
             else
             {
                 m_listSequenceRow.at(i).btNumVoie->setText(tr("Ajouter"));
                 m_listSequenceRow.at(i).btTempsSeq->setVisible(false);
-                m_listSequenceRow.at(i).btDelete->setVisible(false);
+                if(i!=0)//ne pas afficher le bouton pour la première ligne
+					m_listSequenceRow.at(i).btDelete->setVisible(false);
        
             }
         }
