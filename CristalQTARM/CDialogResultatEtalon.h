@@ -17,12 +17,14 @@ public:
 	void setTittle(const QString& sTitre);
 	void setLblMessageErreur(const QString& arg_sMsg);
 	void setLine(const QString& sLblTittle, const QString& sValue);
+	void setLine(int, const QString& sLblTittle, const QString& sValue);
 	void setLine2(const QString& sLblTittle, const QString& sValue);
 	void setLine3(const QString& sLblTittle, const QString& sValue);
 	void setLine4(const QString& sLblTittle, const QString& sValue);
 	void disabledBtApply();
 	void init();
 	QString getReturnValue(); 
+	QString getReturnValue(int); 
 	QString getReturnValue2(); 
 	QString getReturnValue3(); 
 	QString getReturnValue4(); 
@@ -51,9 +53,13 @@ private:
 	QLabel* m_lblValue2;
 	QPushButton* m_btValue3;
 	QPushButton* m_btValue4;
+	QPushButton* m_btValue5;
+	QPushButton* m_btValue6;
 	QLabel* m_lblMessageErreur;
 	QLabel* m_lblValue3;
 	QLabel* m_lblValue4;
+	QLabel* m_lblValue5;
+	QLabel* m_lblValue6;
 	//QVBoxLayout* m_layoutMenu;
 	QPushButton* m_btBack;
 	QPushButton* m_btApply;

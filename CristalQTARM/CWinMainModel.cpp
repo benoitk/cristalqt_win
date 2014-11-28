@@ -739,9 +739,9 @@ void CWinMainModel::setConnexion()
 //Appelé lors de getDataFromSupervision
 void CWinMainModel::checkAgeLog()
 {
-	//une vérfie toute les 1/2 heures pendant la mesure
-	/*qDebug() << "CWinMainModel::checkAgeLog()" << m_iCptPurgeLog;
-	if(++m_iCptPurgeLog>10)//1800)
+	//une vérfie toute les 16 heures pendant la mesure
+/*	qDebug() << "CWinMainModel::checkAgeLog()" << m_iCptPurgeLog;
+	if(++m_iCptPurgeLog>51200)
 	{
 		m_logErrorPrgFileDir->refresh();
 		QStringList listErrorPrgFiles = m_logErrorPrgFileDir->entryList(QDir::Files, QDir::Time);

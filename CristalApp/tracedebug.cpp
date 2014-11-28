@@ -619,7 +619,7 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 				   , stTime.wYear,stTime.wMonth,stTime.wDay,stTime.wHour
 				   , stTime.wMinute,stTime.wSecond
 				   , argNumCurrentStream->szGetLabel()
-				   , argNumCurrentStream->ucGetVal());
+				   , argNumCurrentStream->ucGetVal()+1);
 	
 	switch(argObjVoie->pGetAt(argiNumMesure)->m_NumProgram.ucGetVal())
 	{

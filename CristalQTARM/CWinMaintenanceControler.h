@@ -52,7 +52,10 @@ private:
 
 	//Variable temporaire pour avoir garder certaine ancienne valeur pour les résultats des cycles de maintenance
 	QString m_sAncienCoefActuel;
-	QString m_sAncienCoefActuel2; //mesure 2
+	QString m_sAncienCoefActuel2;
+#ifdef MULTI_MEASURE
+	QList<QString> m_listAncienCoefActuel2; //multi_measure
+#endif
 	QString m_sAncienOffsetActuel;
 	QString m_sAncienMesureManuelle;
 

@@ -95,6 +95,8 @@ QString CWinMaintenanceModel::sGetMesurePHVal()const
 	TCHAR szText[250];
 	QString sPrecision = QString::fromUtf16(( const ushort *)m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_RawConcentration.szGetConfig(szText, 250));
 	sPrecision = sPrecision.split("|").last().split(".").last().left(1);
+	qDebug() << "################&&&&&&&&&&&&&& sPrecision : "<< sPrecision;
+	qDebug() << "################&&&&&&&&&&&&&& valeur : "<< m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_RawConcentration.fGetVal();
 	return QString::number(m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_RawConcentration.fGetVal(), 'f',sPrecision.toInt());
 }
 bool CWinMaintenanceModel::bGetCoefStatus(int arg_numStream, int arg_numMeasure)const

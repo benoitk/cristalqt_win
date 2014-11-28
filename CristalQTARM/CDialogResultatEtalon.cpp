@@ -37,11 +37,19 @@ CDialogResultatEtalon::CDialogResultatEtalon(void): QDialog()
     m_btValue4 = new QPushButton();
 	m_lblValue4 = new QLabel("**********");
 	m_btValue4->setObjectName("btLineEdit");
+	m_btValue5 = new QPushButton();
+	m_lblValue5 = new QLabel("**********");
+	m_btValue5->setObjectName("btLineEdit");
+	m_btValue6 = new QPushButton();
+	m_lblValue6 = new QLabel("**********");
+	m_btValue6->setObjectName("btLineEdit");
 	QFormLayout* formLayout = new QFormLayout();
 	formLayout->addRow(m_lblValue, m_btValue);
 	formLayout->addRow(m_lblValue2, m_btValue2);
 	formLayout->addRow(m_lblValue3, m_btValue3);
 	formLayout->addRow(m_lblValue4, m_btValue4);
+	formLayout->addRow(m_lblValue5, m_btValue5);
+	formLayout->addRow(m_lblValue6, m_btValue6);
 	
 	m_lblMessageErreur = new QLabel();
 	m_lblMessageErreur->setObjectName("lblError");
@@ -94,6 +102,59 @@ void CDialogResultatEtalon::setLine(const QString& sLblTittle, const QString& sV
 	this->updateGeometry();
 }
 
+void CDialogResultatEtalon::setLine(int numLine, const QString& sLblTittle, const QString& sValue)
+{
+	switch(numLine){
+		case 5:
+			m_lblValue6->setVisible(true);
+			m_btValue6->setVisible(true);
+			m_lblValue6->setText(sLblTittle);
+			m_btValue6->setText(sValue);
+			break;
+		case 4:
+			m_lblValue5->setVisible(true);
+			m_btValue5->setVisible(true);
+			m_lblValue5->setText(sLblTittle);
+			m_btValue5->setText(sValue);
+			break;
+		case 3:
+			m_lblValue4->setVisible(true);
+			m_btValue4->setVisible(true);
+			m_lblValue4->setText(sLblTittle);
+			m_btValue4->setText(sValue);
+			break;
+		case 2:
+			m_lblValue3->setVisible(true);
+			m_btValue3->setVisible(true);
+			m_lblValue3->setText(sLblTittle);
+			m_btValue3->setText(sValue);
+			break;
+		case 1:
+			m_lblValue2->setVisible(true);
+			m_btValue2->setVisible(true);
+			m_lblValue2->setText(sLblTittle);
+			m_btValue2->setText(sValue);
+			break;
+		case 0:
+			m_lblValue->setText(sLblTittle);
+			m_btValue->setText(sValue);
+			m_lblValue2->setVisible(false);
+			m_btValue2->setVisible(false);
+			m_lblValue3->setVisible(false);
+			m_btValue3->setVisible(false);
+			m_lblValue4->setVisible(false);
+			m_btValue4->setVisible(false);
+			m_lblValue5->setVisible(false);
+			m_btValue5->setVisible(false);
+			m_lblValue6->setVisible(false);
+			m_btValue6->setVisible(false);
+			break;
+		default:
+			break;
+	}
+	this->updateGeometry();
+}
+
 void CDialogResultatEtalon::setLine2(const QString& sLblTittle, const QString& sValue)
 {
     m_lblValue2->setVisible(true);
@@ -122,6 +183,30 @@ void CDialogResultatEtalon::setLine4(const QString& sLblTittle, const QString& s
 	
 QString CDialogResultatEtalon::getReturnValue()
 {
+	return m_btValue->text();
+}
+QString CDialogResultatEtalon::getReturnValue(int numLine)
+{
+	switch(numLine){
+		case 0:
+			return m_btValue->text();
+			break;
+		case 1:
+			return m_btValue2->text();
+			break;
+		case 2:
+			return m_btValue3->text();
+			break;
+		case 3:
+			return m_btValue4->text();
+			break;
+		case 4:
+			return m_btValue5->text();
+			break;
+		case 5:
+			return m_btValue6->text();
+			break;
+	}
 	return m_btValue->text();
 }
 QString CDialogResultatEtalon::getReturnValue2()
