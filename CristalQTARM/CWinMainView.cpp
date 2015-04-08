@@ -722,6 +722,7 @@ void CWinMainView::dataUpdate()
 	//*** Onglet Diagnostic
     if(m_tabWidgetCentral->currentIndex()==1)
     {
+
 	    m_btTemperatureCuve->setText(m_pModel->getTemperatureCuve());
 	    m_btPressionEau->setText(m_pModel->getPressionEau());
 	    m_btMesureOptique->setText(m_pModel->getMesureOptique());

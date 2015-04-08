@@ -80,6 +80,7 @@ void CSupervision::addKeyOnMapRQTComJBUSMesure(const QString& sKey)
 }
 void CSupervision::addKeyOnMapRQTComJBUSIO(const QString& sKey)
 {
+	
     m_hashRQTComJBUSIO.insert(sKey, ++m_nNumRQTComJBUSIO);
 }
 QHash<QString, int> CSupervision::getHashRQTComJBUSMesure()const

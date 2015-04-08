@@ -827,7 +827,7 @@ BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemIn
 
 	// attente durée max du cycle
 	bWaitForNextTime(m_Duration.nGetVal(), pCmdRun,pCmdPause,pCmdJumpStep,pTimeCycle);
-	
+	 
 	//Aprés attante si il y a une arrêt fiin de cycle, on éxecute la pas stop
 	if(pCmdStopEndCycle->ucGetVal())
 	{

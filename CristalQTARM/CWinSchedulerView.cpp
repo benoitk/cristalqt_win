@@ -542,7 +542,7 @@ void CWinSchedulerView::setRemoteCtrlValue(const QString& arg_sValue)
 }
 void CWinSchedulerView::setValeurEtalonValue(const QString& arg_sValue)
 {
-	m_btRemoteCtrl->setText(arg_sValue);
+	m_btValeurEtalon->setText(arg_sValue);
 	m_pModel->setValeurEtalon(arg_sValue);
 }
 void CWinSchedulerView::setConsigneGainValue(const QString& arg_sValue)

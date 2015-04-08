@@ -20,7 +20,7 @@ void CGraphicsRectItem::mousePressEvent(QGraphicsSceneMouseEvent * event)
 	
 	//if(this->rect().x() < (SCENE_WIDTH/2))//afficher à droite
 	//{
-	//	m_proxyLblInfo->setPos(this->rect().x()+20, this->rect().y());
+	//	m_proxyLblInfo->setPos(this->00.............................................................................................................................rect().x()+20, this->rect().y());
 	//}
 	//if(this->rect().x() > (SCENE_WIDTH/2))//afficher à gauche
 	//{

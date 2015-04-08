@@ -379,13 +379,13 @@ Voulez vous arrêter les cyles ?</source>
         <translation>/screenshot</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="141"/>
+        <location filename="CWinMainControler.cpp" line="143"/>
         <source>
 configuration will be charged !</source>
         <translation>Конфигурация будет изменена !</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="166"/>
+        <location filename="CWinMainControler.cpp" line="168"/>
         <source>Restauration réussi. 
 Veuillez redémarrer électriquement
 l&apos;appareil</source>
@@ -394,36 +394,36 @@ l&apos;appareil</source>
 блок</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="199"/>
+        <location filename="CWinMainControler.cpp" line="202"/>
         <source>Voulez-vous vraiment 
 arrêter le cycle ?</source>
         <translation>Вы хотите остановить цикл ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="216"/>
+        <location filename="CWinMainControler.cpp" line="219"/>
         <source>Voulez-vous vraiment 
 arrêter en fin de cycle ?</source>
         <translation>Вы хотите остановить в конце цикла ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="229"/>
+        <location filename="CWinMainControler.cpp" line="232"/>
         <source>Voulez-vous vraiment 
 aller au cycle suivant?</source>
         <translation>Перейти к след. каналу ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="249"/>
+        <location filename="CWinMainControler.cpp" line="252"/>
         <source>Pas d&apos;alarme.</source>
         <translation>Нет присутствия сигнализации.</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="327"/>
+        <location filename="CWinMainControler.cpp" line="330"/>
         <source>Can&apos;t execute maintenance cycles
  because of brine failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="442"/>
+        <location filename="CWinMainControler.cpp" line="445"/>
         <source>Voulez-vous vraiment 
 arrêter l&apos;application ?</source>
         <translation>Остановка IHM ?</translation>
@@ -682,109 +682,114 @@ arrêter l&apos;application ?</source>
     <name>CWinMaintenanceControler</name>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="72"/>
-        <location filename="CWinMaintenanceControler.cpp" line="107"/>
+        <location filename="CWinMaintenanceControler.cpp" line="112"/>
         <source>VALEUR ETALON</source>
         <translation>Эталлонирование</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="286"/>
+        <location filename="CWinMaintenanceControler.cpp" line="299"/>
         <source>RESULTATS ETALONNAGE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="299"/>
+        <location filename="CWinMaintenanceControler.cpp" line="312"/>
         <source>Mes avant étalonnage</source>
-        <translation>измерение перед калибр</translation>
+        <translation type="unfinished">измерение перед калибр </translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="301"/>
+        <location filename="CWinMaintenanceControler.cpp" line="313"/>
         <source>Mes après étalonnage</source>
-        <translation>измерение после калибр</translation>
+        <translation>измерение после калибр </translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="339"/>
-        <location filename="CWinMaintenanceControler.cpp" line="392"/>
-        <location filename="CWinMaintenanceControler.cpp" line="462"/>
-        <location filename="CWinMaintenanceControler.cpp" line="489"/>
-        <location filename="CWinMaintenanceControler.cpp" line="531"/>
+        <location filename="CWinMaintenanceControler.cpp" line="364"/>
+        <location filename="CWinMaintenanceControler.cpp" line="426"/>
+        <location filename="CWinMaintenanceControler.cpp" line="496"/>
+        <location filename="CWinMaintenanceControler.cpp" line="523"/>
+        <location filename="CWinMaintenanceControler.cpp" line="565"/>
         <source>Erreur étalonnage</source>
         <translation>ОШИБКА ЭТАЛЛОНИРОВАНИЯ</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="411"/>
+        <location filename="CWinMaintenanceControler.cpp" line="445"/>
         <source>RESULTATS ETALONNAGE EN LIGNE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="373"/>
+        <location filename="CWinMaintenanceControler.cpp" line="407"/>
         <source>RESULTATS ZERO EAU-AIR</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="312"/>
-        <location filename="CWinMaintenanceControler.cpp" line="423"/>
+        <location filename="CWinMaintenanceControler.cpp" line="328"/>
+        <location filename="CWinMaintenanceControler.cpp" line="457"/>
         <source>Erreur étalonnage mesure 1 et 2</source>
         <translation>Ошибка эталонирования измер. 1 и 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="318"/>
-        <location filename="CWinMaintenanceControler.cpp" line="429"/>
+        <location filename="CWinMaintenanceControler.cpp" line="334"/>
+        <location filename="CWinMaintenanceControler.cpp" line="463"/>
         <source>Erreur étalonnage mesure 1</source>
         <translation>Ошибка эталонирования измер 1</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="324"/>
-        <location filename="CWinMaintenanceControler.cpp" line="435"/>
+        <location filename="CWinMaintenanceControler.cpp" line="340"/>
+        <location filename="CWinMaintenanceControler.cpp" line="469"/>
         <source>Erreur étalonnage mesure 2</source>
         <translation>Ошибка эталонирования измер 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="377"/>
+        <location filename="CWinMaintenanceControler.cpp" line="346"/>
+        <source>Erreur étalonnage TH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="411"/>
         <source>Erreur zéro eau-air</source>
         <translation>ОШИБКА ЭТАЛЛОНИРОВАНИЯ</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="386"/>
+        <location filename="CWinMaintenanceControler.cpp" line="420"/>
         <source>RESULTATS ETALONNAGE SONDE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="407"/>
+        <location filename="CWinMaintenanceControler.cpp" line="441"/>
         <source>BRINE + 25µg TEST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="484"/>
+        <location filename="CWinMaintenanceControler.cpp" line="518"/>
         <source>RESULTATS DU BLANC</source>
         <translation>Результат белый</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="507"/>
+        <location filename="CWinMaintenanceControler.cpp" line="541"/>
         <source>RESULTATS MESURE PH</source>
         <translation>Результаты ручного измерения</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="513"/>
+        <location filename="CWinMaintenanceControler.cpp" line="547"/>
         <source>BRINE + 75µg TEST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="519"/>
+        <location filename="CWinMaintenanceControler.cpp" line="553"/>
         <source>RESULTATS ETALONNAGE ZERO</source>
         <translation>Результаты обнуления</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="521"/>
+        <location filename="CWinMaintenanceControler.cpp" line="555"/>
         <source>RESULTATS CALCUL PENTE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="553"/>
+        <location filename="CWinMaintenanceControler.cpp" line="587"/>
         <source>RESULTATS MESURE MANUELLE</source>
         <translation>Результаты ручного измерения</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="567"/>
+        <location filename="CWinMaintenanceControler.cpp" line="601"/>
         <source> (Av)</source>
         <translation>(до)</translation>
     </message>
@@ -1065,7 +1070,7 @@ avant cycle nettoyage
     </message>
     <message>
         <location filename="CWinSchedulerView.cpp" line="296"/>
-        <location filename="CWinSchedulerView.cpp" line="634"/>
+        <location filename="CWinSchedulerView.cpp" line="635"/>
         <source>Ajouter</source>
         <translation>Добавить</translation>
     </message>

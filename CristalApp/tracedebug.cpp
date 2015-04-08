@@ -556,7 +556,11 @@ void TRACE_LOG_MESURE(CStream* argObjVoie, CElemInt8* argNumCurrentStream, int a
 													    / argObjVoie->pGetAt(k)->m_iCompteurMesure);
 			
 			l  += _stprintf( szMessage + l
-				 		   , _T( "; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%d;")// %s=%-f; %s=%-f;")
+#ifdef R_D
+				, _T( "; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%d; %s=%-f; %s=%-f;")
+#else
+				, _T( "; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%-f; %s=%d;")// %s=%-f; %s=%-f;")
+#endif
 				     	   , argObjVoie->pGetAt(k)->m_Val.szGetLabel()
 						   , argObjVoie->pGetAt(k)->m_SommeMesure.fGetVal()
 		    //Colorimétrie le rendre configurable pourla V3
@@ -570,13 +574,15 @@ void TRACE_LOG_MESURE(CStream* argObjVoie, CElemInt8* argNumCurrentStream, int a
 						   , argObjVoie->pGetAt(k)->m_AbsorbanceValue.szGetLabel()
 						   , argObjVoie->pGetAt(k)->m_AbsorbanceValue.fGetVal()
 						   , argObjVoie->pGetAt(k)->m_OpticalGain.szGetLabel()
-						   , argObjVoie->pGetAt(k)->m_OpticalGain.nGetVal());
+						   , argObjVoie->pGetAt(k)->m_OpticalGain.nGetVal()
 			//methanalise
-			//			   , argObjVoie->pGetAt(k)->m_CorrectedAbsorbance.szGetLabel()
-			//			   , argObjVoie->pGetAt(k)->m_CorrectedAbsorbance.fGetVal()
-			//			   , argObjVoie->pGetAt(k)->m_RealAbsorbance.szGetLabel()
-			//			   , argObjVoie->pGetAt(k)->m_RealAbsorbance.fGetVal());
-
+#ifdef R_D
+						   , argObjVoie->pGetAt(k)->m_CorrectedAbsorbance.szGetLabel()
+						   , argObjVoie->pGetAt(k)->m_CorrectedAbsorbance.fGetVal()
+						   , argObjVoie->pGetAt(k)->m_RealAbsorbance.szGetLabel()
+						   , argObjVoie->pGetAt(k)->m_RealAbsorbance.fGetVal()
+#endif
+						   );
 			i  += _stprintf( szUserMessage + i
 				 		   , _T( "; %s=%-f; ")
 				     	   , argObjVoie->pGetAt(k)->m_Val.szGetLabel()

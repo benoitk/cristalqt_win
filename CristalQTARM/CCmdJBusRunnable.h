@@ -11,7 +11,7 @@ class CCmdJBusRunnable : public QRunnable
 {
 
 public:
-  ;
+  
     CCmdJBusRunnable(CCardJBusModel * arg_extCard,const int& arg_numRQT, CElemList* arg_elemList, CEnumInterface& arg_interface);
  
     void run();

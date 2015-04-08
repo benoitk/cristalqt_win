@@ -373,8 +373,8 @@ void CAnalyseur::run()
 								m_bStatusFailure.bSetVal(1);
 							}
 							
-							//Si le cycle a été arrété, ne pas faire de trace de mesure ou qu'un cycle est en défaut (eau, température, etc ...)
-							if(m_CmdRun.ucGetVal() && (m_CmdJumpStep.nGetVal()!=9999) )
+							//Si le cycle a été arrété, ne pas faire de trace de mesure ou qu'un cycle est en défaut (eau, température, etc ...)ou voie inactive
+							if(m_CmdRun.ucGetVal() && (m_CmdJumpStep.nGetVal()!=9999) && pStream->m_Active.ucGetVal())
 							{				
 								//Trace des moyennes de mesures
 								TRACE_LOG_MESURE(pStream, &m_NumCurrentStream, m_Average.ucGetVal());	

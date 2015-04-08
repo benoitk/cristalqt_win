@@ -143,6 +143,7 @@ void CWinExternalCardModel::setRequetesJBus()
 
                
                 m_pSupervision->addKeyOnMapRQTComJBUSIO(SORTIE_ANA+ QString::number(m_nNumSAVirtuel));
+				qDebug() << m_pSupervision->getHashRQTComJBUSIO();
                 sLbl = QString("Analog_Out_Label_") + QString::number(nNumSAPhysique);
 				qDebug() << "###### Analog_Out " << sLbl;
 		        dwGetPrivateProfileString((LPCTSTR)sSectionIni.utf16(), (LPCTSTR)sLbl.utf16(),_T("0"),szText, sizeof(szText)/sizeof(TCHAR), SZ_FIC_TEMP);
@@ -419,7 +420,7 @@ void CWinExternalCardModel::setRequetesJBus()
 void CWinExternalCardModel::sendCmdJBus(const int& arg_numRQT, CElemList* arg_elemList, CEnumInterface& arg_interface)
 {
     QMutexLocker locker(m_mutex);
-    //qDebug() << "WinExternalCardModel::sendCmdJBus : " << arg_numRQT;
+    qDebug() << "WinExternalCardModel::sendCmdJBus : " << arg_numRQT;
     m_cycleStep.bExecuteNumExchange(arg_numRQT, arg_elemList, TRUE, TRUE, arg_interface);
 }
 //SLOT
@@ -527,6 +528,7 @@ void CWinExternalCardModel::cmdSortieAnalogique(const int& arg_nNumSortie, const
                                             ->pGetAt(m_listNumMesureSA.at(arg_nNumSortie))->m_ValMaxConvertisseur.nGetVal();
 	}
     qDebug() << "tmp " << tmp;
+	qDebug() << "requette " << m_pSupervision->getNumRQTComJBUSIO(SORTIE_ANA+QString::number(arg_nNumSortie));
 	m_pSupervision->getAnalyseur()->pGetAt(m_listNumCarteSA.at(arg_nNumSortie))
                                             ->pGetAt(m_listNumMesureSA.at(arg_nNumSortie))->m_ValAna.bSetVal(tmp);
 

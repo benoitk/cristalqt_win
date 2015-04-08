@@ -99,6 +99,10 @@ void CDialogResultatEtalon::setLine(const QString& sLblTittle, const QString& sV
     m_btValue3->setVisible(false);
     m_lblValue4->setVisible(false);
     m_btValue4->setVisible(false);
+	m_lblValue5->setVisible(false);
+    m_btValue5->setVisible(false);
+	m_lblValue6->setVisible(false);
+    m_btValue6->setVisible(false);
 	this->updateGeometry();
 }
 

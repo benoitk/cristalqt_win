@@ -18,7 +18,7 @@
 CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(NBR_COEFF_LINEAR),m_ListMesureMoy(NBR_MESURE_MOY),m_ListRealtimeData(NBR_REALTIME_DATA)
 {
 	m_iType = MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_MESURE,0xFF);
-	SetLabel(_T("CMesurexxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
+	SetLabel(_T("CMesure"));
 	SetElemName(QString("CMesure"));
 	// mesure
 	m_Val.SetLabel(_T("m_Val"));
@@ -177,8 +177,8 @@ CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(
 	m_CalibZeroWaterNew.SetLabel(_T("m_CalibZeroWaterNew"));
 	m_CalibZeroWaterNew.SetElemName(QString("m_CalibZeroWaterNew"));
 	m_CalibZeroWaterNew.SetType(MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_FLOAT,eID_MESURE_CALIB_ZERO_WATER_NEW));
-    m_NumProgram.SetLabel(_T("m_NumProgram"));;
-    m_NumProgram.SetElemName(QString("m_NumProgram"));;
+    m_NumProgram.SetLabel(_T("m_NumProgram"));
+    m_NumProgram.SetElemName(QString("m_NumProgram"));
 	m_NumProgram.SetType(MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_INT8,eID_MESURE_NUM_PROGRAM));
 
 	m_AirSetPointAdjustement.SetLabel(_T("m_AirSetPointAdjustement"));
@@ -256,7 +256,6 @@ CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(
     m_AlarmDelta2.SetLabel(_T("m_AlarmDelta2"));
 	m_AlarmDelta2.SetElemName(QString("m_AlarmDelta2"));
 	m_AlarmDelta2.SetType(MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_INT8,eID_MESURE_ALARM_DELTA2));
-
 
 	//Init des variables non présente dans le fichier de conf
 	m_SommeMesure.bSetVal(0);

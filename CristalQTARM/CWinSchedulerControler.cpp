@@ -216,8 +216,8 @@ void CWinSchedulerControler::btValeurEtalonPressed()
 	
 		if(pPaveNum->exec())
 		{
-			int iValue = pPaveNum->getValue().toInt();
-			m_pView->setValeurEtalonValue(QString::number(iValue));
+			float iValue = pPaveNum->getValue().toFloat();
+			m_pView->setValeurEtalonValue(QString::number(iValue, 'f', 2));
 		}
 	}
 }

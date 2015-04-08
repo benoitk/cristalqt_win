@@ -101,7 +101,7 @@ QString CWinMaintenanceModel::sGetMesurePHVal()const
 }
 bool CWinMaintenanceModel::bGetCoefStatus(int arg_numStream, int arg_numMeasure)const
 {
-	//qDebug() << "CWinMaintenanceModel::bGetCoefStatus()" << m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_CalibStatusCoeff.ucGetVal();
+	qDebug() << "CWinMaintenanceModel::bGetCoefStatus()" << arg_numMeasure << " " << arg_numStream;
 
     if(m_pSupervision->getAnalyseur()->pGetAt(arg_numStream)->pGetAt(arg_numMeasure)->m_CalibStatusCoeff.ucGetVal() > 0)
 		return true;
