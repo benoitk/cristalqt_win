@@ -28,6 +28,8 @@ public:
 	CSupervision* getpSupervision(){return m_pSupervision;};
     CWinMainModel* getMainModel();
     void askRepaintGraph(int arg_numStream);
+
+	void cuteMeasureCard();
 	
 public slots:
 #ifdef TEST

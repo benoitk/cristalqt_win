@@ -106,10 +106,10 @@ bool CDialogAlarm::updateAlarms()
 }
 
 //SLOT 
-void CDialogAlarm::acquiter()
+void CDialogAlarm::acquiter(bool arg_bAutoLog)
 {
    // qDebug() << "ERASE ALL" ;
-    if(CUserSession::getInstance()->loginUser())
+    if(arg_bAutoLog || CUserSession::getInstance()->loginUser())
 	{
         for(int i=0; i<m_pSupervision->getAnalyseur()->m_ListMessageError.iGetCount();i++)
             m_pSupervision->getAnalyseur()->m_ListMessageError.bAddAndRollText(_T("CElemBase"));
@@ -150,6 +150,10 @@ void CDialogAlarm::setEnabledBtPrev(const bool& arg_state)
     m_btPrev->setEnabled(arg_state);
 
 }
+QStringList CDialogAlarm::getStringListAlarm(){
+	return m_listModel->stringList();
+}
+
 
 
 

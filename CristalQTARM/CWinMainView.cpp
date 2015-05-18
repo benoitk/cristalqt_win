@@ -632,6 +632,7 @@ void CWinMainView::dataUpdate()
 	if(m_pModel->getEnAlarm())
 	{
 		m_btAlarm->setChecked(!m_btAlarm->isChecked());
+		m_pControler->cuteMeasureCard();
 		//qDebug() << "Alarm ON" ;
 	}
 	else

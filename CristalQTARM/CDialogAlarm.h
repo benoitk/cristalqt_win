@@ -19,10 +19,11 @@ public:
 	void setConnexion();
     void setEnabledBtNext(const bool& arg_state);
     void setEnabledBtPrev(const bool& arg_state);
-
+	QStringList getStringListAlarm();
+	
 public slots:
 	
-	void acquiter();
+	void acquiter(bool arg_bAutoLog=false);
 
 private:
 	

@@ -21,7 +21,6 @@
 #include "CDialogValEtalon.h"
 
 #include "header_qt.h"
-
 #ifdef x86
 	#define DIR_APP  "\\HardDisk\\CristalQT"
 	//#define DIR_APP  "\\HardDisk\\CRISTAL"
@@ -106,14 +105,50 @@ void CWinMainControler::load()
 //SLOT
 void CWinMainControler::getErrorIOAndJBus()
 {
+	qDebug() << "CWinMainControler::getErrorIOAndJBus() " ;
 	m_pSupervision->getAnalyseur()->SetRemoteControl();
 	if (   m_pSupervision->getAnalyseur()->m_ExternalInterface.m_pCarteIO->bGetError() 
 		|| m_pSupervision->getAnalyseur()->m_ExternalInterface.m_pCarteJbusSlave->bGetError())
 	{
 		TRACE_DEBUG_IHM(eError,eCycle,eErrorAppRunThread);
 		m_pSupervision->getAnalyseur()->m_bStatusFailure.bSetVal(1);
+
 	}
 
+}
+void CWinMainControler::cuteMeasureCard(){
+qDebug() << "CWinMainControler::cuteMeasureCard() " ;
+#if !defined(MULTI_STREAL) && defined(SONDE)
+		m_pDialogAlarm->updateAlarms();
+		QStringList listAlarm = m_pDialogAlarm->getStringListAlarm();
+		qDebug() << "listAlarm " << listAlarm;
+		if(!listAlarm.isEmpty()){
+			QString lastError = listAlarm.last();
+			if(lastError.right(27) == "Error application execution" || lastError.right(21) == "Error cycle execution" 
+				|| lastError.right(36) == "Erreur d'exécution de l'application" || lastError.right(27) == "Erreur d'exécution du cycle" ){
+				qDebug() << "####################### last error " << lastError;    
+				m_pModel->setStop();
+				m_bEnStop = true;
+				m_pDialogAlarm->acquiter(true);
+				CWinElecTestControler::getInstance(this)->btOnRelaisPressed(6); //7eme relais carte 1
+				Sleep(4000);
+				CWinElecTestControler::getInstance(this)->btOffRelaisPressed(6);
+				Sleep(4000);
+				m_pModel->setRun();
+				m_bEnStop = false;
+				Sleep(4000);
+
+				m_pModel->setStop();
+				m_bEnStop = true;
+
+				Sleep(8000);
+				m_pDialogAlarm->acquiter(true);
+				m_pModel->setRun();
+				m_bEnStop = false;
+			}
+		}
+#endif
+qDebug() << "FIN CWinMainControler::cuteMeasureCard() " ;
 }
 
 //SLOT pour screenshot
