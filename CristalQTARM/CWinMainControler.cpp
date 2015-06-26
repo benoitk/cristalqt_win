@@ -359,7 +359,7 @@ void CWinMainControler::btMaintenancePressed()
     if(CUserSession::getInstance()->loginUser() )
     {
 #ifdef CALCIUM_MAGNESIUM
-		if(m_pSupervision->getAnalyseur()->pGetAt(0)->m_StatusSaumureFaiul re.ucGetVal() != 0)
+		if(m_pSupervision->getAnalyseur()->pGetAt(0)->m_StatusSaumureFailure.ucGetVal() != 0)
 		{
 			CDialogMessage* dialogMsg = CDialogMessage::getInstance();
 			dialogMsg->setLblMsg(tr("Can't execute maintenance cycles\n because of brine failure"));

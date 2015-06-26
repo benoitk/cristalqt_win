@@ -144,7 +144,24 @@ void ReadConfigMsgError(LPTSTR szFileMsg)
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg403"),_T("eErrorPrg403"),_aszErrorText[eErrorPrg403],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg405"),_T("eErrorPrg405"),_aszErrorText[eErrorPrg405],MAX_PATH,szFileMsg);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg413"),_T("eErrorPrg413"),_aszErrorText[eErrorPrg413],MAX_PATH,szFileMsg);
-#else
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04703"),_T("eErrorPrg04703"),_aszErrorText[eErrorPrg04703],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04705"),_T("eErrorPrg04705"),_aszErrorText[eErrorPrg04705],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04803"),_T("eErrorPrg04803"),_aszErrorText[eErrorPrg04803],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04805"),_T("eErrorPrg04805"),_aszErrorText[eErrorPrg04805],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04903"),_T("eErrorPrg04903"),_aszErrorText[eErrorPrg04903],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg05003"),_T("eErrorPrg05003"),_aszErrorText[eErrorPrg05003],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg00511"),_T("eErrorPrg00511"),_aszErrorText[eErrorPrg00511],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03511"),_T("eErrorPrg03511"),_aszErrorText[eErrorPrg03511],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03503"),_T("eErrorPrg03503"),_aszErrorText[eErrorPrg03503],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03505"),_T("eErrorPrg03505"),_aszErrorText[eErrorPrg03505],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03509"),_T("eErrorPrg03509"),_aszErrorText[eErrorPrg03509],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03203"),_T("eErrorPrg03203"),_aszErrorText[eErrorPrg03203],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03205"),_T("eErrorPrg03205"),_aszErrorText[eErrorPrg03205],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03303"),_T("eErrorPrg03303"),_aszErrorText[eErrorPrg03303],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03305"),_T("eErrorPrg03305"),_aszErrorText[eErrorPrg03305],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03401"),_T("eErrorPrg03401"),_aszErrorText[eErrorPrg03401],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg05103"),_T("eErrorPrg05103"),_aszErrorText[eErrorPrg05103],MAX_PATH,szFileMsg);
+	#else
 HANDLE hf  ;
 	long filelen=0;
 	filelen = openFile(szFileMsg, hf);
@@ -242,6 +259,26 @@ HANDLE hf  ;
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg403"),_T("eErrorPrg403"),_aszErrorText[eErrorPrg403],MAX_PATH, hf, filelen);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg405"),_T("eErrorPrg405"),_aszErrorText[eErrorPrg405],MAX_PATH, hf, filelen);
 	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg413"),_T("eErrorPrg413"),_aszErrorText[eErrorPrg413],MAX_PATH, hf, filelen);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04703"),_T("eErrorPrg04703"),_aszErrorText[eErrorPrg04703],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04705"),_T("eErrorPrg04705"),_aszErrorText[eErrorPrg04705],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04803"),_T("eErrorPrg04803"),_aszErrorText[eErrorPrg04803],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04805"),_T("eErrorPrg04805"),_aszErrorText[eErrorPrg04805],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04903"),_T("eErrorPrg04903"),_aszErrorText[eErrorPrg04903],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg04905"),_T("eErrorPrg04905"),_aszErrorText[eErrorPrg04905],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg05003"),_T("eErrorPrg05003"),_aszErrorText[eErrorPrg05003],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg00511"),_T("eErrorPrg00511"),_aszErrorText[eErrorPrg00511],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03511"),_T("eErrorPrg03511"),_aszErrorText[eErrorPrg03511],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03503"),_T("eErrorPrg03503"),_aszErrorText[eErrorPrg03503],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03505"),_T("eErrorPrg03505"),_aszErrorText[eErrorPrg03505],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03509"),_T("eErrorPrg03509"),_aszErrorText[eErrorPrg03509],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03203"),_T("eErrorPrg03203"),_aszErrorText[eErrorPrg03203],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03205"),_T("eErrorPrg03205"),_aszErrorText[eErrorPrg03205],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03303"),_T("eErrorPrg03303"),_aszErrorText[eErrorPrg03303],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03305"),_T("eErrorPrg03305"),_aszErrorText[eErrorPrg03305],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg03401"),_T("eErrorPrg03401"),_aszErrorText[eErrorPrg03401],MAX_PATH,szFileMsg);
+	dwGetPrivateProfileString(_T("MSG"), _T("eErrorPrg05103"),_T("eErrorPrg05103"),_aszErrorText[eErrorPrg05103],MAX_PATH,szFileMsg);
+
+
 	closeFile(hf);
 #endif
 }
@@ -343,6 +380,27 @@ void WriteConfigMsgError(LPTSTR szFileMsg)
 	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg403"),_aszErrorText[eErrorPrg403],szFileMsg);
 	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg405"),_aszErrorText[eErrorPrg405],szFileMsg);
 	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg413"),_aszErrorText[eErrorPrg413],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04703"),_aszErrorText[eErrorPrg04703],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04705"),_aszErrorText[eErrorPrg04705],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04803"),_aszErrorText[eErrorPrg04803],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04805"),_aszErrorText[eErrorPrg04805],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04903"),_aszErrorText[eErrorPrg04903],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg04905"),_aszErrorText[eErrorPrg04905],szFileMsg);
+	
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg05003"),_aszErrorText[eErrorPrg05003],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg00511"),_aszErrorText[eErrorPrg00511],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03511"),_aszErrorText[eErrorPrg03511],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03503"),_aszErrorText[eErrorPrg03503],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03505"),_aszErrorText[eErrorPrg03505],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03509"),_aszErrorText[eErrorPrg03509],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03203"),_aszErrorText[eErrorPrg03203],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03205"),_aszErrorText[eErrorPrg03205],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03303"),_aszErrorText[eErrorPrg03303],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03305"),_aszErrorText[eErrorPrg03305],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg03401"),_aszErrorText[eErrorPrg03401],szFileMsg);
+	bWritePrivateProfileString(_T("MSG"), _T("eErrorPrg05103"),_aszErrorText[eErrorPrg05103],szFileMsg);
+	
+
 }
 
 static bool bInitLog()
@@ -663,6 +721,7 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrgDefaultIncorrectOpticalSetting, argNumCurrentStream);
 			//Defaut courant projecteur
 			verifierDefaut(0x07, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrgDefaultCurrentProjector, argNumCurrentStream);
+			verifierDefaut(0x07, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg00511, argNumCurrentStream);
 			break;
 		//PRG_MESURE_OPTIQUE
 		case 6:
@@ -814,6 +873,27 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
             verifierDefaut(0x11, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg259, argNumCurrentStream);
 			
 			break;
+		case 32:
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03203, argNumCurrentStream);
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03205, argNumCurrentStream);
+			
+			break;
+		case 33:
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03303, argNumCurrentStream);
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03305, argNumCurrentStream);
+			
+			break;
+		case 34:
+			verifierDefaut(0x01, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03401, argNumCurrentStream);
+			
+			break;
+		case 35: 
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03503, argNumCurrentStream);
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03505, argNumCurrentStream);
+			verifierDefaut(0x09, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03509, argNumCurrentStream);
+            
+			verifierDefaut(0x11, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg03511, argNumCurrentStream);
+			break;
 		case 38: //dosage sonde
 			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg393, argNumCurrentStream);
 			break;
@@ -846,6 +926,31 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 			// prévoir maintenance
 			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg465, argNumCurrentStream);	
 			break;
+		case 47:
+			// fonctionnement mode dégradé
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04703, argNumCurrentStream);	
+			// prévoir maintenance
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04705, argNumCurrentStream);	
+			break;
+		case 48:
+			// fonctionnement mode dégradé
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04803, argNumCurrentStream);	
+			// prévoir maintenance
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04805, argNumCurrentStream);	
+			break;
+		case 49:
+			// fonctionnement mode dégradé
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04903, argNumCurrentStream);	
+			// prévoir maintenance
+			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04905, argNumCurrentStream);	
+			break;
+		case 50:
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg05003, argNumCurrentStream);	
+			break;
+		case 51:
+			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg05103, argNumCurrentStream);	
+			break;
+
 		case 992 : //Dosage cérium
 			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg393, argNumCurrentStream);
 			break;
