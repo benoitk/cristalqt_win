@@ -380,6 +380,12 @@ void CAnalyseur::run()
 								TRACE_LOG_MESURE(pStream, &m_NumCurrentStream, m_Average.ucGetVal());	
 								CDialogHistorique::getInstance()->addMesure(m_NumCurrentStream.ucGetVal(), pStream);												
 							}
+#ifdef TAF
+							if(pStream->m_StatusWaterFailure.ucGetVal()){
+								pStream->pGetAt(0)->m_Val.bSetVal(0);
+								pStream->pGetAt(0)->m_ValAna.bSetVal(pStream->pGetAt(0)->m_ValMinConvertisseur.nGetVal());
+							}
+#endif
 
 							//Si une demande d'ârret fin de cycle a été commandé, mettre le cmdRun à 0 à la fin du cycle
 							if(m_CmdStopEndCycle.ucGetVal())

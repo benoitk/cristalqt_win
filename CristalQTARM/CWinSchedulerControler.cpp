@@ -144,7 +144,7 @@ void CWinSchedulerControler::btNbCyleAvantCalibPressed(){
 		{
 			//Ce servir des bornes configurables plus tard ! 
 			int iValue = pPaveNum->getValue().toInt();
-			if(iValue > 255) iValue = 255;
+			if(iValue > 250) iValue = 250;
 			if(iValue < 0) iValue = 0;
 			m_pView->setNbCyleAvantCalibValue(QString::number(iValue));
 		}
@@ -162,7 +162,7 @@ void CWinSchedulerControler::btNbCyleAvantCleanupPressed(){
 		{
 			//Ce servir des bornes configurables plus tard ! 
 			int iValue = pPaveNum->getValue().toInt();
-			if(iValue > 255) iValue = 255;
+			if(iValue > 250) iValue = 250;
 			if(iValue < 0) iValue = 0;
 			m_pView->setNbCyleAvantCleanupValue(QString::number(iValue));
 		}
@@ -180,7 +180,7 @@ void CWinSchedulerControler::btNbCyleAvantCalibInLinePressed(){
 		{
 			//Ce servir des bornes configurables plus tard ! 
 			int iValue = pPaveNum->getValue().toInt();
-			if(iValue > 255) iValue = 255;
+			if(iValue > 250) iValue = 250;
 			if(iValue < 0) iValue = 0;
 			m_pView->setNbCyleAvantCalibInLineValue(QString::number(iValue));
 		}
@@ -199,7 +199,7 @@ void CWinSchedulerControler::btNbCyleAvantZeroPressed()
 		{
 			//Ce servir des bornes configurables plus tard ! 
 			int iValue = pPaveNum->getValue().toInt();
-			if(iValue > 255) iValue = 255;
+			if(iValue > 250) iValue = 250;
 			if(iValue < 0) iValue = 0;
 			m_pView->setNbCyleAvantZeroValue(QString::number(iValue));
 		}

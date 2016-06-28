@@ -118,7 +118,7 @@ void CWinMainControler::getErrorIOAndJBus()
 }
 void CWinMainControler::cuteMeasureCard(){
 qDebug() << "CWinMainControler::cuteMeasureCard() " ;
-#if !defined(MULTI_STREAL) && defined(SONDE)
+#if !defined(MULTI_STREAM) && defined(SONDE)
 		m_pDialogAlarm->updateAlarms();
 		QStringList listAlarm = m_pDialogAlarm->getStringListAlarm();
 		qDebug() << "listAlarm " << listAlarm;

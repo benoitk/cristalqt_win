@@ -103,17 +103,17 @@ et recommencer</oldsource>
         <translation>Информации</translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="75"/>
+        <location filename="CDialogInfo.cpp" line="82"/>
         <source> avec SELECTEUR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="86"/>
+        <location filename="CDialogInfo.cpp" line="93"/>
         <source>Version de l&apos;IHM :</source>
         <translation>Версия программы IHM : </translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="89"/>
+        <location filename="CDialogInfo.cpp" line="96"/>
         <source>Version de la supervision : </source>
         <translation>Версия Супервизора Firmware : </translation>
     </message>
@@ -374,18 +374,18 @@ Voulez vous arrêter les cyles ?</source>
 <context>
     <name>CWinMainControler</name>
     <message>
-        <location filename="CWinMainControler.cpp" line="128"/>
+        <location filename="CWinMainControler.cpp" line="163"/>
         <source>/screenshot</source>
         <translation>/screenshot</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="143"/>
+        <location filename="CWinMainControler.cpp" line="178"/>
         <source>
 configuration will be charged !</source>
         <translation>Конфигурация будет изменена !</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="168"/>
+        <location filename="CWinMainControler.cpp" line="203"/>
         <source>Restauration réussi. 
 Veuillez redémarrer électriquement
 l&apos;appareil</source>
@@ -394,36 +394,36 @@ l&apos;appareil</source>
 блок</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="202"/>
+        <location filename="CWinMainControler.cpp" line="237"/>
         <source>Voulez-vous vraiment 
 arrêter le cycle ?</source>
         <translation>Вы хотите остановить цикл ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="219"/>
+        <location filename="CWinMainControler.cpp" line="254"/>
         <source>Voulez-vous vraiment 
 arrêter en fin de cycle ?</source>
         <translation>Вы хотите остановить в конце цикла ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="232"/>
+        <location filename="CWinMainControler.cpp" line="267"/>
         <source>Voulez-vous vraiment 
 aller au cycle suivant?</source>
         <translation>Перейти к след. каналу ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="252"/>
+        <location filename="CWinMainControler.cpp" line="287"/>
         <source>Pas d&apos;alarme.</source>
         <translation>Нет присутствия сигнализации.</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="330"/>
+        <location filename="CWinMainControler.cpp" line="365"/>
         <source>Can&apos;t execute maintenance cycles
  because of brine failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="445"/>
+        <location filename="CWinMainControler.cpp" line="480"/>
         <source>Voulez-vous vraiment 
 arrêter l&apos;application ?</source>
         <translation>Остановка IHM ?</translation>
@@ -433,23 +433,23 @@ arrêter l&apos;application ?</source>
     <name>CWinMainModel</name>
     <message>
         <location filename="CWinMainModel.cpp" line="30"/>
-        <location filename="CWinMainModel.cpp" line="405"/>
-        <location filename="CWinMainModel.cpp" line="594"/>
-        <location filename="CWinMainModel.cpp" line="692"/>
+        <location filename="CWinMainModel.cpp" line="409"/>
+        <location filename="CWinMainModel.cpp" line="605"/>
+        <location filename="CWinMainModel.cpp" line="703"/>
         <source>CYCLE EN COURS</source>
         <translation>ЦИКЛ В ПРОЦЕССЕ</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="32"/>
         <location filename="CWinMainModel.cpp" line="380"/>
-        <location filename="CWinMainModel.cpp" line="681"/>
+        <location filename="CWinMainModel.cpp" line="692"/>
         <source>EN PAUSE</source>
         <translation>ПАУЗА</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="34"/>
-        <location filename="CWinMainModel.cpp" line="409"/>
-        <location filename="CWinMainModel.cpp" line="654"/>
+        <location filename="CWinMainModel.cpp" line="413"/>
+        <location filename="CWinMainModel.cpp" line="665"/>
         <source>EN ARRET</source>
         <translation>ОСТАНОВКА</translation>
     </message>
@@ -466,38 +466,38 @@ arrêter l&apos;application ?</source>
 (Неактивный канал)</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="387"/>
+        <location filename="CWinMainModel.cpp" line="390"/>
         <source>ZERO EN COURS</source>
         <translation>ОБНУЛЕНИЕ  В ПРОЦЕССЕ</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="390"/>
+        <location filename="CWinMainModel.cpp" line="394"/>
         <source>CALIBRATION EN LIGNE EN COURS</source>
         <translation>Идет онлайн калибровка</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="393"/>
+        <location filename="CWinMainModel.cpp" line="397"/>
         <source>CALIBRATION EN COURS</source>
         <translation>Идет онлайн калибровка</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="397"/>
+        <location filename="CWinMainModel.cpp" line="401"/>
         <source>RISING IN PROGRESS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="400"/>
+        <location filename="CWinMainModel.cpp" line="404"/>
         <source>BRINE FAILURE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="402"/>
+        <location filename="CWinMainModel.cpp" line="406"/>
         <source>CONTROLE ZERO EN COURS</source>
         <translation>Идет контроль нуля</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="407"/>
-        <location filename="CWinMainModel.cpp" line="670"/>
+        <location filename="CWinMainModel.cpp" line="411"/>
+        <location filename="CWinMainModel.cpp" line="681"/>
         <source>CYCLE EN COURS 
 (ARRET EN FIN DE CYCLE)</source>
         <translation>ЦИКЛ В ПРОЦЕССЕ 
@@ -512,168 +512,168 @@ arrêter l&apos;application ?</source>
         <translation>ИЗМЕРЕНИЯ</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="363"/>
+        <location filename="CWinMainView.cpp" line="365"/>
         <source>Température Cuve</source>
         <translation>Т бака</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="365"/>
+        <location filename="CWinMainView.cpp" line="367"/>
         <source>°C</source>
         <translation>°C</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="367"/>
+        <location filename="CWinMainView.cpp" line="369"/>
         <source>Capteur de pression d&apos;eau</source>
         <translation>Давление (Напряжение на экране)</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="369"/>
+        <location filename="CWinMainView.cpp" line="371"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="356"/>
+        <location filename="CWinMainView.cpp" line="358"/>
         <source>Mesure électrode</source>
         <translation>Измерительный электрод</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="358"/>
+        <location filename="CWinMainView.cpp" line="360"/>
         <source>Mesure optique direct</source>
         <translation>Оптоизмерение</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="361"/>
+        <location filename="CWinMainView.cpp" line="363"/>
         <source>Pts</source>
         <translation>Pts</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="400"/>
+        <location filename="CWinMainView.cpp" line="402"/>
         <source>DIAGNOSTIC</source>
         <extracomment>Nom de l&apos;onglet à laisser en maj pour toutes les trads</extracomment>
         <translation>Диагностика</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="408"/>
+        <location filename="CWinMainView.cpp" line="410"/>
         <source>Maintenance</source>
         <translation>Обслуживание</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="412"/>
+        <location filename="CWinMainView.cpp" line="414"/>
         <source>Options</source>
         <translation>опции</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="416"/>
+        <location filename="CWinMainView.cpp" line="418"/>
         <source>Copie des fichiers log</source>
         <translation>Файлы измерений</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="425"/>
+        <location filename="CWinMainView.cpp" line="427"/>
         <source>Test électrique</source>
         <translation>электрический тест</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="460"/>
+        <location filename="CWinMainView.cpp" line="462"/>
         <source>Switch config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="464"/>
+        <location filename="CWinMainView.cpp" line="466"/>
         <source>Historique</source>
         <translation>История</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="512"/>
+        <location filename="CWinMainView.cpp" line="514"/>
         <source>OUTILS</source>
         <translation>СРЕДСТВА</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="546"/>
+        <location filename="CWinMainView.cpp" line="548"/>
         <source>HISTOGRAMME</source>
         <translation>ГИСТОГРАММА</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="561"/>
+        <location filename="CWinMainView.cpp" line="563"/>
         <source>Restaurer</source>
         <translation>Восстановление</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="565"/>
+        <location filename="CWinMainView.cpp" line="567"/>
         <source>Information</source>
         <translation>Информации</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="569"/>
+        <location filename="CWinMainView.cpp" line="571"/>
         <source>Paramètres</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="573"/>
+        <location filename="CWinMainView.cpp" line="575"/>
         <source>Exploreur</source>
         <translation>Пользователь</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="577"/>
+        <location filename="CWinMainView.cpp" line="579"/>
         <source>Quitter</source>
         <translation>Выйти</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="645"/>
+        <location filename="CWinMainView.cpp" line="648"/>
         <source>Défaut d&apos;eau</source>
         <translation>ОШИБКА ВОДЫ</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="650"/>
+        <location filename="CWinMainView.cpp" line="653"/>
         <source>Seuil dépassé</source>
         <translation>Порог превышен</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="658"/>
+        <location filename="CWinMainView.cpp" line="661"/>
         <source>En arrêt</source>
         <translation>ОСТАНОВКА</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="664"/>
+        <location filename="CWinMainView.cpp" line="667"/>
         <source>En défaut</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="696"/>
-        <location filename="CWinMainView.cpp" line="697"/>
+        <location filename="CWinMainView.cpp" line="699"/>
+        <location filename="CWinMainView.cpp" line="700"/>
         <source>Voie </source>
         <translation>Канал</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="701"/>
+        <location filename="CWinMainView.cpp" line="704"/>
         <source>Décompte </source>
         <translation>считать</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="707"/>
-        <location filename="CWinMainView.cpp" line="708"/>
+        <location filename="CWinMainView.cpp" line="710"/>
+        <location filename="CWinMainView.cpp" line="711"/>
         <source> cycle avant le blanc</source>
         <translation>Цикл до белого</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="710"/>
-        <location filename="CWinMainView.cpp" line="711"/>
+        <location filename="CWinMainView.cpp" line="716"/>
+        <location filename="CWinMainView.cpp" line="717"/>
         <source> cycle avant le nettoyage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="716"/>
-        <location filename="CWinMainView.cpp" line="733"/>
+        <location filename="CWinMainView.cpp" line="722"/>
+        <location filename="CWinMainView.cpp" line="740"/>
         <source>Pas n°:</source>
         <translation>Нет n°:</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="717"/>
-        <location filename="CWinMainView.cpp" line="734"/>
+        <location filename="CWinMainView.cpp" line="723"/>
+        <location filename="CWinMainView.cpp" line="741"/>
         <source>Sur :</source>
         <translation>Ha :</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="839"/>
+        <location filename="CWinMainView.cpp" line="846"/>
         <source>voie </source>
         <translation>Канал</translation>
     </message>
@@ -682,114 +682,123 @@ arrêter l&apos;application ?</source>
     <name>CWinMaintenanceControler</name>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="72"/>
-        <location filename="CWinMaintenanceControler.cpp" line="112"/>
         <source>VALEUR ETALON</source>
         <translation>Эталлонирование</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="299"/>
+        <location filename="CWinMaintenanceControler.cpp" line="300"/>
         <source>RESULTATS ETALONNAGE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="312"/>
+        <location filename="CWinMaintenanceControler.cpp" line="316"/>
         <source>Mes avant étalonnage</source>
         <translation type="unfinished">измерение перед калибр </translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="313"/>
+        <location filename="CWinMaintenanceControler.cpp" line="317"/>
         <source>Mes après étalonnage</source>
         <translation>измерение после калибр </translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="364"/>
-        <location filename="CWinMaintenanceControler.cpp" line="426"/>
-        <location filename="CWinMaintenanceControler.cpp" line="496"/>
-        <location filename="CWinMaintenanceControler.cpp" line="523"/>
-        <location filename="CWinMaintenanceControler.cpp" line="565"/>
+        <location filename="CWinMaintenanceControler.cpp" line="367"/>
+        <location filename="CWinMaintenanceControler.cpp" line="430"/>
+        <location filename="CWinMaintenanceControler.cpp" line="500"/>
+        <location filename="CWinMaintenanceControler.cpp" line="527"/>
+        <location filename="CWinMaintenanceControler.cpp" line="576"/>
         <source>Erreur étalonnage</source>
         <translation>ОШИБКА ЭТАЛЛОНИРОВАНИЯ</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="445"/>
+        <location filename="CWinMaintenanceControler.cpp" line="449"/>
         <source>RESULTATS ETALONNAGE EN LIGNE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="407"/>
+        <location filename="CWinMaintenanceControler.cpp" line="411"/>
         <source>RESULTATS ZERO EAU-AIR</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="328"/>
-        <location filename="CWinMaintenanceControler.cpp" line="457"/>
+        <location filename="CWinMaintenanceControler.cpp" line="112"/>
+        <source>VALEUR ECHANTILLON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="331"/>
+        <location filename="CWinMaintenanceControler.cpp" line="461"/>
         <source>Erreur étalonnage mesure 1 et 2</source>
         <translation>Ошибка эталонирования измер. 1 и 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="334"/>
-        <location filename="CWinMaintenanceControler.cpp" line="463"/>
+        <location filename="CWinMaintenanceControler.cpp" line="337"/>
+        <location filename="CWinMaintenanceControler.cpp" line="467"/>
         <source>Erreur étalonnage mesure 1</source>
         <translation>Ошибка эталонирования измер 1</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="340"/>
-        <location filename="CWinMaintenanceControler.cpp" line="469"/>
+        <location filename="CWinMaintenanceControler.cpp" line="343"/>
+        <location filename="CWinMaintenanceControler.cpp" line="473"/>
         <source>Erreur étalonnage mesure 2</source>
         <translation>Ошибка эталонирования измер 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="346"/>
+        <location filename="CWinMaintenanceControler.cpp" line="349"/>
         <source>Erreur étalonnage TH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="411"/>
+        <location filename="CWinMaintenanceControler.cpp" line="415"/>
         <source>Erreur zéro eau-air</source>
         <translation>ОШИБКА ЭТАЛЛОНИРОВАНИЯ</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="420"/>
+        <location filename="CWinMaintenanceControler.cpp" line="424"/>
         <source>RESULTATS ETALONNAGE SONDE</source>
         <translation>Результаты эталлонирования</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="441"/>
+        <location filename="CWinMaintenanceControler.cpp" line="445"/>
         <source>BRINE + 25µg TEST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="518"/>
+        <location filename="CWinMaintenanceControler.cpp" line="522"/>
         <source>RESULTATS DU BLANC</source>
         <translation>Результат белый</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="541"/>
+        <location filename="CWinMaintenanceControler.cpp" line="545"/>
         <source>RESULTATS MESURE PH</source>
         <translation>Результаты ручного измерения</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="547"/>
+        <location filename="CWinMaintenanceControler.cpp" line="551"/>
         <source>BRINE + 75µg TEST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="553"/>
+        <location filename="CWinMaintenanceControler.cpp" line="557"/>
         <source>RESULTATS ETALONNAGE ZERO</source>
         <translation>Результаты обнуления</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="555"/>
+        <location filename="CWinMaintenanceControler.cpp" line="558"/>
+        <source>Appareil à étalonner</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="561"/>
         <source>RESULTATS CALCUL PENTE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="587"/>
+        <location filename="CWinMaintenanceControler.cpp" line="598"/>
         <source>RESULTATS MESURE MANUELLE</source>
         <translation>Результаты ручного измерения</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="601"/>
+        <location filename="CWinMaintenanceControler.cpp" line="612"/>
         <source> (Av)</source>
         <translation>(до)</translation>
     </message>
@@ -993,6 +1002,10 @@ arrêter l&apos;application ?</source>
     </message>
     <message>
         <location filename="CWinSchedulerView.cpp" line="114"/>
+        <source>Number of cycles before </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="CWinSchedulerView.cpp" line="129"/>
         <location filename="CWinSchedulerView.cpp" line="144"/>
         <location filename="CWinSchedulerView.cpp" line="159"/>
@@ -1006,7 +1019,6 @@ avant </source>
 перед</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="114"/>
         <location filename="CWinSchedulerView.cpp" line="177"/>
         <source>
 (Si 0, pas de cyle de blanc)</source>
@@ -1027,95 +1039,95 @@ avant cycle nettoyage
         <translation>Значение эталона</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="262"/>
+        <location filename="CWinSchedulerView.cpp" line="266"/>
         <source>CYCLES AUTO</source>
         <translation>Авто цикл</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="282"/>
-        <location filename="CWinSchedulerView.cpp" line="618"/>
+        <location filename="CWinSchedulerView.cpp" line="286"/>
+        <location filename="CWinSchedulerView.cpp" line="622"/>
         <source>Pause</source>
         <translation>ПАУЗА</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="284"/>
-        <location filename="CWinSchedulerView.cpp" line="620"/>
+        <location filename="CWinSchedulerView.cpp" line="288"/>
+        <location filename="CWinSchedulerView.cpp" line="624"/>
         <source> Minutes</source>
         <translation>Минуты</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="284"/>
-        <location filename="CWinSchedulerView.cpp" line="620"/>
+        <location filename="CWinSchedulerView.cpp" line="288"/>
+        <location filename="CWinSchedulerView.cpp" line="624"/>
         <source> Minute</source>
         <translation>Минута</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="288"/>
-        <location filename="CWinSchedulerView.cpp" line="357"/>
-        <location filename="CWinSchedulerView.cpp" line="625"/>
+        <location filename="CWinSchedulerView.cpp" line="292"/>
+        <location filename="CWinSchedulerView.cpp" line="361"/>
+        <location filename="CWinSchedulerView.cpp" line="629"/>
         <source>Voie </source>
         <translation>Канал</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="290"/>
-        <location filename="CWinSchedulerView.cpp" line="627"/>
+        <location filename="CWinSchedulerView.cpp" line="294"/>
+        <location filename="CWinSchedulerView.cpp" line="631"/>
         <source> Cycles</source>
         <translation>Циклы</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="290"/>
-        <location filename="CWinSchedulerView.cpp" line="627"/>
+        <location filename="CWinSchedulerView.cpp" line="294"/>
+        <location filename="CWinSchedulerView.cpp" line="631"/>
         <source> Cycle</source>
         <translation>Цикл</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="296"/>
-        <location filename="CWinSchedulerView.cpp" line="635"/>
+        <location filename="CWinSchedulerView.cpp" line="300"/>
+        <location filename="CWinSchedulerView.cpp" line="639"/>
         <source>Ajouter</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="344"/>
+        <location filename="CWinSchedulerView.cpp" line="348"/>
         <source>SEQUENCEUR</source>
         <translation>Последовательность</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="358"/>
+        <location filename="CWinSchedulerView.cpp" line="362"/>
         <source> mesure </source>
         <translation>Измерение</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="390"/>
+        <location filename="CWinSchedulerView.cpp" line="394"/>
         <source>SEUILS</source>
         <translation>Порога</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="466"/>
+        <location filename="CWinSchedulerView.cpp" line="470"/>
         <source>Jour :</source>
         <translation>День :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="468"/>
+        <location filename="CWinSchedulerView.cpp" line="472"/>
         <source>Mois :</source>
         <translation>Месяц :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="470"/>
+        <location filename="CWinSchedulerView.cpp" line="474"/>
         <source>Année :</source>
         <translation>Год :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="484"/>
+        <location filename="CWinSchedulerView.cpp" line="488"/>
         <source>Heure :</source>
         <translation>Час :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="486"/>
+        <location filename="CWinSchedulerView.cpp" line="490"/>
         <source>Minute :</source>
         <translation>Минута :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="501"/>
+        <location filename="CWinSchedulerView.cpp" line="505"/>
         <source>DATE/HEURE</source>
         <translation>АТА/ЧАС</translation>
     </message>

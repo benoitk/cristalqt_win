@@ -343,12 +343,14 @@ void CWinMainView::init()
     gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainLbl()), row,0);
 	gridLayout->addWidget(m_btOpticalGain, row, 1);
 	gridLayout->addWidget(new QLabel(m_pModel->getOpticalGainUnit()), row++,2);
+#ifndef CYANURE
     gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementLbl()), row,0);
 	gridLayout->addWidget(m_btZeroOpticalMeasurement, row, 1);
 	gridLayout->addWidget(new QLabel(m_pModel->getZeroOpticalMeasurementUnit()), row++,2);
     gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementLbl()), row,0);
 	gridLayout->addWidget(m_btOpticalMeasurement, row, 1);
 	gridLayout->addWidget(new QLabel(m_pModel->getOpticalMeasurementUnit()), row++,2);
+#endif
     gridLayout->addWidget(new QLabel(m_pModel->getAbsorbanceValueLbl()), row,0);
 	gridLayout->addWidget(m_btAbsorbanceValue, row, 1);
 	gridLayout->addWidget(new QLabel(m_pModel->getAbsorbanceValueUnit()), row++,2);
@@ -707,6 +709,9 @@ void CWinMainView::dataUpdate()
 #ifdef KMNO4
 		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le blanc")) );
 		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le blanc")) );
+#elif defined SONDE
+		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycles before slope ctrl") );
+		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycles before slope ctrl") );
 #else
 		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le nettoyage")) );
 		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le nettoyage")) );

@@ -384,7 +384,11 @@ QString CWinMainModel::getEtatAnalyseur()const
 		sEtatAnalyseur = tr("CYCLE EN COURS \n(VOIE INHIBE)");
 	else if(bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
 			&& m_pSupervision->getAnalyseur()->m_CmdCycleZero.ucGetVal() != 0xFF)
+#if defined SONDE
+		sEtatAnalyseur = QString("CONTROL SLOPE IN PROGRESS");
+#else
 		sEtatAnalyseur = tr("ZERO EN COURS");
+#endif
 	else if(   bRun && m_pSupervision->getAnalyseur()->m_CmdStopEndCycle.ucGetVal()==0 
 			&& m_pSupervision->getAnalyseur()->m_CmdCycleCalibInLine.ucGetVal() != 0xFF)
 		sEtatAnalyseur = tr("CALIBRATION EN LIGNE EN COURS");
@@ -425,6 +429,13 @@ bool CWinMainModel::getPause()const
 }
 bool CWinMainModel::getEnAlarm()const
 {
+	
+	if(!m_pSupervision->getAnalyseur()->m_bStatusFailure.ucGetVal()){
+		for(int i = 0; i < m_pSupervision->getAnalyseur()->iGetNbrStream(); ++i){
+			if(m_pSupervision->getAnalyseur()->pGetAt(i)->bSetAnalyserFailure)
+				m_pSupervision->getAnalyseur()->m_bStatusFailure.bSetVal(1);
+		}
+	}
     return m_pSupervision->getAnalyseur()->m_bStatusFailure.ucGetVal();
 }
 
@@ -670,8 +681,8 @@ void CWinMainModel::setStopEndCycle()
 	m_sEtatAnalyseur = tr("CYCLE EN COURS \n(ARRET EN FIN DE CYCLE)");
 
 	//Ecriture dans le fichier config de la commande
-	CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdStopEndCycle")
-           , &m_pSupervision->getAnalyseur()->m_CmdStopEndCycle);
+	//CMesureModel::writeElemConfigIni( _T("CListStream"), _T("m_CmdStopEndCycle")
+    //       , &m_pSupervision->getAnalyseur()->m_CmdStopEndCycle);
 	
 }
 void CWinMainModel::setPause()

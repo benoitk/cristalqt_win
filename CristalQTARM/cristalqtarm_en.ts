@@ -105,17 +105,17 @@ and try again</translation>
         <translation>INFORMATION</translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="75"/>
+        <location filename="CDialogInfo.cpp" line="82"/>
         <source> avec SELECTEUR</source>
         <translation>with SELECTOR</translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="86"/>
+        <location filename="CDialogInfo.cpp" line="93"/>
         <source>Version de l&apos;IHM :</source>
         <translation>HMI version :</translation>
     </message>
     <message>
-        <location filename="CDialogInfo.cpp" line="89"/>
+        <location filename="CDialogInfo.cpp" line="96"/>
         <source>Version de la supervision : </source>
         <translation>Supervision version :</translation>
     </message>
@@ -392,58 +392,58 @@ Do you want stop the cycle ?</translation>
 <context>
     <name>CWinMainControler</name>
     <message>
-        <location filename="CWinMainControler.cpp" line="128"/>
+        <location filename="CWinMainControler.cpp" line="163"/>
         <source>/screenshot</source>
         <translation>/screenshot</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="141"/>
+        <location filename="CWinMainControler.cpp" line="178"/>
         <source>
 configuration will be charged !</source>
         <translation>configuration will be charged !</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="166"/>
+        <location filename="CWinMainControler.cpp" line="203"/>
         <source>Restauration réussi. 
 Veuillez redémarrer électriquement
 l&apos;appareil</source>
         <translation>Restauration done. Restart the device</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="199"/>
+        <location filename="CWinMainControler.cpp" line="237"/>
         <source>Voulez-vous vraiment 
 arrêter le cycle ?</source>
         <translation>Do you want stop
 the cycle ? </translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="216"/>
+        <location filename="CWinMainControler.cpp" line="254"/>
         <source>Voulez-vous vraiment 
 arrêter en fin de cycle ?</source>
         <translation>Do you want stop
 at the end of the cycle ? </translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="229"/>
+        <location filename="CWinMainControler.cpp" line="267"/>
         <source>Voulez-vous vraiment 
 aller au cycle suivant?</source>
         <translation>Do you want 
 go to the next cycle ?</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="249"/>
+        <location filename="CWinMainControler.cpp" line="287"/>
         <source>Pas d&apos;alarme.</source>
         <translation>No alarm.</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="327"/>
+        <location filename="CWinMainControler.cpp" line="365"/>
         <source>Can&apos;t execute maintenance cycles
  because of brine failure</source>
         <translation>Can&apos;t execute maintenance cycles
  because of brine failure</translation>
     </message>
     <message>
-        <location filename="CWinMainControler.cpp" line="442"/>
+        <location filename="CWinMainControler.cpp" line="480"/>
         <source>Voulez-vous vraiment 
 arrêter l&apos;application ?</source>
         <translation>Do you want shutdown
@@ -454,23 +454,23 @@ the application ?</translation>
     <name>CWinMainModel</name>
     <message>
         <location filename="CWinMainModel.cpp" line="30"/>
-        <location filename="CWinMainModel.cpp" line="405"/>
-        <location filename="CWinMainModel.cpp" line="594"/>
-        <location filename="CWinMainModel.cpp" line="692"/>
+        <location filename="CWinMainModel.cpp" line="409"/>
+        <location filename="CWinMainModel.cpp" line="605"/>
+        <location filename="CWinMainModel.cpp" line="703"/>
         <source>CYCLE EN COURS</source>
         <translation>CYCLE IN PROGRESS</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="32"/>
         <location filename="CWinMainModel.cpp" line="380"/>
-        <location filename="CWinMainModel.cpp" line="681"/>
+        <location filename="CWinMainModel.cpp" line="692"/>
         <source>EN PAUSE</source>
         <translation>PAUSE</translation>
     </message>
     <message>
         <location filename="CWinMainModel.cpp" line="34"/>
-        <location filename="CWinMainModel.cpp" line="409"/>
-        <location filename="CWinMainModel.cpp" line="654"/>
+        <location filename="CWinMainModel.cpp" line="413"/>
+        <location filename="CWinMainModel.cpp" line="665"/>
         <source>EN ARRET</source>
         <translation>STOPPED</translation>
     </message>
@@ -487,39 +487,39 @@ the application ?</translation>
 (STREAM INHIBITED)</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="387"/>
+        <location filename="CWinMainModel.cpp" line="390"/>
         <source>ZERO EN COURS</source>
         <translatorcomment>BLANK pour le KMNO4 et CLEANUP pour le chlore L+T</translatorcomment>
         <translation>BLANK IN PROGRESS</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="390"/>
+        <location filename="CWinMainModel.cpp" line="394"/>
         <source>CALIBRATION EN LIGNE EN COURS</source>
         <translation>CALIBRATION IN LINE IN PROGRESS</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="393"/>
+        <location filename="CWinMainModel.cpp" line="397"/>
         <source>CALIBRATION EN COURS</source>
         <translation>CALIBRATION IN PROGRESS</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="397"/>
+        <location filename="CWinMainModel.cpp" line="401"/>
         <source>RISING IN PROGRESS</source>
         <translation>RISING IN PROGRESS</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="400"/>
+        <location filename="CWinMainModel.cpp" line="404"/>
         <source>BRINE FAILURE</source>
         <translation>BRINE FAILURE</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="402"/>
+        <location filename="CWinMainModel.cpp" line="406"/>
         <source>CONTROLE ZERO EN COURS</source>
         <translation>ZERO CHECKING IN PROGRESS</translation>
     </message>
     <message>
-        <location filename="CWinMainModel.cpp" line="407"/>
-        <location filename="CWinMainModel.cpp" line="670"/>
+        <location filename="CWinMainModel.cpp" line="411"/>
+        <location filename="CWinMainModel.cpp" line="681"/>
         <source>CYCLE EN COURS 
 (ARRET EN FIN DE CYCLE)</source>
         <translation>CYCLE IN PROGRESS
@@ -534,12 +534,12 @@ the application ?</translation>
         <translation>MEASURE</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="363"/>
+        <location filename="CWinMainView.cpp" line="365"/>
         <source>Température Cuve</source>
         <translation>Vessel temperature</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="365"/>
+        <location filename="CWinMainView.cpp" line="367"/>
         <source>°C</source>
         <translation>°C</translation>
     </message>
@@ -548,28 +548,28 @@ the application ?</translation>
         <translation type="obsolete">Water pressure</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="369"/>
+        <location filename="CWinMainView.cpp" line="371"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="358"/>
+        <location filename="CWinMainView.cpp" line="360"/>
         <source>Mesure optique direct</source>
         <translation>Live optical measure</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="361"/>
+        <location filename="CWinMainView.cpp" line="363"/>
         <source>Pts</source>
         <translation>Pts</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="400"/>
+        <location filename="CWinMainView.cpp" line="402"/>
         <source>DIAGNOSTIC</source>
         <extracomment>Nom de l&apos;onglet à laisser en maj pour toutes les trads</extracomment>
         <translation>DIAGNOSTIC</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="408"/>
+        <location filename="CWinMainView.cpp" line="410"/>
         <source>Maintenance</source>
         <translation>Maintenance</translation>
     </message>
@@ -586,12 +586,12 @@ the application ?</translation>
         <translation type="obsolete">SV/Pumps</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="511"/>
+        <location filename="CWinMainView.cpp" line="514"/>
         <source>OUTILS</source>
         <translation>TOOLS</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="545"/>
+        <location filename="CWinMainView.cpp" line="548"/>
         <source>HISTOGRAMME</source>
         <translation>HISTOGRAM</translation>
     </message>
@@ -604,117 +604,117 @@ the application ?</translation>
         <translation type="obsolete">Water pressure</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="367"/>
+        <location filename="CWinMainView.cpp" line="369"/>
         <source>Capteur de pression d&apos;eau</source>
         <translation>Water pressure sensor</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="356"/>
+        <location filename="CWinMainView.cpp" line="358"/>
         <source>Mesure électrode</source>
         <translation>Electrode measure</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="412"/>
+        <location filename="CWinMainView.cpp" line="414"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="416"/>
+        <location filename="CWinMainView.cpp" line="418"/>
         <source>Copie des fichiers log</source>
         <translation>Log files copy</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="425"/>
+        <location filename="CWinMainView.cpp" line="427"/>
         <source>Test électrique</source>
         <translation>Electrical test</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="460"/>
+        <location filename="CWinMainView.cpp" line="462"/>
         <source>Switch config</source>
         <translation>Switch config</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="464"/>
+        <location filename="CWinMainView.cpp" line="466"/>
         <source>Historique</source>
         <translation>Records</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="560"/>
+        <location filename="CWinMainView.cpp" line="563"/>
         <source>Restaurer</source>
         <translation>Recover</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="564"/>
+        <location filename="CWinMainView.cpp" line="567"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="568"/>
+        <location filename="CWinMainView.cpp" line="571"/>
         <source>Paramètres</source>
         <translation>Parametres</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="572"/>
+        <location filename="CWinMainView.cpp" line="575"/>
         <source>Exploreur</source>
         <translation>Explorer</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="576"/>
+        <location filename="CWinMainView.cpp" line="579"/>
         <source>Quitter</source>
         <translation>Shutdown application</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="646"/>
+        <location filename="CWinMainView.cpp" line="648"/>
         <source>Défaut d&apos;eau</source>
         <translation>Water failure</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="651"/>
+        <location filename="CWinMainView.cpp" line="653"/>
         <source>Seuil dépassé</source>
         <translation>Threshold exceeded</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="659"/>
+        <location filename="CWinMainView.cpp" line="661"/>
         <source>En arrêt</source>
         <translation>Stopped</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="665"/>
+        <location filename="CWinMainView.cpp" line="667"/>
         <source>En défaut</source>
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="702"/>
+        <location filename="CWinMainView.cpp" line="704"/>
         <source>Décompte </source>
         <translation>Countdown</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="708"/>
-        <location filename="CWinMainView.cpp" line="709"/>
+        <location filename="CWinMainView.cpp" line="710"/>
+        <location filename="CWinMainView.cpp" line="711"/>
         <source> cycle avant le blanc</source>
         <oldsource>cycle avant le blanc</oldsource>
         <translation> cycles before blank</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="711"/>
-        <location filename="CWinMainView.cpp" line="712"/>
+        <location filename="CWinMainView.cpp" line="716"/>
+        <location filename="CWinMainView.cpp" line="717"/>
         <source> cycle avant le nettoyage</source>
         <translation> cycles before cleanup</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="717"/>
-        <location filename="CWinMainView.cpp" line="734"/>
+        <location filename="CWinMainView.cpp" line="722"/>
+        <location filename="CWinMainView.cpp" line="740"/>
         <source>Pas n°:</source>
         <translation>Step:</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="718"/>
-        <location filename="CWinMainView.cpp" line="735"/>
+        <location filename="CWinMainView.cpp" line="723"/>
+        <location filename="CWinMainView.cpp" line="741"/>
         <source>Sur :</source>
         <translation>On:</translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="840"/>
+        <location filename="CWinMainView.cpp" line="846"/>
         <source>voie </source>
         <translation>Stream </translation>
     </message>
@@ -723,8 +723,8 @@ the application ?</translation>
         <translation type="obsolete"> in </translation>
     </message>
     <message>
-        <location filename="CWinMainView.cpp" line="697"/>
-        <location filename="CWinMainView.cpp" line="698"/>
+        <location filename="CWinMainView.cpp" line="699"/>
+        <location filename="CWinMainView.cpp" line="700"/>
         <source>Voie </source>
         <translation>Stream</translation>
     </message>
@@ -733,7 +733,6 @@ the application ?</translation>
     <name>CWinMaintenanceControler</name>
     <message>
         <location filename="CWinMaintenanceControler.cpp" line="72"/>
-        <location filename="CWinMaintenanceControler.cpp" line="107"/>
         <source>VALEUR ETALON</source>
         <translation>STANDARD VALUE</translation>
     </message>
@@ -742,7 +741,7 @@ the application ?</translation>
         <translation type="obsolete">OFFSET VALUE</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="286"/>
+        <location filename="CWinMaintenanceControler.cpp" line="300"/>
         <source>RESULTATS ETALONNAGE</source>
         <translation>CALIBRATION RESULTS</translation>
     </message>
@@ -755,21 +754,21 @@ the application ?</translation>
         <translation type="obsolete">Measure after calibration</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="337"/>
-        <location filename="CWinMaintenanceControler.cpp" line="390"/>
-        <location filename="CWinMaintenanceControler.cpp" line="460"/>
-        <location filename="CWinMaintenanceControler.cpp" line="487"/>
-        <location filename="CWinMaintenanceControler.cpp" line="525"/>
+        <location filename="CWinMaintenanceControler.cpp" line="367"/>
+        <location filename="CWinMaintenanceControler.cpp" line="430"/>
+        <location filename="CWinMaintenanceControler.cpp" line="500"/>
+        <location filename="CWinMaintenanceControler.cpp" line="527"/>
+        <location filename="CWinMaintenanceControler.cpp" line="576"/>
         <source>Erreur étalonnage</source>
         <translation>Calibration error</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="409"/>
+        <location filename="CWinMaintenanceControler.cpp" line="449"/>
         <source>RESULTATS ETALONNAGE EN LIGNE</source>
         <translation>CALIBRATION IN LINE RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="371"/>
+        <location filename="CWinMaintenanceControler.cpp" line="411"/>
         <source>RESULTATS ZERO EAU-AIR</source>
         <translation>ZERO WATER AIR RESULTS</translation>
     </message>
@@ -778,75 +777,95 @@ the application ?</translation>
         <translation type="obsolete">Silice measure</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="299"/>
+        <location filename="CWinMaintenanceControler.cpp" line="112"/>
+        <source>VALEUR ECHANTILLON</source>
+        <translation>SAMPLE VALUE</translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="316"/>
         <source>Mes avant étalonnage</source>
         <translation>Measure before calib</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="300"/>
+        <location filename="CWinMaintenanceControler.cpp" line="317"/>
         <source>Mes après étalonnage</source>
         <translation>Measure after calib</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="310"/>
-        <location filename="CWinMaintenanceControler.cpp" line="421"/>
+        <location filename="CWinMaintenanceControler.cpp" line="331"/>
+        <location filename="CWinMaintenanceControler.cpp" line="461"/>
         <source>Erreur étalonnage mesure 1 et 2</source>
         <translation>Calibration error measure 1 and 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="316"/>
-        <location filename="CWinMaintenanceControler.cpp" line="427"/>
+        <location filename="CWinMaintenanceControler.cpp" line="337"/>
+        <location filename="CWinMaintenanceControler.cpp" line="467"/>
         <source>Erreur étalonnage mesure 1</source>
         <translation>Calibration error measure 1</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="322"/>
-        <location filename="CWinMaintenanceControler.cpp" line="433"/>
+        <location filename="CWinMaintenanceControler.cpp" line="343"/>
+        <location filename="CWinMaintenanceControler.cpp" line="473"/>
         <source>Erreur étalonnage mesure 2</source>
         <translation>Calibration error measure 2</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="375"/>
+        <location filename="CWinMaintenanceControler.cpp" line="349"/>
+        <source>Erreur étalonnage TH</source>
+        <translation>Calibration error TH</translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="415"/>
         <source>Erreur zéro eau-air</source>
         <translation>Error zero water air</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="384"/>
+        <location filename="CWinMaintenanceControler.cpp" line="424"/>
         <source>RESULTATS ETALONNAGE SONDE</source>
         <translation>CALIBRATION PROBE RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="405"/>
+        <location filename="CWinMaintenanceControler.cpp" line="445"/>
         <source>BRINE + 25µg TEST</source>
         <translation>BRINE + 25µg TEST</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="482"/>
+        <location filename="CWinMaintenanceControler.cpp" line="522"/>
         <source>RESULTATS DU BLANC</source>
         <translation>BLANK RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="505"/>
+        <location filename="CWinMaintenanceControler.cpp" line="545"/>
         <source>RESULTATS MESURE PH</source>
         <translation>PH MEASURE RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="511"/>
+        <location filename="CWinMaintenanceControler.cpp" line="551"/>
         <source>BRINE + 75µg TEST</source>
         <translation>BRINE + 75µg TEST</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="516"/>
+        <location filename="CWinMaintenanceControler.cpp" line="557"/>
         <source>RESULTATS ETALONNAGE ZERO</source>
         <translation>CALIBRATION ZERO RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="547"/>
+        <location filename="CWinMaintenanceControler.cpp" line="558"/>
+        <source>Appareil à étalonner</source>
+        <translation>Device must be calibrated</translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="561"/>
+        <source>RESULTATS CALCUL PENTE</source>
+        <translation>SLOPE CALCUL RESULT</translation>
+    </message>
+    <message>
+        <location filename="CWinMaintenanceControler.cpp" line="598"/>
         <source>RESULTATS MESURE MANUELLE</source>
         <translation>MANUAL MEASURE RESULTS</translation>
     </message>
     <message>
-        <location filename="CWinMaintenanceControler.cpp" line="561"/>
+        <location filename="CWinMaintenanceControler.cpp" line="612"/>
         <source> (Av)</source>
         <translation>(Bf)</translation>
     </message>
@@ -1077,6 +1096,10 @@ before zero checking</translation>
     </message>
     <message>
         <location filename="CWinSchedulerView.cpp" line="114"/>
+        <source>Number of cycles before </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="CWinSchedulerView.cpp" line="129"/>
         <location filename="CWinSchedulerView.cpp" line="144"/>
         <location filename="CWinSchedulerView.cpp" line="159"/>
@@ -1090,7 +1113,6 @@ avant </source>
 before</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="114"/>
         <location filename="CWinSchedulerView.cpp" line="177"/>
         <source>
 (Si 0, pas de cyle de blanc)</source>
@@ -1102,95 +1124,95 @@ before</translation>
         <translation>Standard value</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="262"/>
+        <location filename="CWinSchedulerView.cpp" line="266"/>
         <source>CYCLES AUTO</source>
         <translation>AUTO. CYCLES</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="282"/>
-        <location filename="CWinSchedulerView.cpp" line="618"/>
+        <location filename="CWinSchedulerView.cpp" line="286"/>
+        <location filename="CWinSchedulerView.cpp" line="622"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="284"/>
-        <location filename="CWinSchedulerView.cpp" line="620"/>
+        <location filename="CWinSchedulerView.cpp" line="288"/>
+        <location filename="CWinSchedulerView.cpp" line="624"/>
         <source> Minutes</source>
         <translation>Minutes</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="284"/>
-        <location filename="CWinSchedulerView.cpp" line="620"/>
+        <location filename="CWinSchedulerView.cpp" line="288"/>
+        <location filename="CWinSchedulerView.cpp" line="624"/>
         <source> Minute</source>
         <translation>Minute</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="288"/>
-        <location filename="CWinSchedulerView.cpp" line="357"/>
-        <location filename="CWinSchedulerView.cpp" line="625"/>
+        <location filename="CWinSchedulerView.cpp" line="292"/>
+        <location filename="CWinSchedulerView.cpp" line="361"/>
+        <location filename="CWinSchedulerView.cpp" line="629"/>
         <source>Voie </source>
         <translation>Stream</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="290"/>
-        <location filename="CWinSchedulerView.cpp" line="627"/>
+        <location filename="CWinSchedulerView.cpp" line="294"/>
+        <location filename="CWinSchedulerView.cpp" line="631"/>
         <source> Cycles</source>
         <translation>Cycles</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="290"/>
-        <location filename="CWinSchedulerView.cpp" line="627"/>
+        <location filename="CWinSchedulerView.cpp" line="294"/>
+        <location filename="CWinSchedulerView.cpp" line="631"/>
         <source> Cycle</source>
         <translation>Cycle</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="296"/>
-        <location filename="CWinSchedulerView.cpp" line="634"/>
+        <location filename="CWinSchedulerView.cpp" line="300"/>
+        <location filename="CWinSchedulerView.cpp" line="639"/>
         <source>Ajouter</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="344"/>
+        <location filename="CWinSchedulerView.cpp" line="348"/>
         <source>SEQUENCEUR</source>
         <translation>SCHEDULER</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="358"/>
+        <location filename="CWinSchedulerView.cpp" line="362"/>
         <source> mesure </source>
         <translation> measure </translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="390"/>
+        <location filename="CWinSchedulerView.cpp" line="394"/>
         <source>SEUILS</source>
         <translation>THRESHOLD</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="466"/>
+        <location filename="CWinSchedulerView.cpp" line="470"/>
         <source>Jour :</source>
         <translation>Day :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="468"/>
+        <location filename="CWinSchedulerView.cpp" line="472"/>
         <source>Mois :</source>
         <translation>Month :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="470"/>
+        <location filename="CWinSchedulerView.cpp" line="474"/>
         <source>Année :</source>
         <translation>Year :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="484"/>
+        <location filename="CWinSchedulerView.cpp" line="488"/>
         <source>Heure :</source>
         <translation>Hour :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="486"/>
+        <location filename="CWinSchedulerView.cpp" line="490"/>
         <source>Minute :</source>
         <translation>Minute :</translation>
     </message>
     <message>
-        <location filename="CWinSchedulerView.cpp" line="501"/>
+        <location filename="CWinSchedulerView.cpp" line="505"/>
         <source>DATE/HEURE</source>
         <translation>DATE/TIME</translation>
     </message>

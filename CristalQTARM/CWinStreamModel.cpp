@@ -60,7 +60,7 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06cc");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06ce");
 	        
-    #elif defined(SONDE)
+    #elif defined(SONDE) && !defined(CYANURE)
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0601");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0602");
 			#ifdef RES_640_480
@@ -98,6 +98,30 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
 	        
 			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d2");
 			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d1");
+
+#elif defined(SONDE) && defined(CYANURE)
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0601");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0602");
+			#ifdef RES_640_480
+				listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0603");
+			#endif
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0606");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0607");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0608");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0609");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061f");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061a");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"060a");//listValuesNames.append("m_AnalogPlage");
+
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0417");//listValuesNames.append("m_AnalogPlage");
+			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0619");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0621");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06cc");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06cd");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"060b");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061b");//listValuesNames.append("m_AnalogPlage");
+	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061c");//listValuesNames.append("m_AnalogPlage");
+	        
     #elif defined(COULEUR)
             listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0601");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0602");
@@ -180,9 +204,9 @@ CWinStreamModel::CWinStreamModel(CSupervision* argoSupervision, CWinStreamView* 
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061c");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"061e");
 	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"0623");
-			listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d9");
-	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d6");
-	        listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d7");
+			//listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d9");
+	        //listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d6");
+	        //listValuesKey.append("0x0" + QString::number(i) +"0"+ QString::number(j) +"06d7");
 
     	    
     #endif

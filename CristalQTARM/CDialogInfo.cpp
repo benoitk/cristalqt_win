@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 59"
+#define NUM_VERSION_QT "4.0.7 build 65"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;
@@ -23,6 +23,9 @@ CDialogInfo::CDialogInfo()
     QString sTypeAnalyseur;
 #ifdef SONDE
     sTypeAnalyseur = "SONDE";
+#ifdef CYANURE 
+	sTypeAnalyseur = "CYANURE";
+#endif
 #elif defined(KMNO4)    
     sTypeAnalyseur = "KMNO4";
 #elif defined(TITRI)    
@@ -48,6 +51,10 @@ CDialogInfo::CDialogInfo()
 
 #if defined(PH)
     sTypeAnalyseur = "PH " + sTypeAnalyseur;
+#endif 
+
+#if defined(TAF)
+    sTypeAnalyseur = "TAF " + sTypeAnalyseur;
 #endif 
 
 #if defined(CHROME)

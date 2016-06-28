@@ -121,6 +121,7 @@ void CDialogAlarm::acquiter(bool arg_bAutoLog)
         for(int i=0; i<m_pSupervision->getAnalyseur()->iGetNbrStream(); ++i)
         {
             m_pSupervision->getAnalyseur()->pGetAt(i)->m_StatusFailure.bSetVal(0);
+			m_pSupervision->getAnalyseur()->pGetAt(i)->bSetAnalyserFailure = false;
             for(int j=0; j<m_pSupervision->getAnalyseur()->pGetAt(i)->iGetNbrMesure(); ++j)
                 m_pSupervision->getAnalyseur()->pGetAt(i)->pGetAt(j)->m_StatusFailure.bSetVal(0);
                 

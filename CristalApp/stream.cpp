@@ -34,6 +34,8 @@ CStream::CStream(BYTE ucNumVoie):CElemBase(),m_ListPeriodicHourCycleCleanup(24),
 	m_iNbrMesure = 0;
 	memset(&m_apMesure[0],0,sizeof(m_apMesure));
 	
+	bSetAnalyserFailure = false;
+
 	//Nom de la voie
 	m_StreamName.SetLabel(_T("m_StreamName"));;
 	m_StreamName.SetType(MAKE_ID(ucNumVoie,0xFF,eTYPE_TXT,eID_STREAM_NAME));
@@ -1325,6 +1327,8 @@ CElemList CListStream::m_ListMessageError(NBR_MSG_ERROR_MAX);
 
 CListStream::CListStream():CElemBase(),CThread(),m_ListSequenceNum(NBR_SEQUENCE_CYCLE_MAX),m_ListSequenceDuree(NBR_SEQUENCE_CYCLE_MAX)
 {
+
+	
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_LIST_VOIE,0xEF);
 	SetLabel(_T("CListStreamxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	m_CmdLoadNumConfig.SetLabel(_T("m_CmdLoadNumConfig"));;

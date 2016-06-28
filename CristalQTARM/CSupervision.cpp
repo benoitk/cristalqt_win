@@ -14,9 +14,7 @@ CSupervision::CSupervision()
 
 void CSupervision::setCarteIO(CCarteIO *argpCarteIO)
 {
-	
 	m_pIOCard = argpCarteIO;
-
 }
 
 void CSupervision::setAnalyseur(CAnalyseur *argpAnalyseur)

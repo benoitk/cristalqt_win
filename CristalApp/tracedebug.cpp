@@ -413,9 +413,9 @@ static bool _bInit = bInitLog();
 //EX : 	TRACE_DEBUG(eTypeMsg, __FILE__,__FUNCTION__,__LINE__,"    Nb decoded line   : %d \n", 0);
 void TRACE_DEBUG(int eTypeMsg,int eOrigineMsg,
 	LPCTSTR szFile,			// fichier source
-	LPCTSTR szFunction,			// fonction source
-	int			noLigne,			// numéro de la ligne de source
-	LPCTSTR	format, ... )		// format du message utilisateur
+	LPCTSTR szFunction,		// fonction source
+	int			noLigne,	// numéro de la ligne de source
+	LPCTSTR	format, ... )	// format du message utilisateur
 {
 	TCHAR		szFileName[MAX_PATH];
 	TCHAR		szTextInfo[1024];
@@ -545,7 +545,7 @@ void TRACE_DEBUG_IHM(int eTypeMsg,int eOrigineMsg, int eErrorCode, CElemInt8* ar
     {
 	    GetLocalTime(&stTime);
 	    _stprintf( szTextDebug 
-			     , _T(">LVL:%s ; ORIG:%s ; %04d/%02d/%02d ; %02d:%02d:%02d ; %s\r\n")
+			     , _T(">LVL:%s ; ORIG:%s ; %04d/%02d/%02d ; %02d:%02d:%02d ; %s @1@\r\n")
 			     , aszTypeMsgTrace[eTypeMsg]
 			     , aszOrigineMsgTrace[eOrigineMsg]
 			     , stTime.wYear,stTime.wMonth,stTime.wDay,stTime.wHour,stTime.wMinute,stTime.wSecond
@@ -934,9 +934,11 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 			break;
 		case 48:
 			// fonctionnement mode dégradé
-			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04803, argNumCurrentStream);	
+			if(verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04803, argNumCurrentStream))
+				argObjVoie->bSetAnalyserFailure = true;
 			// prévoir maintenance
-			verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04805, argNumCurrentStream);	
+			if(verifierDefaut(0x05, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg04805, argNumCurrentStream))
+				argObjVoie->bSetAnalyserFailure = true;	
 			break;
 		case 49:
 			// fonctionnement mode dégradé
@@ -1018,7 +1020,7 @@ void TRACE_DEBUG_MSG_TIME(WCHAR* argpszMessage, int iID)
 	OutputDebugString(szMessage);
 }
 
-void verifierDefaut(BYTE argcErrorToCheck, CStream* argObjVoie, int argiNumMesure, int argiNumPas, WCHAR* argpszMessage, int* argpIndexMessage, int argeError, CElemInt8* argNumCurrentStream)
+bool verifierDefaut(BYTE argcErrorToCheck, CStream* argObjVoie, int argiNumMesure, int argiNumPas, WCHAR* argpszMessage, int* argpIndexMessage, int argeError, CElemInt8* argNumCurrentStream)
 {
 	if(    (argObjVoie->pGetAt(argiNumMesure)->m_StatusFailure.ucGetVal() | argcErrorToCheck) 
 
@@ -1030,7 +1032,9 @@ void verifierDefaut(BYTE argcErrorToCheck, CStream* argObjVoie, int argiNumMesur
 									   , argiNumPas
 									   , _aszErrorText[argeError]);
 		TRACE_DEBUG_IHM(eError,eMesure,argeError, argNumCurrentStream);
+		return true;
 	}
+	return false;
 }
 
 
@@ -1098,7 +1102,7 @@ BOOL bEcrireFichierLog(WCHAR* argpszMessage, WCHAR* argpszFullPath, WCHAR* argps
 				      , 0
 					  , NULL
 					  , OPEN_ALWAYS
-					  , FILE_ATTRIBUTE_NORMAL
+					  , FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH
 					  , NULL);
 
 	if (hFile != INVALID_HANDLE_VALUE)

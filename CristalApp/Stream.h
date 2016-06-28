@@ -53,6 +53,8 @@ public:
 
 
 public:
+	bool bSetAnalyserFailure;
+
 	CElemBase m_StreamName;
 	CElemInt16 m_CycleTimeMax;					// durée max du cycle		 INUTILISE ==> variable dans CListStream
 	CElemInt16 m_CycleTimeCurrent;				// temps passé dans le cycle INUTILISE ==> variable dans CListStream

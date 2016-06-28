@@ -158,6 +158,6 @@ typedef enum eMsgErrorIHM {
 
 
 //Methode local
-void verifierDefaut(BYTE argcErrorToCheck, CStream* argObjVoie, int argiNumMesure, int argiNumPas, WCHAR* argpszMessage, int* argpIndexMessage, int argeError, CElemInt8* argNumCurrentStream);
+bool verifierDefaut(BYTE argcErrorToCheck, CStream* argObjVoie, int argiNumMesure, int argiNumPas, WCHAR* argpszMessage, int* argpIndexMessage, int argeError, CElemInt8* argNumCurrentStream);
 BOOL bEcrireFichierLog(WCHAR* argpszMessage, WCHAR* argpszFullPath, WCHAR* argpszFileName);
 void szBuildFileName(WCHAR* argszFileName, WCHAR* argszExt);
