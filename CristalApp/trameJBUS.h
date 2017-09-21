@@ -19,7 +19,7 @@ extern  WORD wCalculCRC16(BYTE* pucBuffer, long lSize);
 class  CElemTrameJbus : public CElemBase
 {
 public:
-	CElemTrameJbus();
+	CElemTrameJbus(CElemBase* parent);
 	virtual ~CElemTrameJbus();
 
 public:
@@ -53,7 +53,7 @@ protected:
 class  CElemTrameJbusReadBitsRQ_1_2: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusReadBitsRQ_1_2();
+	CElemTrameJbusReadBitsRQ_1_2(CElemBase* parent);
 	virtual ~CElemTrameJbusReadBitsRQ_1_2();
 
 public:
@@ -70,7 +70,7 @@ protected:
 class  CElemTrameJbusReadBitsRP_1_2: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusReadBitsRP_1_2();
+	CElemTrameJbusReadBitsRP_1_2(CElemBase* parent);
 	virtual ~CElemTrameJbusReadBitsRP_1_2();
 
 public:
@@ -97,7 +97,7 @@ protected:
 class  CElemTrameJbusReadWordsRQ_3_4: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusReadWordsRQ_3_4();
+	CElemTrameJbusReadWordsRQ_3_4(CElemBase* parent);
 	virtual ~CElemTrameJbusReadWordsRQ_3_4();
 
 public:
@@ -114,7 +114,7 @@ protected:
 class  CElemTrameJbusReadWordsRP_3_4: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusReadWordsRP_3_4();
+	CElemTrameJbusReadWordsRP_3_4(CElemBase* parent);
 	virtual ~CElemTrameJbusReadWordsRP_3_4();
 
 public:
@@ -141,7 +141,7 @@ protected:
 class  CElemTrameJbusWriteBit_5: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteBit_5();
+	CElemTrameJbusWriteBit_5(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteBit_5();
 
 public:
@@ -168,7 +168,7 @@ protected:
 class  CElemTrameJbusWriteWord_6: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteWord_6();
+	CElemTrameJbusWriteWord_6(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteWord_6();
 
 public:
@@ -195,7 +195,7 @@ protected:
 class  CElemTrameJbusWriteBitsRQ_15: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteBitsRQ_15();
+	CElemTrameJbusWriteBitsRQ_15(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteBitsRQ_15();
 
 public:
@@ -213,7 +213,7 @@ protected:
 class  CElemTrameJbusWriteBitsRP_15: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteBitsRP_15();
+	CElemTrameJbusWriteBitsRP_15(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteBitsRP_15();
 
 public:
@@ -241,7 +241,7 @@ protected:
 class  CElemTrameJbusWriteWordsRQ_16: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteWordsRQ_16();
+	CElemTrameJbusWriteWordsRQ_16(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteWordsRQ_16();
 
 public:
@@ -259,7 +259,7 @@ protected:
 class  CElemTrameJbusWriteWordsRP_16: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusWriteWordsRP_16();
+	CElemTrameJbusWriteWordsRP_16(CElemBase* parent);
 	virtual ~CElemTrameJbusWriteWordsRP_16();
 
 public:
@@ -288,7 +288,7 @@ protected:
 class  CElemTrameJbusSocket_20: public CElemTrameJbus
 {
 public:
-	CElemTrameJbusSocket_20();
+	CElemTrameJbusSocket_20(CElemBase* parent);
 	virtual ~CElemTrameJbusSocket_20();
 
 public:
@@ -315,7 +315,7 @@ protected:
 class  CElemExchangeJbus : public CElemBase
 {
 public:
-	CElemExchangeJbus();
+	CElemExchangeJbus(CElemBase* parent);
 	virtual ~CElemExchangeJbus();
 
 public:

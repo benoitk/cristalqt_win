@@ -631,18 +631,18 @@ void CWinMainView::dataUpdate()
     
     
 	//clignotage alarm
-	if(m_pModel->getEnAlarm())
-	{
-		m_btAlarm->setChecked(!m_btAlarm->isChecked());
-		m_pControler->cuteMeasureCard();
-		//qDebug() << "Alarm ON" ;
-	}
-	else
-	{
+	//if(m_pModel->getEnAlarm())
+	//{
+	//	m_btAlarm->setChecked(!m_btAlarm->isChecked());
+	//	m_pControler->cuteMeasureCard();
+	//	//qDebug() << "Alarm ON" ;
+	//}
+	//else
+	//{
 		m_btAlarm->setChecked(false);
 		//qDebug() << "Alarm OFF" ;
 
-	}
+	//}
 
 	if(m_pModel->getStatusWaterFailure(m_pModel->nGetCurrentStream()))
 		m_lblStatusWaterFailure->setText(tr("Défaut d'eau"));
@@ -707,17 +707,22 @@ void CWinMainView::dataUpdate()
     else
     {
 #ifdef KMNO4
-		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le blanc")) );
-		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le blanc")) );
+		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle(s) avant le blanc")) );
+		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle(s) avant le blanc")) );
 #elif defined SONDE
-		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycles before slope ctrl") );
-		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycles before slope ctrl") );
+		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycle(s) before slope ctrl") );
+		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(" cycle(s) before slope ctrl") );
 #else
-		m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le nettoyage")) );
-		m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le nettoyage")) );
+		// un seul cycle périodique est utilisable de cette façon. 
+		if(m_pModel->getNbCycleAvantBlanc().toInt() > 1){
+			m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycles avant le zéro")) );
+			m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycles avant le zéro")) );
+		} else {
+			m_lblCurrentStream->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le zéro")) );
+			m_lblCurrentStreamDiag->setText(m_pModel->getNbCycleAvantBlanc() + QString(tr(" cycle avant le zéro")) );
+		}
 #endif
     }
-
 
     m_lblCurrentStep->setText(QString(tr("Pas n°:")) + m_pModel->getCurrentStep());
 	m_lblTotalStep->setText(QString(tr("Sur :")) +m_pModel->getTotalStep());

@@ -97,7 +97,7 @@ CThread::CThread()
 //#ifndef TEST2
 //	InitializeCriticalSection(&m_hCriticalSection);
 //#endif
-	m_mutex = new QMutex();
+	//m_mutex = new QMutex();
 }
 
 void CThread::SetPause(BOOL bPause)

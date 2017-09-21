@@ -17,7 +17,7 @@
 #define ALL_POMPES_OFF_1 "ALL_POMPES_OFF_1"
 #define ALL_POMPES_OFF_2 "ALL_POMPES_OFF_2"
 
-CWinEVPompeModel::CWinEVPompeModel(CSupervision* argpSupervision)//, CWinEVPompeView* argpView)
+CWinEVPompeModel::CWinEVPompeModel(CSupervision* argpSupervision): m_cycleStep(NULL)//, CWinEVPompeView* argpView)
 {
 	qDebug() << "### Instance CWinEVPompeModel" << endl;
 	m_pSupervision = argpSupervision;

@@ -17,7 +17,7 @@
 *    Point de sortie
 ***********************************************************************@!)*/
 
-CSocketIHM::CSocketIHM():CSocketTcpServeur()
+CSocketIHM::CSocketIHM():CSocketTcpServeur(), m_ElemCycleStep(NULL)
 {
 	m_bNumInterface = NUM_INTERFACE_SOCKET_IHM;
 }

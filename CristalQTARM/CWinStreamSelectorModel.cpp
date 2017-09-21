@@ -11,7 +11,7 @@
 #define STREAM "STREAM_"
 
 
-CWinStreamSelectorModel::CWinStreamSelectorModel(CSupervision* argpSupervision)//, CWinEVPompeView* argpView)
+CWinStreamSelectorModel::CWinStreamSelectorModel(CSupervision* argpSupervision): m_cycleStep(NULL)//, CWinEVPompeView* argpView)
 {
 	qDebug() << "### Instance CWinStreamSelectorModel" << endl;
 	m_pSupervision = argpSupervision;

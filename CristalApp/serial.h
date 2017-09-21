@@ -4,7 +4,7 @@
 class CListStream;
 class CElemList;
 
-#define TIME_OUT_READ_RS232			500
+#define TIME_OUT_READ_RS232			1000
 ////////////////////////////////////////////////////////////////////////////
 // CSerialPort window
 class CSerialPort : public CThreadInterface

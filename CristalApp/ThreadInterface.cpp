@@ -102,13 +102,13 @@ BOOL CThreadInterface::bReadConfig(LPCTSTR pszFileName)
 {
 #ifndef TEST
 	m_bNumInterface = iGetPrivateProfileInt(_T("Config"), _T("m_bNumInterface"),m_bNumInterface, pszFileName); 
-	TRACE_LOG_MSG(_T("! m_bNumInterface !"));
+	//TRACE_LOG_MSG(_T("! m_bNumInterface !"));
 	m_bCanRead = iGetPrivateProfileInt(_T("Config"), _T("m_bCanRead"),m_bCanRead, pszFileName); 
-	TRACE_LOG_MSG(_T("! Cm_bCanReadonfig !"));
+	//TRACE_LOG_MSG(_T("! Cm_bCanReadonfig !"));
 	m_bCanWrite = iGetPrivateProfileInt(_T("Config"), _T("m_bCanWrite"),m_bCanWrite, pszFileName); 
-	TRACE_LOG_MSG(_T("! m_bCanWrite !"));
+	//TRACE_LOG_MSG(_T("! m_bCanWrite !"));
 	m_bModeInteger = iGetPrivateProfileInt(_T("Config"), _T("m_bModeInteger"),m_bModeInteger, pszFileName); 
-	TRACE_LOG_MSG(_T("! m_bModeInteger !"));
+	//TRACE_LOG_MSG(_T("! m_bModeInteger !"));
 #else
 	HANDLE hf  ;
 	long filelen = openFile(pszFileName, hf);

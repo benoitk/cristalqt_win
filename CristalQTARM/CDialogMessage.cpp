@@ -27,7 +27,6 @@ CDialogMessage::CDialogMessage()
 	layoutMain->addLayout(layoutMenu);
 	widgetDialog->setLayout(layoutMain);
 	
-	
 	QHBoxLayout* layout = new QHBoxLayout();
     layoutMain->setContentsMargins ( 0, 0, 0, 0 );
 	layout->addWidget(tabWidget);

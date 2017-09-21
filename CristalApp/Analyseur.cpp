@@ -18,8 +18,9 @@
 *    Point de sortie
 ***********************************************************************@!)*/
 
-CAnalyseur::CAnalyseur():CListStream()
+CAnalyseur::CAnalyseur():m_parentAnalyseur(NULL), CListStream(&m_parentAnalyseur)
 {
+	m_parentAnalyseur.SetLabel(_T("Analyseur"));
 }
 
 
@@ -37,7 +38,7 @@ CAnalyseur::~CAnalyseur()
 //DWORD CAnalyseur::RunThread()
 void CAnalyseur::run()
 {
-	TRACE_LOG_MSG(_T("CAnalyseur::run() !"));	
+	//TRACE_LOG_MSG(_T("CAnalyseur::run() !"));	
 
 #define BREAK_NBR		9999
 	//int i;
@@ -373,6 +374,14 @@ void CAnalyseur::run()
 								m_bStatusFailure.bSetVal(1);
 							}
 							
+
+							//si gain d'une mesure à 255 ou 0 : remonter sur defaut général
+							for(int index=0; index<pStream->iGetNbrMesure(); ++index){
+								if(   pStream->pGetAt(index)->m_OpticalGain.nGetVal() >= 255
+								   || pStream->pGetAt(index)->m_OpticalGain.nGetVal() <= 0)
+									m_bStatusFailure.bSetVal(1);
+							}
+
 							//Si le cycle a été arrété, ne pas faire de trace de mesure ou qu'un cycle est en défaut (eau, température, etc ...)ou voie inactive
 							if(m_CmdRun.ucGetVal() && (m_CmdJumpStep.nGetVal()!=9999) && pStream->m_Active.ucGetVal())
 							{				

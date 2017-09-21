@@ -26,7 +26,7 @@ CSerialPort::CSerialPort():CThreadInterface()
 	m_nNumPort = 0;
 	memset(&m_DCB,0,sizeof(m_DCB));
 	m_lOffsetBuffer = 0;
-	m_pListExchange = new CElemList(NBR_EXCHANGE_JBUS_MAX);
+	m_pListExchange = new CElemList(NBR_EXCHANGE_JBUS_MAX, NULL);
 }
 
 
@@ -58,10 +58,10 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 
 	bReturn = CThreadInterface::bReadConfig(pszFileName);
 #ifndef TEST
-	TRACE_LOG_MSG(_T("! CThreadInterface::bReadConfig !"));
+	//TRACE_LOG_MSG(_T("! CThreadInterface::bReadConfig !"));
 	// taille du buffer
 	lSizeDataMax = iGetPrivateProfileInt(_T("Config"),_T("m_lSizeDataMax"),1024,pszFileName);
-	TRACE_LOG_MSG(_T("! m_lSizeDataMax !"));
+	//TRACE_LOG_MSG(_T("! m_lSizeDataMax !"));
 
 	if (lSizeDataMax > 0)
 	{
@@ -75,36 +75,36 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 		}
 		m_lSizeDataMax = lSizeDataMax;
 	}
-	TRACE_LOG_MSG(_T("! if (m_pRxBuffer == NULL) !"));
+	//TRACE_LOG_MSG(_T("! if (m_pRxBuffer == NULL) !"));
 
 	// port com
 	m_nNumPort = iGetPrivateProfileInt(_T("Config"),_T("m_nNumPort"),m_nNumPort,pszFileName);
-	TRACE_LOG_MSG(_T("! m_nNumPort !"));
+	//TRACE_LOG_MSG(_T("! m_nNumPort !"));
 	m_DCB.DCBlength = sizeof(DCB);
-	TRACE_LOG_MSG(_T("! sizeof(DCB) !"));
+	//TRACE_LOG_MSG(_T("! sizeof(DCB) !"));
 	memset(&m_DCB,0,sizeof(m_DCB));
-	TRACE_LOG_MSG(_T("! memset !"));
+	//TRACE_LOG_MSG(_T("! memset !"));
 #ifdef _WIN32_WCE
 	_stprintf( szPort, _T("COM%d:"), m_nNumPort );
 #else
 	_stprintf( szPort, _T("\\\\.\\COM%d"), m_nNumPort );
 #endif
-	TRACE_LOG_MSG(_T("! szPort !"));
+	//TRACE_LOG_MSG(_T("! szPort !"));
 	m_hTTY = CreateFile( szPort, GENERIC_READ | GENERIC_WRITE,0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_SYSTEM/*FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED*/, NULL );
-	TRACE_LOG_MSG(_T("! CreateFile !"));
+	//TRACE_LOG_MSG(_T("! CreateFile !"));
 	if (m_hTTY != INVALID_HANDLE_VALUE)
 	{
 		GetCommState( m_hTTY, &m_DCB );
 		CloseHandle(m_hTTY);
 		m_hTTY = INVALID_HANDLE_VALUE;
-		TRACE_LOG_MSG(_T("! CreateFile  ok!"));
+		//TRACE_LOG_MSG(_T("! CreateFile  ok!"));
 	}
 	else
 	{
 		TRACE_DEBUG_LAST_ERROR(eDebug,eConfig,GetLastError());
 		TRACE_LOG_MSG(_T("! CreateFile fail!"));
 	}
-	TRACE_LOG_MSG(_T("! m_hTTY !"));
+	//TRACE_LOG_MSG(_T("! m_hTTY !"));
 	m_DCB.BaudRate = iGetPrivateProfileInt(_T("Com"), _T("BaudRate"),m_DCB.BaudRate, pszFileName);
 	m_DCB.ByteSize = iGetPrivateProfileInt(_T("Com"), _T("ByteSize"), m_DCB.ByteSize, pszFileName);
 	m_DCB.Parity = iGetPrivateProfileInt(_T("Com"), _T("Parity"), m_DCB.Parity, pszFileName);
@@ -131,7 +131,7 @@ BOOL CSerialPort::bReadConfig(LPCTSTR pszFileName)
 	m_DCB.wReserved = 0;
 	m_DCB.EofChar = iGetPrivateProfileInt(_T("Com"), _T("EofChar"), m_DCB.EofChar, pszFileName);//'\n';
 	m_DCB.EvtChar = iGetPrivateProfileInt(_T("Com"), _T("EvtChar"), m_DCB.EvtChar, pszFileName);//'\r'; 
-	TRACE_LOG_MSG(_T("! all DCB !"));
+	//TRACE_LOG_MSG(_T("! all DCB !"));
 #else
 	HANDLE hf  ;
 	long filelen = openFile(pszFileName, hf);
@@ -408,10 +408,10 @@ BOOL CSerialPort::bRead(BYTE* lpData,long lSizeDataMax,long *plNbrLu,BOOL bByPas
 
 BOOL CSerialPort::bWriteAndRead(long lExtraHeader,BYTE* pBufferWrite,long iSizeToWrite,BYTE* pBufferRead, long iSizeToRead,long iSizeToReadMax, long *piSizeRead,BOOL bByPass)
 {
-    QMutexLocker locker(m_mutex);
+    QMutexLocker locker(&m_mutex);
 	BOOL bReturn = FALSE;
 
-	//EnterCriticalSection(&m_hCriticalSection);
+	//EnterCriticalSection(&m_hCriticalSection); //remplacé par QMutexLocker
 	
 	PurgeComm( m_hTTY, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR );
 	
@@ -445,7 +445,7 @@ BOOL CSerialPort::bWriteAndRead(long lExtraHeader,BYTE* pBufferWrite,long iSizeT
 		m_lNbrErrCom++;
 	}
 
-//	LeaveCriticalSection(&m_hCriticalSection);
+	//LeaveCriticalSection(&m_hCriticalSection);
 	
 	if (!bReturn && ( m_iNbrErrRead>3 || m_iNbrErrRead>3 ))
 	{
@@ -482,7 +482,7 @@ BOOL CSerialPort::bAddExchangeJbus(LPTSTR pszRQ,LPTSTR pszRP,CListStream *pListS
 	CElemExchangeJbus *pExchangeJbus = NULL;
 	int iCurrentPos;
 
-	if (pExchangeJbus = new CElemExchangeJbus())
+	if (pExchangeJbus = new CElemExchangeJbus(NULL))
 	{
 		_stprintf(szText,_T("Requete perif : %d"), m_pListExchange->iGetCount()+1);
 		pExchangeJbus->SetLabel(szText);

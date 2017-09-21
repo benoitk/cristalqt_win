@@ -15,7 +15,69 @@
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(NBR_COEFF_LINEAR),m_ListMesureMoy(NBR_MESURE_MOY),m_ListRealtimeData(NBR_REALTIME_DATA)
+CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure, CElemBase* parent):CElemBase(parent),m_ListCoeffLinear(NBR_COEFF_LINEAR, this),m_ListMesureMoy(NBR_MESURE_MOY, this),m_ListRealtimeData(NBR_REALTIME_DATA, this)
+     ,m_Val(this)
+	 ,m_ValMax(this)
+	 ,m_ValMin(this)
+	 ,m_StatusFailure(this)
+	 ,m_Threshold1(this)
+	 ,m_Threshold2(this)
+	 ,m_StatusThreshold1(this)
+	 ,m_StatusThreshold2(this)
+	 ,m_AnalogZero(this)
+	 ,m_AnalogPlage(this)
+	 ,m_CalibCoeff(this)
+	 ,m_CalibZeroWater(this)
+	 ,m_CalibZeroAir(this)
+	 ,m_CalibStatusCoeff(this)
+	 ,m_CalibStatusZero(this)
+	 ,m_SettingThreshold(this)
+	 ,m_ValJbusSlave(this)
+	 ,m_CoeffValJbusSlave(this)
+	 ,m_ValAna(this)
+	 ,m_ValMaxConvertisseur(this)
+	 ,m_ValMinConvertisseur(this)
+	 ,m_OpticalGain(this)
+	 ,m_ZeroOpticalMeasurement(this)
+	 ,m_AbsorbanceValue(this)
+	 ,m_StandardValueBefore(this)
+	 ,m_StandardValueAfter(this)
+	 ,m_CalibCoeffNew(this)
+	 ,m_OpticalMeasurement(this)
+	 ,m_AbsorbanceReference(this)
+	 ,m_RawConcentration(this)
+	 ,m_CorrectedAbsorbance(this)
+	 ,m_RealAbsorbance(this)
+	 ,m_Delta(this)
+	 ,m_CalibZeroWaterNew(this)
+     ,m_NumProgram(this)
+	 ,m_AirSetPointAdjustement(this)
+	 ,m_AirRefMeasureRedrSync(this)
+	 ,m_AirWaterFlag(this)
+	 ,m_RefBaseline(this)
+	 ,m_Water90(this)
+	 ,m_Turbidity90(this)
+	 ,m_TurbidityFinal(this)
+	 ,m_TurbidityCoef(this)
+	 ,m_TurbidityStandard(this)
+	 ,m_AirOpticalGain(this)
+	 ,m_AirRedrSync(this)
+	 ,m_AbsorbanceTurbidity180(this)
+	 ,m_AbsorbanceCorrected(this)
+	 ,m_OpticalGain90(this)
+	 ,m_CourantLedColo(this)
+	 ,m_MeasureSetByLed(this)
+	 ,m_Turbidity(this)
+	 ,m_Temperature(this)
+	 ,m_ZeroStandard(this)
+	 ,m_CoefDilution(this)
+	 ,m_CoefAjustement(this)
+
+	 ,m_StatusSonde(this)
+	 ,m_StatusConcentration(this)
+	 ,m_AlarmDelta(this)
+	 ,m_AlarmDelta2(this)
+	 ,m_SommeMesure(this)
 {
 	m_iType = MAKE_ID(ucNumVoie,ucNumMesure,eTYPE_MESURE,0xFF);
 	SetLabel(_T("CMesure"));
@@ -262,7 +324,69 @@ CMesure::CMesure(BYTE ucNumVoie,BYTE ucNumMesure):CElemBase(),m_ListCoeffLinear(
 	m_iCompteurMesure = 0;
 }
 
-CMesure::CMesure():CElemBase(),m_ListCoeffLinear(NBR_COEFF_LINEAR),m_ListMesureMoy(NBR_MESURE_MOY),m_ListRealtimeData(NBR_REALTIME_DATA)
+CMesure::CMesure(CElemBase* parent):CElemBase(parent),m_ListCoeffLinear(NBR_COEFF_LINEAR, this),m_ListMesureMoy(NBR_MESURE_MOY, this),m_ListRealtimeData(NBR_REALTIME_DATA, this)
+,m_Val(this)
+	 ,m_ValMax(this)
+	 ,m_ValMin(this)
+	 ,m_StatusFailure(this)
+	 ,m_Threshold1(this)
+	 ,m_Threshold2(this)
+	 ,m_StatusThreshold1(this)
+	 ,m_StatusThreshold2(this)
+	 ,m_AnalogZero(this)
+	 ,m_AnalogPlage(this)
+	 ,m_CalibCoeff(this)
+	 ,m_CalibZeroWater(this)
+	 ,m_CalibZeroAir(this)
+	 ,m_CalibStatusCoeff(this)
+	 ,m_CalibStatusZero(this)
+	 ,m_SettingThreshold(this)
+	 ,m_ValJbusSlave(this)
+	 ,m_CoeffValJbusSlave(this)
+	 ,m_ValAna(this)
+	 ,m_ValMaxConvertisseur(this)
+	 ,m_ValMinConvertisseur(this)
+	 ,m_OpticalGain(this)
+	 ,m_ZeroOpticalMeasurement(this)
+	 ,m_AbsorbanceValue(this)
+	 ,m_StandardValueBefore(this)
+	 ,m_StandardValueAfter(this)
+	 ,m_CalibCoeffNew(this)
+	 ,m_OpticalMeasurement(this)
+	 ,m_AbsorbanceReference(this)
+	 ,m_RawConcentration(this)
+	 ,m_CorrectedAbsorbance(this)
+	 ,m_RealAbsorbance(this)
+	 ,m_Delta(this)
+	 ,m_CalibZeroWaterNew(this)
+     ,m_NumProgram(this)
+	 ,m_AirSetPointAdjustement(this)
+	 ,m_AirRefMeasureRedrSync(this)
+	 ,m_AirWaterFlag(this)
+	 ,m_RefBaseline(this)
+	 ,m_Water90(this)
+	 ,m_Turbidity90(this)
+	 ,m_TurbidityFinal(this)
+	 ,m_TurbidityCoef(this)
+	 ,m_TurbidityStandard(this)
+	 ,m_AirOpticalGain(this)
+	 ,m_AirRedrSync(this)
+	 ,m_AbsorbanceTurbidity180(this)
+	 ,m_AbsorbanceCorrected(this)
+	 ,m_OpticalGain90(this)
+	 ,m_CourantLedColo(this)
+	 ,m_MeasureSetByLed(this)
+	 ,m_Turbidity(this)
+	 ,m_Temperature(this)
+	 ,m_ZeroStandard(this)
+	 ,m_CoefDilution(this)
+	 ,m_CoefAjustement(this)
+
+	 ,m_StatusSonde(this)
+	 ,m_StatusConcentration(this)
+	 ,m_AlarmDelta(this)
+	 ,m_AlarmDelta2(this)
+	 ,m_SommeMesure(this)
 {
 }
 
@@ -535,17 +659,17 @@ BOOL CMesure::bReadConfig(int iNumStream, int iNumMesure, LPCTSTR pszFileName,HA
 	m_SettingThreshold.bSetConfig(szText);
 
 	// coeff linearisation
-	for (i = 0; i < NBR_COEFF_LINEAR;i++) m_ListCoeffLinear.pAdd(new CElemFloat());
+	for (i = 0; i < NBR_COEFF_LINEAR;i++) m_ListCoeffLinear.pAdd(new CElemFloat(this));
 	_stprintf(szText2,_T("0x%08x|m_ListCoeffLinear|1.0|2.0|3.0|4.0|5.0|6.0|7.0|8.0|9.0|10.0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_COEFF_LINEAR));
 	dwGetPrivateProfileString(szRub,_T("m_ListCoeffLinear"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_ListCoeffLinear.bSetConfig(szText);
 	// liste des moyennes
-	for (i = 0; i < NBR_MESURE_MOY;i++) m_ListMesureMoy.pAdd(new CElemFloat());
+	for (i = 0; i < NBR_MESURE_MOY;i++) m_ListMesureMoy.pAdd(new CElemFloat(this));
 	_stprintf(szText2,_T("0x%08x|m_ListMesureMoy|0|0|0|0|0|0|0|0|0|0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_MOYENNE));
 	dwGetPrivateProfileString(szRub,_T("m_ListMesureMoy"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_ListMesureMoy.bSetConfig(szText);
 	// données temps-reels
-	for (i = 0; i < NBR_REALTIME_DATA;i++) m_ListRealtimeData.pAdd(new CElemFloat());
+	for (i = 0; i < NBR_REALTIME_DATA;i++) m_ListRealtimeData.pAdd(new CElemFloat(this));
 	_stprintf(szText2,_T("0x%08x|m_ListRealtimeData|1.0|2.0|3.0|4.0|5.0|6.0|7.0|8.0|9.0|10.0"),MAKE_ID(iNumStream, iNumMesure,eTYPE_LIST,eID_MESURE_LIST_REALTIMEDATA));
 	dwGetPrivateProfileString(szRub,_T("m_ListRealtimeData"),szText2,szText,sizeof(szText)/sizeof(TCHAR),pszFileName);
 	m_ListRealtimeData.bSetConfig(szText);

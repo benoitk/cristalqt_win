@@ -25,6 +25,8 @@ public:
 	CElemList m_ListDataCanRead;
 	CElemList m_ListDataCanWrite;
 
+	CElemBase m_parentCarteJBus;
+
 protected:
 	virtual long lDispatchTrame(BYTE* lpData,long lSizeTotal);
 #ifdef TEST

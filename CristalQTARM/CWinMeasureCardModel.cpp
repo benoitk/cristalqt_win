@@ -20,7 +20,7 @@
 #define ORGANNE_LOCAL_ON "ORGANNE_LOCAL_ON"
 #define ORGANNE_LOCAL_OFF "ORGANNE_LOCAL_OFF"
 
-CWinMeasureCardModel::CWinMeasureCardModel(CSupervision* argpSupervision)//, CWinMeasureCardView* argpView)
+CWinMeasureCardModel::CWinMeasureCardModel(CSupervision* argpSupervision): m_cycleStep(NULL)//, CWinMeasureCardView* argpView)
 {
 	
 	m_pSupervision = argpSupervision;

@@ -31,6 +31,7 @@ protected:
     //virtual DWORD RunThread();
 
 public:
+	CElemBase m_parentCarteIO;
 	CElemCycleStep m_ElemCycleStep;
 protected:
 	DWORD m_dwDelay;

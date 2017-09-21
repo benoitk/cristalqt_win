@@ -2,7 +2,7 @@
 #include "network.h"
 
 
-
+#include <QDebug>
 //========================================================================
 //=== Fonction	: CalculeCrc16Msg
 //=== Paramètres passés	: Chaine d octet dont on veut le CRC16
@@ -58,8 +58,10 @@ WORD wCalculCRC16(BYTE* pucBuffer, long lSize)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbus::CElemTrameJbus(): CElemBase(),m_ListParams(NBR_PARAM_MAX)
+CElemTrameJbus::CElemTrameJbus(CElemBase* parent): CElemBase(parent),m_ListParams(NBR_PARAM_MAX, this)
+, m_NumDest(this), m_CodeFct(this), m_CRC16(this)
 {
+
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_JBUS_TRAME,0xFF);
 	SetLabel(_T("CElemTrameJbus"));
 }
@@ -205,7 +207,9 @@ BOOL CElemTrameJbus::bAccessAllowed(BOOL bCanRead,BOOL bCanWrite)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusReadBitsRQ_1_2::CElemTrameJbusReadBitsRQ_1_2(): CElemTrameJbus()
+CElemTrameJbusReadBitsRQ_1_2::CElemTrameJbusReadBitsRQ_1_2(CElemBase* parent): CElemTrameJbus(parent)
+		,m_StartAddr(this)
+		,m_NbrBits(this)
 {
 	SetLabel(_T("CElemTrameJbusReadBitsRQ_1_2"));
 }
@@ -308,7 +312,7 @@ LPTSTR CElemTrameJbusReadBitsRQ_1_2::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusReadBitsRP_1_2::CElemTrameJbusReadBitsRP_1_2(): CElemTrameJbus()
+CElemTrameJbusReadBitsRP_1_2::CElemTrameJbusReadBitsRP_1_2(CElemBase* parent): CElemTrameJbus(parent), m_NbrBytes(this)
 {
 	SetLabel(_T("CElemTrameJbusReadBitsRP_1_2"));
 }
@@ -379,7 +383,7 @@ BOOL CElemTrameJbusReadBitsRP_1_2::bSetConfig(LPTSTR pszText,int &iCurrentPos,CL
 			pcToken = _tcstok( NULL, szSeps ); 
 			for (i = 0;bReturn && (pcToken != NULL) && (i < m_NbrBytes.ucGetVal());i++)
 			{
-				pElemFieldBit8 = (CElemFieldBit8 *)m_ListParams.pAdd(new CElemFieldBit8());
+				pElemFieldBit8 = (CElemFieldBit8 *)m_ListParams.pAdd(new CElemFieldBit8(this));
 				bReturn = (pElemFieldBit8 != NULL);
 				if (bReturn)
 				{
@@ -403,7 +407,7 @@ BOOL CElemTrameJbusReadBitsRP_1_2::bSetConfig(LPTSTR pszText,int &iCurrentPos,CL
 							}
 							else
 							{
-								pElem = new CElemInt8();
+								pElem = new CElemInt8(this);
 								bReturn = (pElem != NULL);
 								if (bReturn)
 								{
@@ -495,7 +499,9 @@ LPTSTR CElemTrameJbusReadBitsRP_1_2::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusReadWordsRQ_3_4::CElemTrameJbusReadWordsRQ_3_4(): CElemTrameJbus()
+CElemTrameJbusReadWordsRQ_3_4::CElemTrameJbusReadWordsRQ_3_4(CElemBase* parent): CElemTrameJbus(parent),
+				m_StartAddr(this),
+				m_NbrWords(this)
 {
 	SetLabel(_T("CElemTrameJbusReadWordsRQ_3_4"));
 }
@@ -599,7 +605,7 @@ LPTSTR CElemTrameJbusReadWordsRQ_3_4::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusReadWordsRP_3_4::CElemTrameJbusReadWordsRP_3_4(): CElemTrameJbus()
+CElemTrameJbusReadWordsRP_3_4::CElemTrameJbusReadWordsRP_3_4(CElemBase* parent): CElemTrameJbus(parent), m_NbrBytes(this)
 {
 	SetLabel(_T("CElemTrameJbusReadWordsRP_3_4"));
 }
@@ -618,8 +624,16 @@ BOOL CElemTrameJbusReadWordsRP_3_4::bSerialize(CContext &Context)
 	BOOL bForceWord = Context.bGetForceWord();
 	bReturn = CElemTrameJbus::bSerialize(Context);
 	if (bReturn) bReturn = m_NbrBytes.bSerialize(Context);
+
 	// vérification nbr demandé == nbr configuré
 	Context.SetForceWord(TRUE);
+	
+	//TEST
+	/*BYTE val1 = m_NbrBytes.ucGetVal();
+	BYTE val2 = m_ListParams.iGetStreamSize(Context);
+	qDebug() << "val1 : " << val1<< "val 2 : " << val2;*/
+	//
+
 	if (bReturn) bReturn = (m_NbrBytes.ucGetVal() == (m_ListParams.iGetStreamSize(Context)/*m_ListParams.iGetCount()*2*/));//2009_06_25
 	if (bReturn) bReturn = m_ListParams.bSerialize(Context);
 	Context.SetForceWord(bForceWord);
@@ -685,7 +699,7 @@ BOOL CElemTrameJbusReadWordsRP_3_4::bSetConfig(LPTSTR pszText,int &iCurrentPos,C
 				}
 				else // c'est une valeur
 				{
-					pElem = new CElemInt16();
+					pElem = new CElemInt16(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -763,7 +777,7 @@ LPTSTR CElemTrameJbusReadWordsRP_3_4::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteBit_5::CElemTrameJbusWriteBit_5(): CElemTrameJbus()
+CElemTrameJbusWriteBit_5::CElemTrameJbusWriteBit_5(CElemBase* parent): CElemTrameJbus(parent), m_StartAddr(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteBit_5"));
 }
@@ -845,7 +859,7 @@ BOOL CElemTrameJbusWriteBit_5::bSetConfig(LPTSTR pszText,int &iCurrentPos,CListS
 				}
 				else // c'est une valeur
 				{
-					pElem = new CElemInt8();
+					pElem = new CElemInt8(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -860,7 +874,7 @@ BOOL CElemTrameJbusWriteBit_5::bSetConfig(LPTSTR pszText,int &iCurrentPos,CListS
 				// le zero pour terminer
 				if (bReturn)
 				{
-					bReturn = (m_ListParams.pAdd(new CElemInt8()) != NULL);
+					bReturn = (m_ListParams.pAdd(new CElemInt8(this)) != NULL);
 				}
 			}
 		}
@@ -922,7 +936,7 @@ LPTSTR CElemTrameJbusWriteBit_5::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteWord_6::CElemTrameJbusWriteWord_6(): CElemTrameJbus()
+CElemTrameJbusWriteWord_6::CElemTrameJbusWriteWord_6(CElemBase* parent): CElemTrameJbus(parent), m_StartAddr(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteWord_6"));
 }
@@ -1004,7 +1018,7 @@ BOOL CElemTrameJbusWriteWord_6::bSetConfig(LPTSTR pszText,int &iCurrentPos,CList
 				}
 				else // c'est une valeur
 				{
-					pElem = new CElemInt16();
+					pElem = new CElemInt16(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -1076,7 +1090,10 @@ LPTSTR CElemTrameJbusWriteWord_6::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteBitsRQ_15::CElemTrameJbusWriteBitsRQ_15(): CElemTrameJbus()
+CElemTrameJbusWriteBitsRQ_15::CElemTrameJbusWriteBitsRQ_15(CElemBase* parent): CElemTrameJbus(parent)
+						,m_StartAddr(this)
+						,m_NbrBits(this)
+						,m_NbrBytes(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteBitsRQ_15"));
 }
@@ -1164,7 +1181,7 @@ BOOL CElemTrameJbusWriteBitsRQ_15::bSetConfig(LPTSTR pszText,int &iCurrentPos,CL
 				pcToken = _tcstok( NULL, szSeps ); 
 				for (i = 0;bReturn && (pcToken != NULL) && (i < m_NbrBits.nGetVal());)
 				{
-					pElemFieldBit8 = (CElemFieldBit8 *)m_ListParams.pAdd(new CElemFieldBit8());
+					pElemFieldBit8 = (CElemFieldBit8 *)m_ListParams.pAdd(new CElemFieldBit8(this));
 					bReturn = (pElemFieldBit8 != NULL);
 					if (bReturn)
 					{
@@ -1184,7 +1201,7 @@ BOOL CElemTrameJbusWriteBitsRQ_15::bSetConfig(LPTSTR pszText,int &iCurrentPos,CL
 								}
 								else
 								{
-									pElem = new CElemInt8();
+									pElem = new CElemInt8(this);
 									bReturn = (pElem != NULL);
 									if (bReturn)
 									{
@@ -1275,7 +1292,9 @@ LPTSTR CElemTrameJbusWriteBitsRQ_15::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteBitsRP_15::CElemTrameJbusWriteBitsRP_15(): CElemTrameJbus()
+CElemTrameJbusWriteBitsRP_15::CElemTrameJbusWriteBitsRP_15(CElemBase* parent): CElemTrameJbus(parent)
+				,m_StartAddr(this)
+				,m_NbrBits(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteBitsRP_15"));
 }
@@ -1392,7 +1411,10 @@ LPTSTR CElemTrameJbusWriteBitsRP_15::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteWordsRQ_16::CElemTrameJbusWriteWordsRQ_16(): CElemTrameJbus()
+CElemTrameJbusWriteWordsRQ_16::CElemTrameJbusWriteWordsRQ_16(CElemBase* parent): CElemTrameJbus(parent)
+					,m_StartAddr(this)
+					,m_NbrWords(this)
+					,m_NbrBytes(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteWordsRQ_16"));
 }
@@ -1500,7 +1522,7 @@ BOOL CElemTrameJbusWriteWordsRQ_16::bSetConfig(LPTSTR pszText,int &iCurrentPos,C
 				}
 				else // c'est une valeur
 				{
-					pElem = new CElemInt16();
+					pElem = new CElemInt16(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -1576,7 +1598,9 @@ LPTSTR CElemTrameJbusWriteWordsRQ_16::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusWriteWordsRP_16::CElemTrameJbusWriteWordsRP_16(): CElemTrameJbus()
+CElemTrameJbusWriteWordsRP_16::CElemTrameJbusWriteWordsRP_16(CElemBase* parent): CElemTrameJbus(parent)
+				,m_StartAddr(this)
+				,m_NbrWords(this)
 {
 	SetLabel(_T("CElemTrameJbusWriteWordsRP_16"));
 }
@@ -1694,7 +1718,7 @@ LPTSTR CElemTrameJbusWriteWordsRP_16::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemTrameJbusSocket_20::CElemTrameJbusSocket_20(): CElemTrameJbus()
+CElemTrameJbusSocket_20::CElemTrameJbusSocket_20(CElemBase* parent): CElemTrameJbus(parent), m_NbrParams(this)
 {
 	SetLabel(_T("CElemTrameJbusSocket_20"));
 }
@@ -1791,7 +1815,7 @@ BOOL CElemTrameJbusSocket_20::bSetConfig(LPTSTR pszText,int &iCurrentPos,CListSt
 				}
 				else // c'est une valeur
 				{
-					pElem = new CElemFloat();
+					pElem = new CElemFloat(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -1864,7 +1888,7 @@ LPTSTR CElemTrameJbusSocket_20::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemExchangeJbus::CElemExchangeJbus() : CElemBase()
+CElemExchangeJbus::CElemExchangeJbus(CElemBase* parent) : CElemBase(parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_JBUS_EXCHANGE,0xFF);
 	SetLabel(_T("CElemExchangeJbus"));
@@ -1911,7 +1935,7 @@ int CElemExchangeJbus::iGetStreamSize(CContext &Context)
 int CElemExchangeJbus::iGetNumFunction(LPTSTR pszText)
 {
 	TCHAR szTemp[MAX_PATH];
-	CElemInt8 CodeFunc;
+	CElemInt8 CodeFunc(this);
 	int i = 0;
 
 	szTemp[0] = 0;
@@ -1959,40 +1983,40 @@ BOOL CElemExchangeJbus::bSetConfig(BOOL bIsRQ, LPTSTR szText,int &iCurrentPos,CL
 	{
 	case 1:
 	case 2:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusReadBitsRQ_1_2();
-		else m_pTrameJbusRP = new CElemTrameJbusReadBitsRP_1_2();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusReadBitsRQ_1_2(this);
+		else m_pTrameJbusRP = new CElemTrameJbusReadBitsRP_1_2(this);
 		break;
 
 	case 3:
 	case 4:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusReadWordsRQ_3_4();
-		else m_pTrameJbusRP = new CElemTrameJbusReadWordsRP_3_4();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusReadWordsRQ_3_4(this);
+		else m_pTrameJbusRP = new CElemTrameJbusReadWordsRP_3_4(this);
 		break;
 
 	case 5:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteBit_5();
-		else m_pTrameJbusRP = new CElemTrameJbusWriteBit_5();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteBit_5(this);
+		else m_pTrameJbusRP = new CElemTrameJbusWriteBit_5(this);
 		break;
 
 	case 6:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteWord_6();
-		else m_pTrameJbusRP = new CElemTrameJbusWriteWord_6();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteWord_6(this);
+		else m_pTrameJbusRP = new CElemTrameJbusWriteWord_6(this);
 		break;
 
 	case 15:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteBitsRQ_15();
-		else m_pTrameJbusRP = new CElemTrameJbusWriteBitsRP_15();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteBitsRQ_15(this);
+		else m_pTrameJbusRP = new CElemTrameJbusWriteBitsRP_15(this);
 		break;
 
 	case 16:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteWordsRQ_16();
-		else m_pTrameJbusRP = new CElemTrameJbusWriteWordsRP_16();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusWriteWordsRQ_16(this);
+		else m_pTrameJbusRP = new CElemTrameJbusWriteWordsRP_16(this);
 		break;
 
 	case 20:
 	case 21:
-		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusSocket_20();
-		else m_pTrameJbusRP = new CElemTrameJbusSocket_20();
+		if (bIsRQ) m_pTrameJbusRQ = new CElemTrameJbusSocket_20(this);
+		else m_pTrameJbusRP = new CElemTrameJbusSocket_20(this);
 		break;
 
 	default:

@@ -18,8 +18,8 @@
 class  CMesure : public CElemBase
 {
 public:
-	CMesure(BYTE ucNumVoie,BYTE ucNumMesure);
-	CMesure();
+	CMesure(BYTE ucNumVoie,BYTE ucNumMesure, CElemBase* parent);
+	CMesure(CElemBase* parent);
 	virtual ~CMesure();
 
 public:

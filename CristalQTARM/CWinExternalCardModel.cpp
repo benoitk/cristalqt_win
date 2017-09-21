@@ -15,7 +15,7 @@
 
 
 
-CWinExternalCardModel::CWinExternalCardModel(CSupervision* argpSupervision, CWinElecTestView* argpView)//, CWinExternalCardView* argpView)
+CWinExternalCardModel::CWinExternalCardModel(CSupervision* argpSupervision, CWinElecTestView* argpView): m_cycleStep(NULL)//, CWinExternalCardView* argpView)
 {
 	//qDebug() << "### Instance CWinExternalCardModel" << endl;
 	m_pSupervision = argpSupervision;

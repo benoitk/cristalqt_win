@@ -2,7 +2,14 @@
 #include "Network.h"
 #include "header_qt.h"
 
+ #include <windows.h>
+   #include <winioctl.h>
+   #include <tchar.h>
+   #include <stdio.h>
+
 #define USB_DIR "\\Hard Disk"
+
+#include <QString>
 
 CDialogCopyFiles* CDialogCopyFiles::singleton = 0;
 CDialogCopyFiles::CDialogCopyFiles()
@@ -58,12 +65,20 @@ void CDialogCopyFiles::execCopy()
 	int nCoef=1;
 	QDir dirUSB(USB_DIR);
 	
+	TCHAR szSrc[500];
+	TCHAR szDst[500];
+
 	QString sFilePath;
 	if(dirUSB.exists())
 	{
 		dirUSB.mkpath(dirUSB.absolutePath()+"/CRISTAL_LOG/CristalErrorPrgLog");
 		dirUSB.mkpath(dirUSB.absolutePath()+"/CRISTAL_LOG/UserLogFileDir");
 		dirUSB.mkpath(dirUSB.absolutePath()+"/CRISTAL_LOG/CristalLog");
+		
+		m_logErrorPrgFileDir->refresh();
+		m_logFileDir->refresh();
+		m_logUserFileDir->refresh();
+
 		m_btApply->setEnabled(false);
 		m_btBack->setEnabled(false);
 		m_progressBar.setVisible(true);
@@ -83,7 +98,8 @@ void CDialogCopyFiles::execCopy()
 			{
 				fileDest.remove();
 			}
-			fileSource.copy(fileDest.fileName());
+			//fileSource.copy(fileDest.fileName());
+			bCopyFile((LPCTSTR)fileSource.fileName().utf16(), (LPCTSTR)fileDest.fileName().utf16(), false);
 			
 			m_progressBar.setValue(nbFiles*nCoef);
 		}
@@ -96,7 +112,8 @@ void CDialogCopyFiles::execCopy()
 			{
 				fileDest.remove();
 			}
-			fileSource.copy(fileDest.fileName());
+			//fileSource.copy(fileDest.fileName());
+			bCopyFile((LPCTSTR)fileSource.fileName().utf16(), (LPCTSTR)fileDest.fileName().utf16(), false);
 			
 			m_progressBar.setValue(nbFiles*nCoef);
 		}
@@ -109,13 +126,13 @@ void CDialogCopyFiles::execCopy()
 			{
 				fileDest.remove();
 			}
-			fileSource.copy(fileDest.fileName());
+			//fileSource.copy(fileDest.fileName());
+			bCopyFile((LPCTSTR)fileSource.fileName().utf16(), (LPCTSTR)fileDest.fileName().utf16(), false);
 			
 			m_progressBar.setValue(nbFiles*nCoef);
 		}
 		m_progressBar.setValue(100);
 		m_lblInfo->setText(tr("Copie terminée !"));
-		
 		
 	}
 	else

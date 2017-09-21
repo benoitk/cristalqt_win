@@ -20,7 +20,7 @@
 class  CStream : public CElemBase
 {
 public:
-	CStream(BYTE ucNumVoie);
+	CStream(BYTE ucNumVoie, CElemBase* parent);
 	virtual ~CStream();
 
 public:
@@ -167,7 +167,7 @@ protected:
 class  CListStream : public CElemBase, public CThread
 {
 public:
-	CListStream();
+	CListStream(CElemBase* parent);
 	virtual ~CListStream();
 	virtual void RemoveAll();
 
@@ -237,6 +237,7 @@ public:
 	CElemList m_ListSequenceNum;
 	CElemList m_ListSequenceDuree;
 	static CElemList m_ListMessageError;
+
 
 protected:
 	long m_iNbrStream;

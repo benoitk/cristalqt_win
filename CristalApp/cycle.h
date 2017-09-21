@@ -19,7 +19,7 @@ class CStream;
 class CElemCycleStep : public CElemBase
 {
 public:
-	CElemCycleStep();
+	CElemCycleStep(CElemBase* parent);
 	virtual ~CElemCycleStep();
 
 public:
@@ -75,7 +75,7 @@ public:
 class CElemCycle : public CElemList
 {
 public:
-	CElemCycle();
+	CElemCycle(CElemBase* parent);
 	virtual ~CElemCycle();
 
 public:
@@ -98,6 +98,7 @@ public:
 	//CRITICAL_SECTION  m_hCriticalSection;
 
 public:
+	
 	static CElemCycleStep m_CurrentStep;
 };
 
@@ -116,7 +117,7 @@ public:
 class CElemCycleZero : public CElemCycle
 {
 public:
-	CElemCycleZero();
+	CElemCycleZero(CElemBase* parent);
 	virtual ~CElemCycleZero();
 
 public:
@@ -143,7 +144,7 @@ public:
 class CElemCycleCalib : public CElemCycleZero
 {
 public:
-	CElemCycleCalib();
+	CElemCycleCalib(CElemBase* parent);
 	virtual ~CElemCycleCalib();
 
 public:
@@ -170,7 +171,7 @@ public:
 class CElemCycleCleanup : public CElemCycle
 {
 public:
-	CElemCycleCleanup();
+	CElemCycleCleanup(CElemBase* parent);
 	virtual ~CElemCycleCleanup();
 
 public:

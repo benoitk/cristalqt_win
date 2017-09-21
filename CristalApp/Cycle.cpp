@@ -15,7 +15,8 @@
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemCycleStep::CElemCycleStep() : CElemBase(),m_ListExchangeBegin(NBR_EXCHANGE_JBUS_MAX),m_ListExchangeEnd(NBR_EXCHANGE_JBUS_MAX),m_ListExchangeRealTime(NBR_EXCHANGE_JBUS_MAX)
+CElemCycleStep::CElemCycleStep(CElemBase* parent) : CElemBase(parent),m_ListExchangeBegin(NBR_EXCHANGE_JBUS_MAX, this),m_ListExchangeEnd(NBR_EXCHANGE_JBUS_MAX, this),m_ListExchangeRealTime(NBR_EXCHANGE_JBUS_MAX, this)
+					,m_Step(this)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_STEP,0xFF);
 	SetLabel(_T("CElemCycleStepxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
@@ -75,7 +76,7 @@ BOOL CElemCycleStep::bReadConfigExchangeJbus(LPTSTR pszRub, LPTSTR pszKeyRQ,LPTS
 	CElemExchangeJbus *pExchangeJbus = NULL;
 	int iCurrentPos;
 
-	if (pExchangeJbus = new CElemExchangeJbus())
+	if (pExchangeJbus = new CElemExchangeJbus(this))
 	{
 		_stprintf(szText,_T("CElemCycleStep : (PAS=%s) -> %s - %s"),pszRub, pszKeyRQ,pszKeyRP);
 		pExchangeJbus->SetLabel(szText);
@@ -282,6 +283,7 @@ BOOL CElemCycleStep::bExecuteNumExchange(int iNum,CElemList *pListExchange, BOOL
 {
 	BOOL bReturn = TRUE;
 	CElemExchangeJbus *pElem = NULL;
+	TCHAR szMsgErr[10000];
 	BYTE aBuffer[10240];
 	CContext Context;
 	int iNbrTrame;
@@ -327,8 +329,17 @@ BOOL CElemCycleStep::bExecuteNumExchange(int iNum,CElemList *pListExchange, BOOL
 											
 
 										}
-										else TRACE_LOG_MSG(_T("Erreur write and read"));
-
+										//else {
+										//	int lg = _stprintf(szMsgErr,_T("Erreur write and read : %s "),pElem->szGetLabel());
+										//	CElemBase* parent = pElem->getParent();
+										//	while(parent != NULL){
+										//		lg += _stprintf(szMsgErr + lg,_T(",%s "),parent->szGetLabel());
+			
+										//		parent = parent->getParent();
+										//	}
+										//	TRACE_LOG_MSG(szMsgErr);
+										//	//TRACE_LOG_MSG(_T("Erreur write and read"));
+										//}
 										Sleep(DW_DELAI_INTER_TRAME);// delai inter-trame
 										
 									}
@@ -499,7 +510,8 @@ BOOL CElemCycleStep::bExecute(CElemInt8 *pCmdRun,CElemInt16 *pStatusRealTime,CEl
 	return bReturn;
 }
 
-CElemCycleStep CElemCycle::m_CurrentStep;
+
+CElemCycleStep CElemCycle::m_CurrentStep(NULL);
 
 /*(@!*****************************************************************************************
 * Nom     : CElemCycle
@@ -512,8 +524,12 @@ CElemCycleStep CElemCycle::m_CurrentStep;
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemCycle::CElemCycle() : CElemList(NBR_CYCLE_STEP_MAX)
+CElemCycle::CElemCycle(CElemBase* parent) : CElemList(NBR_CYCLE_STEP_MAX, parent)
+						,m_Duration(this)
+						,m_ElemCycleStepStop(this)
 {
+	
+
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE,0xFF);
 	SetLabel(_T("CElemCyclexxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
 	//InitializeCriticalSection(&m_hCriticalSection);
@@ -580,7 +596,7 @@ BOOL CElemCycle::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 	for (i = 0;bReturn && (i <= iLastStep); i++)
 	{
 		_stprintf(szRub,_T("%d"),i);
-		if (pCycleStep == NULL) pCycleStep = new CElemCycleStep();
+		if (pCycleStep == NULL) pCycleStep = new CElemCycleStep(this);
 		if (bReturn = (pCycleStep != NULL))
 		{
 			pCycleStep->SetAutoDelete(TRUE);
@@ -820,7 +836,7 @@ BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemIn
  	if(!pCmdRun->ucGetVal())
 	{
 		//Ce pas ne peut être arrêté
-		CElemInt8 m_CmdRunStopStep;
+		CElemInt8 m_CmdRunStopStep(this);
 		m_CmdRunStopStep.bSetVal((BYTE)1);
 		m_ElemCycleStepStop.bExecute(&m_CmdRunStopStep,pStatusRealTime,pTimeCycle,EnumInterface);
 	}
@@ -832,7 +848,7 @@ BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemIn
 	if(pCmdStopEndCycle->ucGetVal())
 	{
 		//Ce pas ne peut être arrêté
-		CElemInt8 m_CmdRunStopStep;
+		CElemInt8 m_CmdRunStopStep(this);
 		m_CmdRunStopStep.bSetVal((BYTE)1);
 		m_ElemCycleStepStop.bExecute(&m_CmdRunStopStep,pStatusRealTime,pTimeCycle,EnumInterface);
 	}
@@ -857,7 +873,7 @@ BOOL CElemCycle::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CElemIn
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemCycleZero::CElemCycleZero() : CElemCycle()
+CElemCycleZero::CElemCycleZero(CElemBase* parent) : CElemCycle(parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_ZERO,0xFF);
 	SetLabel(_T("CElemCycleZeroxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
@@ -949,7 +965,7 @@ BOOL CElemCycleZero::bExecute(CElemInt8 *pCmdRun ,CElemInt8 *pCmdStopEndCycle,CE
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemCycleCalib::CElemCycleCalib() : CElemCycleZero()
+CElemCycleCalib::CElemCycleCalib(CElemBase* parent) : CElemCycleZero(parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_CALIB,0xFF);
 	SetLabel(_T("CElemCycleCalibxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));
@@ -1039,7 +1055,7 @@ BOOL CElemCycleCalib::bExecute(CElemInt8 *pCmdRun,CElemInt8 *pCmdStopEndCycle,CE
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemCycleCleanup::CElemCycleCleanup() : CElemCycle()
+CElemCycleCleanup::CElemCycleCleanup(CElemBase* parent) : CElemCycle(parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_CYCLE_CLEANUP,0xFF);
 	SetLabel(_T("CElemCycleCleanupxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"));

@@ -20,10 +20,31 @@ enum eRemoteControl{
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CStream::CStream(BYTE ucNumVoie):CElemBase(),m_ListPeriodicHourCycleCleanup(24), m_ListPeriodicHourCycleZero(24)
-								,m_ListPeriodicHourCycleCalib(24),m_ListPeriodicHourCycleCalibInLine(24)
-								,m_ListPeriodicDayCycleCleanup(7),m_ListPeriodicDayCycleZero(7)
-								,m_ListPeriodicDayCycleCalib(7),m_ListPeriodicDayCycleCalibInLine(7)
+CStream::CStream(BYTE ucNumVoie, CElemBase* parent):CElemBase(parent),m_ListPeriodicHourCycleCleanup(24, this), m_ListPeriodicHourCycleZero(24, this)
+								,m_ListPeriodicHourCycleCalib(24, this),m_ListPeriodicHourCycleCalibInLine(24, this)
+								,m_ListPeriodicDayCycleCleanup(7, this),m_ListPeriodicDayCycleZero(7, this)
+								,m_ListPeriodicDayCycleCalib(7, this),m_ListPeriodicDayCycleCalibInLine(7, this)
+								,m_StreamName(this), m_CycleTimeMax(this)
+								,m_CycleTimeCurrent(this),m_Active(this)
+								,m_StatusFailure(this),m_StatusWaterFailure(this)
+								,m_IsRunning(this),m_CounterCycle(this),m_ElemCycleFilename(this)
+								,m_ElemCycleCleanupFilename(this),m_ElemCycleZeroFilename(this)
+								,m_ElemCycleCalibFilename(this),m_ElemCycleCalibInLineFilename(this)
+								,m_ElemCycle(this),m_ElemCycleCleanup(this)
+								,m_ElemCycleZero(this),m_ElemCycleCalib(this)
+								,m_ElemCycleCalibInLine(this),m_CellTemperature(this)
+								,m_WaterFailureSetPoint(this), m_OpticalSetPoint(this)
+								,m_CellTemperatureSetPoint(this), m_PressureMeasurement(this)
+								,m_ThresholdTemperatureProbe(this), m_TemperatureProbe(this)
+								,m_SettingColorThreshold1(this), m_SettingColorThreshold2(this)
+								,m_PeriodicCycleCleanup(this), m_PeriodicCycleZero(this)
+								,m_PeriodicCycleCalib(this), m_PeriodicCycleCalibInLine(this)
+								,m_ConditioningCycleCleanup(this), m_ConditioningCycleZero(this)
+								,m_ConditioningCycleCalib(this), m_ConditioningCycleCalibInLine(this)
+								,m_ConditioningCycleMeasurement(this),m_ConditioningCleanup(this)
+								,m_ConditioningZero(this), m_ConditioningCalib(this)
+								,m_ConditioningCalibInLine(this), m_ConditioningMeasurement(this)
+								,m_StateConditioning(this), m_StatusSaumureFailure(this)
 {
 	TCHAR szText[MAX_PATH];
 	SYSTEMTIME  stTime;
@@ -201,7 +222,7 @@ CMesure *CStream::pNew()
 
 	if (m_iNbrMesure < NBR_MESURE_MAX)
 	{
-		pMesure = new CMesure(NUM_VOIE(m_iType),(BYTE)m_iNbrMesure);
+		pMesure = new CMesure(NUM_VOIE(m_iType),(BYTE)m_iNbrMesure, this);
 		if (pMesure)
 		{
 			m_apMesure[m_iNbrMesure] = pMesure;
@@ -246,7 +267,7 @@ BOOL CStream::bSerialize(CContext &Context)
 
 	for (i = 0;(bReturn) && (i < m_iNbrMesure);i++)
 	{
-		if (!Context.m_bSave) m_apMesure[i] = new CMesure(NUM_VOIE(m_iType),(BYTE)m_iNbrMesure);
+		if (!Context.m_bSave) m_apMesure[i] = new CMesure(NUM_VOIE(m_iType),(BYTE)m_iNbrMesure, this);
 		if (m_apMesure[i]) bReturn = m_apMesure[i]->bSerialize(Context);
 	}
 
@@ -498,7 +519,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 	{
 		if (m_ListPeriodicHourCycleCleanup.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicHourCycleCleanup.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -507,7 +528,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicHourCycleZero.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicHourCycleZero.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -516,7 +537,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicHourCycleCalib.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicHourCycleCalib.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -525,7 +546,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicHourCycleCalibInLine.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicHourCycleCalibInLine.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -550,7 +571,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 	{
 		if (m_ListPeriodicDayCycleCleanup.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicDayCycleCleanup.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -559,7 +580,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicDayCycleZero.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicDayCycleZero.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -568,7 +589,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicDayCycleCalib.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicDayCycleCalib.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -577,7 +598,7 @@ BOOL CStream::bReadConfig(int iNumStream, LPCTSTR pszFileName,CListStream *pList
 		}
 		if (m_ListPeriodicDayCycleCalibInLine.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListPeriodicDayCycleCalibInLine.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -1322,10 +1343,44 @@ BOOL CStream::bCheckAndCmdPeriodic( int& argiCheckedDays, int& argiCheckedHours
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemList CListStream::m_ListMessageError(NBR_MSG_ERROR_MAX);
+CElemList CListStream::m_ListMessageError(NBR_MSG_ERROR_MAX, NULL);
 
 
-CListStream::CListStream():CElemBase(),CThread(),m_ListSequenceNum(NBR_SEQUENCE_CYCLE_MAX),m_ListSequenceDuree(NBR_SEQUENCE_CYCLE_MAX)
+CListStream::CListStream(CElemBase* parent):CElemBase(parent),CThread(),m_ListSequenceNum(NBR_SEQUENCE_CYCLE_MAX, this),m_ListSequenceDuree(NBR_SEQUENCE_CYCLE_MAX, this)
+	 ,m_CmdLoadNumConfig(this)
+	 ,m_CmdSaveNumConfig(this)
+	 ,m_CmdRun(this)
+	 ,m_CmdPause(this)
+	 ,m_CmdCycleCalib(this)
+	 ,m_CmdCycleCalibInLine(this)
+	 ,m_CmdCycleZero(this)
+	 ,m_CmdCycleCleanup(this)
+	 ,m_CmdJumpStep(this)
+	 ,m_CmdRemoteControl(this)
+	 ,m_CmdStopEndCycle(this)
+	 ,m_CmdMaintenanceManuel(this)
+	 ,m_NumCurrentConfig(this)
+	 ,m_NumVersion(this)
+	 ,m_NumCurrentStream(this)
+	 ,m_bStateMaintenance(this)
+	 ,m_bStateCalib(this)
+	 ,m_bStateCalibInLine(this)
+	 ,m_bStateZero(this)
+	 ,m_bStateCleanup(this)
+	 ,m_bStatusFailure(this)
+	 ,m_bStatusSupervision(this)
+	 ,m_bStatusRealTime(this)
+	 ,m_CurrentTimeCycle(this)
+	 ,m_TimeRemaingUntilNextCycle(this)
+	 ,m_CellTemperatureOrder(this) 
+	 ,m_CellTemperatureOffset(this)
+
+	, m_Average(this)
+
+	, m_GainProbe(this)
+	, m_OffsetProbe(this)
+
+	
 {
 
 	
@@ -1465,7 +1520,7 @@ CStream *CListStream::pNew()
 
 	if (m_iNbrStream < NBR_STREAM_MAX)
 	{
-		pStream = new CStream((BYTE)m_iNbrStream);
+		pStream = new CStream((BYTE)m_iNbrStream, this);
 		if (pStream)
 		{
 			m_apStream[m_iNbrStream] = pStream;
@@ -1531,7 +1586,7 @@ BOOL CListStream::bSerialize(CContext &Context)
 
 	for (i = 0;(bReturn) && (i < m_iNbrStream);i++)
 	{
-		if (!Context.m_bSave) m_apStream[i] = new CStream(i);
+		if (!Context.m_bSave) m_apStream[i] = new CStream(i, this);
 		if (m_apStream[i]) bReturn = m_apStream[i]->bSerialize(Context);
 	}
 
@@ -1595,14 +1650,14 @@ CElemBase *CListStream::pFindOrCreateElemFromID(long lID)
 	pElem = pFindElemFromID(lID);
 	if (pElem == NULL)
 	{
-		if (NUM_TYPE(lID) == eTYPE_TXT) pElem = new CElemBase();
-		else if (NUM_TYPE(lID) == eTYPE_BITFIELD8) pElem = new CElemFieldBit8();
-		else if (NUM_TYPE(lID) == eTYPE_BITFIELD16) pElem = new CElemFieldBit16();
-		else if (NUM_TYPE(lID) == eTYPE_INT8) pElem = new CElemInt8();
-		else if (NUM_TYPE(lID) == eTYPE_INT16) pElem = new CElemInt16();
-		else if (NUM_TYPE(lID) == eTYPE_INT32) pElem = new CElemInt32();
-		else if (NUM_TYPE(lID) == eTYPE_FLOAT) pElem = new CElemFloat();
-		else pElem = new CElemFieldBit8();
+		if (NUM_TYPE(lID) == eTYPE_TXT) pElem = new CElemBase(this);
+		else if (NUM_TYPE(lID) == eTYPE_BITFIELD8) pElem = new CElemFieldBit8(this);
+		else if (NUM_TYPE(lID) == eTYPE_BITFIELD16) pElem = new CElemFieldBit16(this);
+		else if (NUM_TYPE(lID) == eTYPE_INT8) pElem = new CElemInt8(this);
+		else if (NUM_TYPE(lID) == eTYPE_INT16) pElem = new CElemInt16(this);
+		else if (NUM_TYPE(lID) == eTYPE_INT32) pElem = new CElemInt32(this);
+		else if (NUM_TYPE(lID) == eTYPE_FLOAT) pElem = new CElemFloat(this);
+		else pElem = new CElemFieldBit8(this);
 		pElem->SetType(lID);
 		pElem->SetAutoDelete(TRUE);
 	}
@@ -2029,7 +2084,7 @@ BOOL CListStream::bReadConfig(LPCTSTR pszFileName)
 	{
 		if (m_ListSequenceNum.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt8())
+			if (pElem = new CElemInt8(this))
 			{
 				m_ListSequenceNum.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -2046,7 +2101,7 @@ BOOL CListStream::bReadConfig(LPCTSTR pszFileName)
 	{
 		if (m_ListSequenceDuree.pGetAt(i) == NULL)
 		{
-			if (pElem = new CElemInt16())
+			if (pElem = new CElemInt16(this))
 			{
 				m_ListSequenceDuree.pAdd(pElem);
 				pElem->SetAutoDelete(TRUE);
@@ -2066,7 +2121,7 @@ BOOL CListStream::bReadConfig(LPCTSTR pszFileName)
 		bReturn = m_ListMessageError.bSetConfig(szText);
 		for (i = 0; i < NBR_MSG_ERROR_MAX; i++)
 		{
-			m_ListMessageError.pAdd(new CElemBase());
+			m_ListMessageError.pAdd(new CElemBase(this));
 		}
 	}
 
@@ -2318,7 +2373,7 @@ HANDLE hf  ;
 		bReturn = m_ListMessageError.bSetConfig(szText);
 		for (i = 0; i < NBR_MSG_ERROR_MAX; i++)
 		{
-			m_ListMessageError.pAdd(new CElemBase());
+			m_ListMessageError.pAdd(new CElemBase(this));
 		}
 	}
 

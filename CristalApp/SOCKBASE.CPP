@@ -214,7 +214,7 @@ long CSocketBase::lRead(long *plExtraHeader,BYTE* lpData,long lSizeMax,long *plN
 ***********************************************************************@!)*/
 long CSocketBase::lProtectedWrite (BYTE* lpData,long lSizeTotal)
 {
-	QMutexLocker locker(m_mutex);
+	QMutexLocker locker(&m_mutex);
 	long erreur = 0;
 	long rw=1;
 

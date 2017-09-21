@@ -313,9 +313,11 @@ public:
 class CElemBase
 {
 public:
-	CElemBase();
+	CElemBase(CElemBase* parent);
 	virtual ~CElemBase();
 	LPTSTR szGetLabel(){return m_pcLabel;};
+	CElemBase* getParent(){return m_parent;};
+	
 	void SetLabel(LPCTSTR szText);
 	void SetElemName(const QString& arg_elemName);
     QString getElemName()const;
@@ -342,7 +344,10 @@ public:
 	BOOL bSetLabelLength(int iSize);
 	long lGetLabelLength();
 
+	
+
 protected:
+	CElemBase* m_parent;
 	TCHAR *m_pcLabel;
     QString m_elemName;
 	short m_iLabelLength;
@@ -367,7 +372,7 @@ protected:
 class CElemList : public CElemBase
 {
 public:
-	CElemList(int iNbrElem);
+	CElemList(int iNbrElem, CElemBase* parent);
 	virtual ~CElemList();
 
 public:
@@ -402,7 +407,7 @@ protected:
 class CElemNbr : public CElemBase
 {
 public:
-	CElemNbr();
+	CElemNbr(CElemBase* parent);
 	virtual ~CElemNbr();
 
 public:
@@ -432,7 +437,7 @@ public:
 class  CElemFloat : public CElemNbr
 {
 public:
-	CElemFloat();
+	CElemFloat(CElemBase* parent);
 	virtual ~CElemFloat();
 
 public:
@@ -466,7 +471,7 @@ protected:
 class  CElemInt8 : public CElemNbr
 {
 public:
-	CElemInt8();
+	CElemInt8(CElemBase* parent);
 	virtual ~CElemInt8();
 
 public:
@@ -497,7 +502,7 @@ protected:
 class  CElemInt16 : public CElemNbr
 {
 public:
-	CElemInt16();
+	CElemInt16(CElemBase* parent);
 	virtual ~CElemInt16();
 
 public:
@@ -528,7 +533,7 @@ protected:
 class  CElemInt32 : public CElemNbr
 {
 public:
-	CElemInt32();
+	CElemInt32(CElemBase* parent);
 	virtual ~CElemInt32();
 
 public:
@@ -559,7 +564,7 @@ class CListStream;
 class  CElemFieldBit8 : public CElemList
 {
 public:
-	CElemFieldBit8();
+	CElemFieldBit8(CElemBase* parent);
 	virtual ~CElemFieldBit8();
 
 public:
@@ -585,7 +590,7 @@ public:
 class  CElemFieldBit16 : public CElemList
 {
 public:
-	CElemFieldBit16();
+	CElemFieldBit16(CElemBase* parent);
 	virtual ~CElemFieldBit16();
 
 public:

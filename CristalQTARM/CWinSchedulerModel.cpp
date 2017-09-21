@@ -346,10 +346,10 @@ void CWinSchedulerModel::setRemoteControl(QString arg_nbCycle)
 
 }
 
-void CWinSchedulerModel::setValeurEtalon(QString arg_nbCycle)
+void CWinSchedulerModel::setValeurEtalon(QString arg)
 {
 
-	m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore.bSetVal((BYTE)arg_nbCycle.toShort(0, 10));
+	m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore.bSetVal(arg.toFloat());
 	CMesureModel::writeElemConfigIni(_T("CStream0_CMesure0")
 							, _T("m_StandardValueBefore")
 							, &m_pSupervision->getAnalyseur()->pGetAt(0)->pGetAt(0)->m_StandardValueBefore);

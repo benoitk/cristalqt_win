@@ -65,9 +65,9 @@ protected:
 	BOOL m_bPause;
 	BOOL m_bInRunThread;
 
-	QMutex* m_mutex;
+	QMutex m_mutex;
 public:
-//	CRITICAL_SECTION  m_hCriticalSection;
+
 	HANDLE m_hThread;
 	DWORD m_dwThreadID;
 };

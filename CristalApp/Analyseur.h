@@ -17,6 +17,7 @@ public slots:
 	void run();
 
 private :
+	CElemBase m_parentAnalyseur;
 	int m_indexSeqence;
 	int m_iTimeElapse;
 };

@@ -19,7 +19,6 @@ CDialogResultatEtalon::CDialogResultatEtalon(void): QDialog()
 	m_sTittle = "init";
 	m_sValue = "init";
 	m_sDialogTittle = "init";
-	
 	m_tabWidget = new QTabWidget();
 
 	QWidget* widgetDialog = new QWidget();

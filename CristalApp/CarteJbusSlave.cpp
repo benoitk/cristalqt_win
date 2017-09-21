@@ -13,8 +13,10 @@
 *    Initialisation des membres de la classe
 *    Point de sortie
 ***********************************************************************@!)*/
-CCarteJbusSlave::CCarteJbusSlave():CSerialPort(),m_ListDataCanRead(NBR_CMD_READ_JBUS_SLAVE_MAX),m_ListDataCanWrite(NBR_CMD_WRITE_JBUS_SLAVE_MAX)
+CCarteJbusSlave::CCarteJbusSlave():CSerialPort(),m_ListDataCanRead(NBR_CMD_READ_JBUS_SLAVE_MAX, NULL),m_ListDataCanWrite(NBR_CMD_WRITE_JBUS_SLAVE_MAX, NULL)
+	,m_parentCarteJBus(NULL)
 {
+	m_parentCarteJBus.SetLabel(_T("JBus "));
 	m_bNumInterface = NUM_INTERFACE_CARTE_JBUS_SLAVE;
 	m_bCanRead = FALSE;
 	m_bCanWrite = TRUE;
@@ -24,7 +26,7 @@ CCarteJbusSlave::CCarteJbusSlave():CSerialPort(),m_ListDataCanRead(NBR_CMD_READ_
 
 void CCarteJbusSlave::run()
 {
-	TRACE_LOG_MSG(_T("! CCarteJbusSlave->start(); ok !"));
+	//TRACE_LOG_MSG(_T("! CCarteJbusSlave->start(); ok !"));
 	m_bInRunThread = TRUE;
 	//while(1){Sleep(1000);}
 	CSerialPort::run();
@@ -64,7 +66,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		// CMD MARCHE VOIE 8600
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|%08x|%08x"),MAKE_ID(0,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(1,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),
 					MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),0,0);
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -72,7 +74,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		}
 		// CMD RUN 8601
 		_stprintf(szText, _T("0x%08x"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_RUN));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanWrite.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -87,7 +89,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		for(int i=0; i<pListStream->iGetNbrStream(); ++i)
 		{
 			_stprintf(szText, _T("0|0|0|0|0|0|0|0"));
-			pListStream->pGetAt(i)->m_ListCmdJbusMaintenance = (CElemFieldBit8*)m_ListDataCanWrite.pAdd(new CElemFieldBit8());
+			pListStream->pGetAt(i)->m_ListCmdJbusMaintenance = (CElemFieldBit8*)m_ListDataCanWrite.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 			if (bReturn = (pListStream->pGetAt(i)->m_ListCmdJbusMaintenance != NULL))
 			{
 				iCurrentPos = 0;
@@ -100,7 +102,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		// ETAT MARCHE VOIE : 0x8610
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|%08x|%08x"),MAKE_ID(0,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(1,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),
 					MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_ACTIVE),0,0);
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -109,7 +111,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		// analyse en cours de la VOIE : 0x8611
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|%08x|%08x"),MAKE_ID(0,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),MAKE_ID(1,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),
 					MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_IS_RUNNING),0,0);
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -117,7 +119,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		}
 		// analyse arrêt / attente / sav : 0x8612
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_RUN),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_CMD_PAUSE),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_MAINTENANCE));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -125,43 +127,43 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		}
 		// analyseur nettoyage zero calibrage : 0x8613
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_CLEANUP),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_ZERO),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATE_CALIB));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
 			bReturn = pElemFieldBit8->bSetConfig(szText,iCurrentPos,pListStream);
 		}
 		// ADU : 0x8614
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8615
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8616
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8617
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8618
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8619
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861A
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861B
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861C
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861D
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861E
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x861F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// Voie 1 Mesure x status Seuil 1 et 2 : 0x8620
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x"),
 							MAKE_ID(0,0,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(0,0,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(0,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(0,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(0,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(0,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(0,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(0,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -173,7 +175,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(1,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(1,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(1,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(1,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(1,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(1,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -185,7 +187,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(2,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(2,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(2,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(2,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(2,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(2,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -197,7 +199,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(3,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(3,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(3,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(3,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(3,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(3,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -209,7 +211,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(4,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(4,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(4,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(4,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(4,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(4,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -221,25 +223,25 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(5,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(5,1,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(5,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(5,2,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2),
 							MAKE_ID(5,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD1),MAKE_ID(5,3,eTYPE_INT8,eID_MESURE_STATUS_THRESHOLD2));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
 			bReturn = pElemFieldBit8->bSetConfig(szText,iCurrentPos,pListStream);
 		}
 		// ADU : 0x8626
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8627
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8628
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// default mesure 1 et 2 : 0x8629
 		_stprintf(szText, _T("0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x|0x%08x"),
 							MAKE_ID(0,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(0,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(0,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(0,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(1,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(1,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(1,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(1,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -251,7 +253,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(2,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(2,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(3,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(3,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(3,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(3,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -263,7 +265,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(4,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(4,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(5,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(5,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),
 							MAKE_ID(5,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	),MAKE_ID(5,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_ZERO	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -278,7 +280,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(0,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(0,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(1,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(1,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(1,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(1,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -290,7 +292,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(2,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(2,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(3,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(3,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(3,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(3,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -302,7 +304,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(4,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(4,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(5,0,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(5,1,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),
 							MAKE_ID(5,2,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	),MAKE_ID(5,3,eTYPE_INT8,eID_MESURE_CALIB_STATUS_COEFF	));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -310,10 +312,10 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		}
 
 		// ADU : 0x862F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// defaut d'analyseur : 0x8630
 		_stprintf(szText, _T("0x%08x"),MAKE_ID(0xFF,0xFF,eTYPE_INT8,eID_LISTSTREAM_STATUS_FAILURE));
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -325,7 +327,7 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_STATUS_FAILURE),MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_STATUS_FAILURE),
 							MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_STATUS_FAILURE),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_STATUS_FAILURE),
 							0,0);
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
@@ -337,118 +339,118 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 							MAKE_ID(2,0xFF,eTYPE_INT8,eID_STREAM_STATUS_WATER_FAILURE),MAKE_ID(3,0xFF,eTYPE_INT8,eID_STREAM_STATUS_WATER_FAILURE),
 							MAKE_ID(4,0xFF,eTYPE_INT8,eID_STREAM_STATUS_WATER_FAILURE),MAKE_ID(5,0xFF,eTYPE_INT8,eID_STREAM_STATUS_WATER_FAILURE),
 							0,0);
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		if (bReturn = (pElemFieldBit8 != NULL))
 		{
 			iCurrentPos = 0;
 			bReturn = pElemFieldBit8->bSetConfig(szText,iCurrentPos,pListStream);
 		}
 		// ADU : 0x8633
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8634
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8635
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8636
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8637
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// Défaut matériel 1 - 8 : 0x8638
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// Défaut matériel 9 - 16 : 0x8639
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// Défaut matériel 17 - 24 : 0x863A
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// maintenance : 0x863B
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x863C
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x863D
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x863E
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x863F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// Valeur analogique 1 : 0x8640
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 2 : 0x8642
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 3 : 0x8644
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 4 : 0x8646
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 5 : 0x8648
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 6 : 0x864A
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 7 : 0x864C
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 8 : 0x864E
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 9 : 0x8650
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 10 : 0x8652
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 11 : 0x8654
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 12 : 0x8656
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 13 : 0x8658
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 14 : 0x865A
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 15 : 0x865C
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 16 : 0x865E
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 17 : 0x8660
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 18 : 0x8662
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 19 : 0x8664
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 20 : 0x8666
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 21 : 0x8668
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 22 : 0x866A
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 23 : 0x866C
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// Valeur analogique 24 : 0x866E
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// ADU : 0x8670
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8671
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8672
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8673
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8674
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8675
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8676
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8677
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8678
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8679
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867A
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867B
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867C
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867D
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867E
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x867F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// compteur cycle voie 1 : 0x8680
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(0,0xFF,eTYPE_INT16,eID_STREAM_COUNTER_CYCLE)));
 		// compteur cycle voie 2 : 0x8682
@@ -462,45 +464,45 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		// compteur cycle voie 6 : 0x868A
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(5,0xFF,eTYPE_INT16,eID_STREAM_COUNTER_CYCLE)));
 		// ADU : 0x868C
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x868D
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x868E
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x868F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8690
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8691
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8692
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8693
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8694
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8695
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8696
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8697
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8698
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x8699
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869A
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869B
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869C
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869D
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869E
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// ADU : 0x869F
-		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8());
+		pElemFieldBit8 = (CElemFieldBit8 *)m_ListDataCanRead.pAdd(new CElemFieldBit8(&m_parentCarteJBus));
 		// voie 1 mesure 1 : 0x86A0
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(0, 0,eTYPE_INT16,eID_MESURE_VAL_JBUS_SLAVE)));
 		// voie 1 mesure 2 : 0x86A2
@@ -550,18 +552,18 @@ BOOL CCarteJbusSlave::bReadConfig(LPCTSTR pszFileName,CListStream *pListStream)
 		// voie 6 mesure 4 : 0x86CE
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(pListStream->pFindOrCreateElemFromID(MAKE_ID(5, 3,eTYPE_INT16,eID_MESURE_VAL_JBUS_SLAVE)));
 		// voie 1 mesure 1  : 0x86D0 (pour le control zéro modif nickel VOIE 1 MESURE 1)
-		CElemInt16* intDeltaJbus = new CElemInt16();
+		CElemInt16* intDeltaJbus = new CElemInt16(&m_parentCarteJBus);
 		intDeltaJbus->bSetVal(((CElemFloat*)pListStream->pFindOrCreateElemFromID(MAKE_ID(0, 0,eTYPE_FLOAT,eID_MESURE_DELTA)))->fGetVal()
 							* ((CElemFloat*)pListStream->pFindOrCreateElemFromID(MAKE_ID(0, 0,eTYPE_FLOAT,eID_MESURE_COEFF_VAL_JBUS_SLAVE)))->fGetVal());
 		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(intDeltaJbus);
 		// ADU : 0x86D2
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// ADU : 0x86D4
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// ADU : 0x86D6
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 		// ADU : 0x86D8
-		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16());
+		pElemInt16 = (CElemInt16 *)m_ListDataCanRead.pAdd(new CElemInt16(&m_parentCarteJBus));
 	}
 
 	if (!bReturn) 

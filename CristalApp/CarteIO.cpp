@@ -14,8 +14,9 @@
 *    Point de sortie
 ***********************************************************************@!)*/
 
-CCarteIO::CCarteIO():CSerialPort()
+CCarteIO::CCarteIO():CSerialPort(), m_parentCarteIO(NULL), m_ElemCycleStep(&m_parentCarteIO)
 {
+	m_parentCarteIO.SetLabel(_T("Carte IO"));
 	m_bNumInterface = NUM_INTERFACE_CARTE_IO_MIN;
 	m_bCanRead = FALSE;
 	m_bCanWrite = TRUE;
@@ -106,7 +107,7 @@ BOOL CCarteIO::bWriteConfig(LPCTSTR pszFileName)
 void CCarteIO::run()
 {
 	
-	TRACE_LOG_MSG(_T("! pCarteIO->start(); ok !"));
+	//TRACE_LOG_MSG(_T("! pCarteIO->start(); ok !"));
 	m_bInRunThread = TRUE;
 	/*while(1){Sleep(1000);}*/
 	m_bRun = bOpen();

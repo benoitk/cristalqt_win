@@ -74,7 +74,6 @@ void CWinMainControler::load()
     CDialogValEtalon::getInstance();
     
 	CUserSession::getInstance()->objectRegister(this);
-
 	
 	//Controles de la fenêtre principale
 	m_bEnStop = false;
@@ -111,7 +110,7 @@ void CWinMainControler::getErrorIOAndJBus()
 		|| m_pSupervision->getAnalyseur()->m_ExternalInterface.m_pCarteJbusSlave->bGetError())
 	{
 		TRACE_DEBUG_IHM(eError,eCycle,eErrorAppRunThread);
-		m_pSupervision->getAnalyseur()->m_bStatusFailure.bSetVal(1);
+		//m_pSupervision->getAnalyseur()->m_bStatusFailure.bSetVal(1);
 
 	}
 

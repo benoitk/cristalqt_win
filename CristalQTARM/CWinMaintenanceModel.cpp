@@ -6,7 +6,7 @@
 #include "CCmdJBusRunnable.h"
 
 //#include "header_qt.h"
-CWinMaintenanceModel::CWinMaintenanceModel(CSupervision* argpSupervision, CWinMaintenanceView* argpView)
+CWinMaintenanceModel::CWinMaintenanceModel(CSupervision* argpSupervision, CWinMaintenanceView* argpView): m_cycleStep(NULL)
 {
     m_threadPool = new QThreadPool(this);
     m_mutex = new QMutex();

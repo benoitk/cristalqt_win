@@ -30,6 +30,7 @@ private:
     CSupervision* m_pSupervision;
     CWinElecTestView* m_pView;
     CElemCycleStep m_cycleStep;
+
     
     QThreadPool* m_threadPool;
     QMutex* m_mutex;

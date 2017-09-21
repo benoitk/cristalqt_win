@@ -10,7 +10,7 @@
 #define SZ_CONFIG_ANALYSEUR_FILE _T("ConfigAnalyseur.ini")
 #define NB_FILES_LOG 60
 
-CWinMainModel::CWinMainModel(CSupervision* argoSupervision, CWinMainView* argoView)
+CWinMainModel::CWinMainModel(CSupervision* argoSupervision, CWinMainView* argoView): m_cycleStep(NULL), m_oCycleStep(NULL)
 {
     m_threadPool = new QThreadPool(this);
     m_mutex = new QMutex();
@@ -852,7 +852,11 @@ QString CWinMainModel::getMesureValue(int numStream, int numMeasure)const
 {
 	if(    m_pSupervision->getAnalyseur()->pGetAt(numStream) 
 		&& m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure))
-        return QString::number(m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure)->m_Val.fGetVal(), 'f', 3);
+#ifdef ALU
+        return QString::number(m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure)->m_Val.fGetVal(), 'f', 1);
+#else     
+		return QString::number(m_pSupervision->getAnalyseur()->pGetAt(numStream)->pGetAt(numMeasure)->m_Val.fGetVal(), 'f', 3);
+#endif
 	else
 		return "NaN";
 }

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "network.h"
-
+#include "header_qt.h"
 
 
 BOOL _bShowError = TRUE;  
@@ -664,6 +664,9 @@ void TRACE_LOG_MESURE(CStream* argObjVoie, CElemInt8* argNumCurrentStream, int a
 		szBuildFileName(szFileName, _T(".txt"));
 		bEcrireFichierLog(szMessage, _szLogFileDir, szFileName);
 		bEcrireFichierLog(szUserMessage, _szUserLogFileDir, szFileName);
+		/*QDir dirUSB("\\Hard Disk");
+		if(dirUSB.exists())
+			bEcrireFichierLog(szUserMessage, _T("\\Hard Disk\\LOG"), szFileName);*/
 	}
 
 	
@@ -688,16 +691,7 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 	switch(argObjVoie->pGetAt(argiNumMesure)->m_NumProgram.ucGetVal())
 	{
 		//!\A gérer dynamiquement en V3 avec un fichier de conf supplémentaire pour la mapping ou pas
-		//PRG_000
-		case 0:
-			break;
-		//PRG_ATTENTE
-		case 1:
-			//Aucun retour
-			break;
-		//PRG_MARCHE_ARRET_CHAUFFE
-		case 2:
-			break;
+	
 		//PRG_CONTROL_REGUL_CHAUFFE
 		case 3:
 			 //consigne non atteinte
@@ -956,12 +950,27 @@ void TRACE_LOG_ERROR_PRG(CStream* argObjVoie, CElemInt8* argNumCurrentStream, in
 		case 992 : //Dosage cérium
 			verifierDefaut(0x03, argObjVoie, argiNumMesure, argiNumPas, szMessage, &l, eErrorPrg393, argNumCurrentStream);
 			break;
+
+		//PRG_000
+		case 0:
+		//	break;
+		//PRG_ATTENTE
+		case 1:
+			//Aucun retour
+		//	break;
+		//PRG_MARCHE_ARRET_CHAUFFE
+		case 2:
+		//	break;
 		//PRG_PAUSE
 		case 998:
 			//Aucun retour
-			break;
+		//	break;
 		//PRG_999
 		case 999:
+		default:
+			_stprintf( szMessage + l
+				, _T("Err program n° %d")
+				, argObjVoie->pGetAt(argiNumMesure)->m_NumProgram.ucGetVal());
 			//aucun retour
 			break;
 
@@ -1102,7 +1111,7 @@ BOOL bEcrireFichierLog(WCHAR* argpszMessage, WCHAR* argpszFullPath, WCHAR* argps
 				      , 0
 					  , NULL
 					  , OPEN_ALWAYS
-					  , FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH
+					  , FILE_FLAG_WRITE_THROUGH
 					  , NULL);
 
 	if (hFile != INVALID_HANDLE_VALUE)

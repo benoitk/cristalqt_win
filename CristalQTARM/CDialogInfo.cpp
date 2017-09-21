@@ -2,7 +2,7 @@
 #include "Network.h"
 #include "header_qt.h"
 
-#define NUM_VERSION_QT "4.0.7 build 65"
+#define NUM_VERSION_QT "4.0.7 build 72a"
 
 
 CDialogInfo* CDialogInfo::singleton = 0;
@@ -48,6 +48,11 @@ CDialogInfo::CDialogInfo()
 #if defined(MULTI_MEASURE)
     sTypeAnalyseur = "MULTI MEASURE " + sTypeAnalyseur; 
 #endif 
+
+#if defined(ALU)
+    sTypeAnalyseur = "ALU " + sTypeAnalyseur;
+#endif 
+
 
 #if defined(PH)
     sTypeAnalyseur = "PH " + sTypeAnalyseur;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "network.h"
 
+#include <QDebug>
 
 /*(@!*****************************************************************************************
 * Nom     : CElemBase
@@ -13,7 +14,7 @@
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemBase::CElemBase()
+CElemBase::CElemBase(CElemBase* parent)
 {
 #if !defined(TEST2)
 	InitializeCriticalSection(&m_hCriticalSection);
@@ -23,6 +24,7 @@ CElemBase::CElemBase()
 	m_iLabelLength = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_TXT,0xFF);
 	SetLabel(_T("CElemBase"));
+	m_parent = parent;
 }
 
 CElemBase::~CElemBase()
@@ -375,7 +377,7 @@ LPTSTR CElemBase::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemList::CElemList(int iNbrElem):CElemBase()
+CElemList::CElemList(int iNbrElem, CElemBase* parent):CElemBase(parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_LIST,0xFF);
 	SetLabel(_T("CElemList"));
@@ -533,7 +535,7 @@ BOOL CElemList::bSerialize(CContext &Context)
 	{
 		if (m_ppElem[i] == NULL)
 		{
-			if (m_ppElem[i] = new CElemBase()) m_ppElem[i]->SetAutoDelete(TRUE);
+			if (m_ppElem[i] = new CElemBase(this)) m_ppElem[i]->SetAutoDelete(TRUE);
 		}
 		bReturn = (m_ppElem[i] != NULL);
 		if (bReturn)
@@ -657,7 +659,7 @@ LPTSTR CElemList::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemFieldBit8::CElemFieldBit8():CElemList(8)
+CElemFieldBit8::CElemFieldBit8(CElemBase* parent):CElemList(8, parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD8,0xFF);
 	SetLabel(_T("CElemFieldBit8"));
@@ -770,7 +772,7 @@ BOOL CElemFieldBit8::bSetConfig(LPTSTR pszText,int &iCurrentPos,CListStream *pLi
 				}
 				if (pElem == NULL)
 				{
-					pElem = new CElemInt8();
+					pElem = new CElemInt8(this);
 					bReturn = (pElem != NULL);
 					if (bReturn)
 					{
@@ -784,7 +786,7 @@ BOOL CElemFieldBit8::bSetConfig(LPTSTR pszText,int &iCurrentPos,CListStream *pLi
 			}
 			else
 			{
-				pElem = new CElemInt8();
+				pElem = new CElemInt8(this);
 				bReturn = (pElem != NULL);
 				if (bReturn)
 				{
@@ -850,7 +852,7 @@ LPTSTR CElemFieldBit8::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemFieldBit16::CElemFieldBit16():CElemList(16)
+CElemFieldBit16::CElemFieldBit16(CElemBase* parent):CElemList(16, parent)
 {
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_BITFIELD16,0xFF);
 	SetLabel(_T("CElemFieldBit16"));
@@ -949,7 +951,7 @@ int CElemFieldBit16::iGetStreamSize(CContext &Context)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemNbr::CElemNbr():CElemBase()
+CElemNbr::CElemNbr(CElemBase* parent):CElemBase(parent),m_szUnit(this),m_szFormat(this)
 {
 	m_szUnit.SetLabel(_T("V"));
 	m_szFormat.SetLabel(_T("%08x"));
@@ -1067,7 +1069,7 @@ LPTSTR CElemNbr::szGetConfig(LPTSTR pszText, int iSizeMax)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemFloat::CElemFloat():CElemNbr()
+CElemFloat::CElemFloat(CElemBase* parent):CElemNbr(parent)
 {
 	m_fVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_FLOAT,0xFF);
@@ -1101,6 +1103,9 @@ int CElemFloat::iGetStreamSize(CContext &Context)
 	if (Context.m_bModeInteger && Context.m_bForceByte) iSize += sizeof(BYTE);
 	else if (Context.m_bForceWord && Context.m_bModeInteger) iSize += sizeof(short);
 	else iSize += sizeof(m_fVal);
+
+	//qDebug() << "iSize : " << iSize << " m_bModeInteger : " << Context.m_bModeInteger 
+	//	<< " m_bForceWord : " << Context.m_bForceWord << " m_bForceByte : " << Context.m_bForceByte; 
 	return iSize;
 }
 
@@ -1134,7 +1139,7 @@ void CElemFloat::operator =(float argfOperande)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemInt8::CElemInt8():CElemNbr()
+CElemInt8::CElemInt8(CElemBase* parent):CElemNbr(parent)
 {
 	m_ucVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT8,0xFF);
@@ -1181,7 +1186,7 @@ int CElemInt8::iGetStreamSize(CContext &Context)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemInt16::CElemInt16():CElemNbr()
+CElemInt16::CElemInt16(CElemBase* parent):CElemNbr(parent)
 {
 	m_nVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT16,0xFF);
@@ -1227,7 +1232,7 @@ int CElemInt16::iGetStreamSize(CContext &Context)
 * Pseudo code		  : sans objet
 *
 *****************************************************************************************@!)*/
-CElemInt32::CElemInt32():CElemNbr()
+CElemInt32::CElemInt32(CElemBase* parent):CElemNbr(parent)
 {
 	m_lVal = 0;
 	m_iType = MAKE_ID(0xFF,0xFF,eTYPE_INT32,0xFF);
